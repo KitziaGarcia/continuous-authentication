@@ -1933,9 +1933,9 @@ def test_compare_models_produces_all_sections_for_each_model():
     fns = {"red": make_model_embed_fn(ECGEmbeddingNet(cfg)), "cruda": raw_embed_fn}
     md = compare_models(fns, split, cfg)
     for model in ("red", "cruda"):
-        assert f"{model} | vistos, entre sesiones (val)" in md
-        assert f"{model} | NO vistos (hold-out), entre sesiones" in md
-        assert f"{model} | vistos, misma sesión" in md
+        assert f"{model} · vistos, entre sesiones (val)" in md
+        assert f"{model} · NO vistos (hold-out), entre sesiones" in md
+        assert f"{model} · vistos, misma sesión" in md
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -2027,10 +2027,10 @@ def compare_models(embed_fns: dict, split: PolarSplit, cfg: Config) -> str:
         val = run_protocol(fn, enroll_val, split.val)
         thr = eer(val.genuine, val.impostor)[1]
         n, s = cfg.bootstrap_samples, cfg.seed
-        rows.append(make_row(f"{name} | vistos, entre sesiones (val)", val, thr, n, s))
-        rows.append(make_row(f"{name} | NO vistos (hold-out), entre sesiones",
+        rows.append(make_row(f"{name} · vistos, entre sesiones (val)", val, thr, n, s))
+        rows.append(make_row(f"{name} · NO vistos (hold-out), entre sesiones",
                              run_protocol(fn, hold_enroll, hold_test), thr, n, s))
-        rows.append(make_row(f"{name} | vistos, misma sesión",
+        rows.append(make_row(f"{name} · vistos, misma sesión",
                              run_protocol(fn, same_enroll, same_test), thr, n, s))
     return format_report(rows)
 ```

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.superpowers/
+data/raw/
+data/processed/
+models/*.pt
+models/*.json
+reports/*.md
