@@ -309,3 +309,14 @@ def test_same_session_row_is_not_computed_on_training_windows():
     train_keys = {w.tobytes() for w in split.train.windows}
     same_session_calls = seen[-2:]          # registro y prueba del protocolo misma-sesión (últimos dos)
     assert all(w.tobytes() not in train_keys for arr in same_session_calls for w in arr)
+
+
+# --- template_scores: puntajes ventana-vs-cada-plantilla (usado por build_trials y por try_me) ---
+def test_template_scores_shape_order_and_values():
+    from src.evaluate import template_scores
+
+    enroll = np.array([[1.0, 0.0], [1.0, 0.0], [0.0, 1.0]])
+    owners, scores = template_scores(enroll, np.array(["b", "b", "a"]), np.array([[1.0, 0.0], [0.0, 1.0]]))
+    assert list(owners) == ["a", "b"]                       # ordenados alfabéticamente
+    assert scores.shape == (2, 2)
+    assert np.allclose(scores, [[0.0, 1.0], [1.0, 0.0]])    # ventana 1 ~ plantilla "b"; ventana 2 ~ "a"

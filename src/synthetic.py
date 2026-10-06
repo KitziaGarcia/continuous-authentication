@@ -28,6 +28,39 @@ def _one_window(rng, params: dict, window_samples: int, fs: int) -> np.ndarray:
     return (x - x.mean()) / (x.std() + 1e-8)
 
 
+def make_synthetic_signal(seconds: float, fs: int = 130, seed: int = 0, hr_bpm: float | None = None,
+                          rr_jitter: float = 0.0) -> np.ndarray:
+    """Señal continua sintética (una sola persona): sirve para probar la grabación sin sensor.
+
+    hr_bpm fija la frecuencia cardiaca; rr_jitter (0 a 1) hace irregular cada intervalo entre latidos.
+    """
+    rng = np.random.default_rng(seed)
+    n = int(seconds * fs)
+    t = np.arange(n) / fs
+    default_hr = rng.uniform(60, 85)           # se sortea siempre: así la semilla da la misma señal
+    period = 60.0 / (hr_bpm if hr_bpm is not None else default_hr)
+    if rr_jitter > 0:
+        beats, b = [], 0.0
+        while b < t[-1] + period:
+            beats.append(b)
+            b += period * (1 + rng.uniform(-rr_jitter, rr_jitter))
+    else:
+        beats = np.arange(0.0, t[-1] + period, period)
+    x = np.zeros(n)
+    for beat in beats:
+        # Cada latido solo se calcula en su ventana local (de -0.5 s a +0.9 s): fuera de ahí las ondas
+        # valen prácticamente 0. Recorrer toda la señal por cada latido era cuadrático (10 s para 15 min).
+        i0, i1 = max(0, int((beat - 0.5) * fs)), min(n, int((beat + 0.9) * fs) + 1)
+        if i0 >= i1:
+            continue
+        tl = t[i0:i1]
+        x[i0:i1] += (_gauss(tl, beat - 0.16, 0.025, 0.15)      # onda P
+                     + _gauss(tl, beat, 0.012, 1.0)            # pico R
+                     + _gauss(tl, beat + 0.03, 0.012, -0.15)   # onda S
+                     + _gauss(tl, beat + 0.30, 0.05, 0.30))    # onda T
+    return x + rng.normal(0, 0.02, n)
+
+
 def make_synthetic_table(
     n_people: int = 6,
     n_sessions: int = 3,

@@ -43,6 +43,33 @@ Notebooks (in Spanish): `python notebooks/build_notebooks.py` regenerates them; 
 `notebooks/02_model_and_training.ipynb` and `notebooks/03_finetuning_explained.ipynb`. They run on
 synthetic data until real Polar recordings exist in `data/processed/polar/`.
 
+## Data collection protocol (Polar H10)
+Step-by-step guide for the team and volunteers (in Spanish): [`docs/guia_recoleccion.md`](docs/guia_recoleccion.md).
+Each person gets a fixed anonymous ID (`P01`, `P02`, ...) and records **3 sessions on different days**
+(~5.5 min each: rest, reading, problem solving, talking):
+
+    python -m src.session --id P03                      # one guided sitting; the date and file names are automatic
+    python -m src.session --id P03 --redo reposo        # repeat one activity (the old file moves to data/descartadas/)
+    python -m src.status                                # who recorded which days, who is due next
+
+Files are written as `data/processed/polar/P03__2026-10-06__reposo.npz` (one per activity; all activities of a
+sitting share the same session id = the date). Each activity is checked automatically (`src/quality.py`: flat
+signal, spikes, irregular rhythm, lost beats); bad ones are set aside, never deleted. Personal data is git-ignored
+and `tests/test_repo_hygiene.py` guards it.
+
+## Quick trial (older, ad-hoc recorder) with the Polar H10 (2 people)
+Record each person at least twice (enrollment + test; take the strap off and put it back on in between,
+ideally on different days), then check whether the model tells you apart:
+
+    python -m src.record --id kitzia --seconds 60      # also: --simulate to test without the strap
+    python -m src.try_me                               # uses models/modelo_ecg.pt or the latest modelo_vN.pt
+
+`record` saves the raw signal in `data/raw/polar/`, the windows in `data/processed/polar/`, and opens a PNG
+(`reports/recordings/`) with the whole signal and a 10 s zoom so you can confirm a real heartbeat was captured.
+`try_me` enrolls each person with their first recording, scores their later recordings against everyone's
+fingerprint, and prints plain-language results plus a picture. With only 2 people there is no one left to test a
+fine-tuned model on, so the trial uses the ECG-ID-pretrained model as is.
+
 ## Public dataset
 ECG-ID (PhysioNet, https://physionet.org/content/ecgiddb/): 90 people, 310 recordings, 500 Hz.
 License: **Open Data Commons Attribution License v1.0** (checked on the dataset page on 2026-10-01;

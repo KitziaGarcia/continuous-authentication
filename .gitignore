@@ -8,3 +8,7 @@ data/processed/
 models/*.pt
 models/*.json
 reports/*.md
+reports/recordings/
+reports/*.png
+data/piloto/
+data/descartadas/

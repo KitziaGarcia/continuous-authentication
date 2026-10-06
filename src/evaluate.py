@@ -95,16 +95,24 @@ class Trials:
         return len(set(self.genuine_owner.tolist()))
 
 
-def build_trials(enroll_emb, enroll_ids, test_emb, test_ids) -> Trials:
+def template_scores(enroll_emb, enroll_ids, test_emb):
     """Plantilla = promedio de los embeddings de registro de cada persona (brief, sección 3).
 
-    Cada ventana de prueba se compara contra TODAS las plantillas: contra la propia es un
-    intento genuino, contra las demás es un intento impostor.
+    Devuelve (dueños ordenados, puntajes (N ventanas, K plantillas)): similitud coseno de cada
+    ventana de prueba contra la plantilla de cada persona registrada.
     """
-    enroll_ids, test_ids = np.asarray(enroll_ids), np.asarray(test_ids)
+    enroll_ids = np.asarray(enroll_ids)
     owners = np.array(sorted(set(enroll_ids.tolist())))
     templates = l2_normalize(np.stack([np.asarray(enroll_emb)[enroll_ids == o].mean(axis=0) for o in owners]))
-    scores = l2_normalize(np.asarray(test_emb)) @ templates.T            # coseno
+    return owners, l2_normalize(np.asarray(test_emb)) @ templates.T      # coseno
+
+
+def build_trials(enroll_emb, enroll_ids, test_emb, test_ids) -> Trials:
+    """Cada ventana de prueba se compara contra TODAS las plantillas: contra la propia es un
+    intento genuino, contra las demás es un intento impostor.
+    """
+    test_ids = np.asarray(test_ids)
+    owners, scores = template_scores(enroll_emb, enroll_ids, test_emb)
     same = test_ids[:, None] == owners[None, :]
     owner_grid = np.broadcast_to(owners[None, :], scores.shape)
     t = Trials(scores[same], owner_grid[same], scores[~same], owner_grid[~same])

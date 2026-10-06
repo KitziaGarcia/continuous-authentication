@@ -7,3 +7,5 @@ wfdb
 nbformat
 nbconvert
 ipykernel
+bleak
+polar-python
