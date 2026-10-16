@@ -9,3 +9,6 @@ nbconvert
 ipykernel
 bleak
 polar-python
+fastapi
+uvicorn[standard]
+httpx

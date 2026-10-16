@@ -1,247 +1,310 @@
-# Guía para conectar la web con el modelo de autenticación continua con ECG
+# Guía de integración: cómo conectar el frontend con el backend de autenticación continua
 
-**Para quién es:** quien haga la web (y el asistente de IA que use, Claude o Gemini, que **no** tiene acceso al
-resto del repo). Este documento resume lo necesario para integrar el modelo sin leer todo el código.
-Si algo aquí contradice al código, manda el código; avisa al equipo del modelo.
+**Para quién es:** quien construya la web (y el asistente de IA que use, que **no** ve el resto del repo).
+Aquí está todo lo necesario para hablar con el backend. **La arquitectura y el framework del frontend los decides
+tú**; este documento solo define el contrato: qué ejecutar, qué rutas llamar y qué datos llegan.
 
----
-
-## 1. Qué hace el sistema
-
-1. Una persona se pone una banda de pecho **Polar H10** (mide ECG a 130 Hz).
-2. **Registro:** se graban ~60 s de su ECG y se guarda su "huella" (un vector de 128 números).
-3. **Vigilancia:** cada ~2.5 s se toman sus últimos 5 s de ECG, se convierten en un vector de 128 números y se
-   compara contra la huella (similitud coseno). Si el promedio de las últimas 6 comparaciones es ≥ umbral,
-   la persona sigue **autenticada**; si no, **no autenticada**.
-
-El modelo es una red neuronal pequeña (1D-CNN residual, ~371 mil parámetros, ~1.5 MB) en **PyTorch**.
-Corre sin problema en CPU: una decisión toma ~5 ms (medido en un CPU de PC).
-
-> **Estado: prototipo de investigación (tesis).** El error medido entre días con personas ya vistas es de
-> ~7 % (EER). **No es un sistema de seguridad real.** No lo presentes como tal en la interfaz.
+> **Estado: prototipo de investigación (tesis).** El error medido entre días con personas ya vistas es de ~7 %
+> (EER). **No es un sistema de seguridad real**; no lo presentes como tal en la interfaz.
 
 ---
 
-## 2. Arquitectura recomendada
+## 1. Idea general
 
 ```
-Polar H10 --BLE--> [Backend Python: lee muestras, corre el modelo] --HTTP/WebSocket--> [Web: muestra el estado]
+Polar H10 --Bluetooth--> [Backend Python (este repo)] --HTTP + WebSocket (JSON)--> [Tu frontend]
 ```
 
-- **El modelo y todo el preprocesamiento viven en Python** (backend). La web **no** corre la red neuronal.
-  El filtrado usa `scipy` (filtro de fase cero) y las normalizaciones deben ser idénticas a las del
-  entrenamiento; reimplementarlo en JavaScript es arriesgado y **no se ha probado**.
-- **Lectura de la banda (dos opciones):**
-  - **A (recomendada, ya funciona):** el backend Python lee la banda por Bluetooth con `bleak` +
-    `polar-python` (clase `PolarSource` en `src/session.py`). Backend y banda deben estar en la misma
-    máquina (con Bluetooth), y la web solo muestra resultados.
-  - **B (no probada):** el navegador lee la banda con Web Bluetooth y manda las muestras al backend. Solo
-    Chrome/Edge, requiere HTTPS o `localhost`, y el protocolo ECG del Polar (servicio PMD) no está
-    implementado en JS en este proyecto.
-- Sugerencia: FastAPI + WebSocket para empujar el estado a la web. Aún no está instalado ni hay servidor en el
-  repo; es trabajo nuevo.
+- El **backend** lee la banda, corre el modelo y decide. El frontend **no** procesa ECG: solo manda órdenes
+  (HTTP) y recibe eventos (WebSocket).
+- El backend debe correr en la **misma máquina que tiene Bluetooth** y a la que está emparejada la banda.
+- Hay **una sola banda y una sola operación a la vez** (un registro o una vigilancia). Si mandas otra mientras
+  hay una en curso, responde `409 BUSY`.
 
----
+## 2. Cómo correr el backend
 
-## 3. Contrato de la señal (lo más importante: no cambiar nada de esto)
+Desde la raíz del repo (Python 3.10+; probado en 3.14):
 
-| Parámetro | Valor |
+```bash
+python -m venv .venv && .venv\Scripts\activate            # Windows; en Linux/Mac: source .venv/bin/activate
+pip install torch --index-url https://download.pytorch.org/whl/cpu    # torch NO está en requirements.txt
+pip install -r requirements.txt
+```
+
+| Comando | Para qué |
 |---|---|
-| Frecuencia de muestreo | **130 Hz** (lo que entrega el H10 en modo ECG) |
-| Muestras | Enteros en µV, **crudos**, sin normalizar (14 bits) |
-| Ventana de entrada al modelo | **650 muestras = 5 s** |
-| Filtro | Pasa-banda 0.5–40 Hz, Butterworth orden 4, **fase cero** (`sosfiltfilt`) |
-| Normalización | **z-score por ventana** (media 0, desviación 1) |
-| Forma del tensor | `(N, 1, 650)`, `float32` |
-| Salida | `(N, 128)`, vectores **ya normalizados a longitud 1** |
-| Similitud | Producto punto con la huella = **similitud coseno** |
+| `python -m src.api --simulate` | **Desarrollo del frontend sin banda.** Señal sintética que tú controlas (ver §7). |
+| `python -m src.api --simulate --speed 20` | Igual, pero el tiempo corre 20 veces más rápido (el registro de 65 s dura ~3 s). |
+| `python -m src.api` | Con la banda Polar H10 real (Bluetooth, banda puesta y húmeda). |
 
-Todo el preprocesamiento está en `src/windowing.py::signal_to_windows(sig, fs, cfg)`. **Úsala; no la
-reescribas.** Si cambia cualquier parámetro, el modelo deja de funcionar bien sin dar error.
+Opciones: `--host` (por defecto `127.0.0.1`), `--port` (8000), `--checkpoint models/modelo_X.pt` (por defecto
+`models/modelo_ecg.pt` o el último `modelo_vN.pt`), `--threshold` (0.31), `--cors-origin http://localhost:5173`
+(repetible; por defecto cualquier origen puede llamar, cómodo para desarrollo).
 
-Trucos que importan:
-- **El filtro de fase cero necesita contexto.** Por eso, para decidir cada vez se usan las **últimas 1950
-  muestras (15 s)**, se filtran juntas y se toma la **última ventana de 650**. No filtres solo 5 s.
-- Una **ventana plana** (banda desconectada) se descarta antes del z-score; si no, quedaría convertida en ruido.
-- Las primeras ~5 s tras conectar la banda son inestables: se descartan en el registro.
-- Si la banda manda datos por lotes (BLE), recorta ~1 s en los bordes de cada tramo grabado.
+El servidor queda en `http://127.0.0.1:8000`. Documentación interactiva de las rutas HTTP: `/docs`; esquema
+OpenAPI: `/openapi.json` (el WebSocket **no** aparece ahí: está en §5).
+
+Los modelos entrenados están en `models/` (los datos de ECG **no** están en el repo). Las huellas de los
+usuarios se guardan en `data/live/<user_id>.npz` (ignorado por git).
 
 ---
 
-## 4. Archivos del repo que importan
+## 3. Flujo de la aplicación
 
-Solo estos; el resto (entrenamiento, notebooks, pruebas) se puede ignorar.
-
-| Archivo | Para qué |
-|---|---|
-| `src/config.py` | Clase `Config` con todos los hiperparámetros (`fs=130`, `window_samples=650`, `embedding_dim=128`, ...). Usa `Config()` por defecto: debe coincidir con el modelo. |
-| `src/model.py` | La red `ECGEmbeddingNet`. |
-| `src/checkpoint.py` | `load_checkpoint(path, cfg)` devuelve la red lista en modo evaluación. |
-| `src/windowing.py` | `signal_to_windows`: filtro, ventanas y z-score. |
-| `src/evaluate.py` | `make_model_embed_fn(model)` (ventanas → embeddings sin gradientes) y `l2_normalize`. |
-| `src/quality.py` | `check_quality(raw, fs, min_peaks)`: detecta señal plana, picos, ritmo imposible, huecos. |
-| `src/live.py` | Lógica de autenticación continua ya probada: `make_template`, `score_window`, `Decider`, y el ciclo `monitor`. Es la referencia de cómo decidir. |
-| `src/session.py` | `PolarSource`: lectura del H10 por Bluetooth (`start()`, `stop()`, `n_samples()`, `take(i0, i1)`). |
-
-Dependencias: Python 3.10+ (probado en 3.14), `torch` (CPU), `numpy`, `scipy`, `scikit-learn`, `bleak`,
-`polar-python`. **Ojo:** `requirements.txt` **no** lista `torch`; se instala aparte:
-`pip install torch --index-url https://download.pytorch.org/whl/cpu`.
-
----
-
-## 5. Dónde está el modelo entrenado
-
-Los modelos están en `models/` (cada `.pt` pesa ~1.5 MB y lleva al lado un `.json` con su configuración y
-métricas). Los datos de ECG **no** están en el repo, solo los modelos.
-
-| Archivo | Qué es |
-|---|---|
-| `modelo_v1.pt` | Solo preentrenado con un dataset público (**no usar** para la web) |
-| `modelo_v2.pt` | Preentrenado + fine-tuning con datos Polar |
-| `modelo_v3.pt` | Entrenado solo con datos Polar (el que hoy usa por defecto `src.live`) |
-
-Todavía **no está decidido** cuál será el definitivo (empatan en las pruebas y se reentrenará con más datos).
-Cuando se decida se copiará a `models/modelo_ecg.pt` y el nombre será estable. **Haz que la ruta del modelo
-sea configurable** y no escribas `v3` fijo en el código. La huella guardada depende del modelo (ver abajo).
-
----
-
-## 6. Código de integración (probado)
-
-Motor mínimo para el backend. Probado con grabaciones reales: con la huella de una persona, 0 de 30
-decisiones propias rechazadas y 29 de 30 de otra persona rechazadas.
-
-```python
-"""Motor de autenticación continua para el backend web (sin hardware)."""
-import numpy as np
-
-from src.checkpoint import load_checkpoint
-from src.config import Config
-from src.evaluate import make_model_embed_fn
-from src.live import AUTH, BAD_SIGNAL, Decider, make_template, score_window
-from src.quality import check_quality
-from src.windowing import signal_to_windows
-
-FS = 130
-BUFFER = 3 * 650          # 15 s: 5 s de ventana + 10 s de contexto para el filtro
-
-
-class AuthEngine:
-    def __init__(self, checkpoint: str, threshold: float = 0.31, smooth: int = 6, reset_after: int = 2):
-        self.cfg = Config()
-        self.embed = make_model_embed_fn(load_checkpoint(checkpoint, self.cfg))
-        self.threshold, self.smooth, self.reset_after = threshold, smooth, reset_after
-
-    def enroll(self, raw: np.ndarray) -> np.ndarray:
-        """`raw`: ~60 s de muestras crudas del Polar (sin los primeros 5 s). Devuelve la huella (128,)."""
-        q = check_quality(raw, FS)
-        if not q.ok:
-            raise ValueError("Registro con mala señal: " + " ".join(q.issues))
-        return make_template(self.embed, signal_to_windows(raw, FS, self.cfg))
-
-    def new_monitor(self, template: np.ndarray) -> "Monitor":
-        return Monitor(self, template)
-
-
-class Monitor:
-    """Una instancia por usuario conectado; llamar `step` cada ~2.5 s."""
-
-    def __init__(self, engine: AuthEngine, template: np.ndarray):
-        self.e, self.template = engine, template
-        self.decider, self.bad_run = Decider(engine.threshold, engine.smooth), 0
-
-    def step(self, last_15s: np.ndarray) -> dict:
-        """`last_15s`: las últimas 1950 muestras crudas (en µV). Devuelve un dict listo para JSON."""
-        if len(last_15s) < BUFFER:
-            return {"status": "WARMING_UP", "score": None, "smoothed": None}
-        raw = np.asarray(last_15s[-BUFFER:], dtype=np.float64)
-        windows = signal_to_windows(raw, FS, self.e.cfg)
-        if len(windows) == 0 or not check_quality(raw[-2 * 650:], FS, min_peaks=5).ok:
-            self.bad_run += 1
-            if self.bad_run >= self.e.reset_after:
-                self.decider.reset()
-            return {"status": BAD_SIGNAL, "score": None, "smoothed": None}
-        self.bad_run = 0
-        score = score_window(self.e.embed, self.template, windows[-1])
-        smoothed, status = self.decider.update(score)
-        return {"status": status, "score": score, "smoothed": smoothed, "authenticated": status == AUTH}
+```
+                 POST /enroll/start                    POST /monitor/start
+   [sin huella] ───────────────────► [registrando 65 s] ─────────────────► [vigilando]
+        ▲                                   │ falla (señal mala)                 │
+        │                                   ▼                                    │ POST /stop
+        └──────────── reintentar ◄── enroll_result ok:false                      ▼
+                                                                            [idle, banda cerrada]
 ```
 
-Valores de `status` (cadenas de `src/live.py`): `"AUTENTICADO"`, `"NO AUTENTICADO"`, `"SEÑAL MALA"`, más
-`"WARMING_UP"` del ejemplo. El campo `authenticated` solo existe cuando hubo decisión.
+1. Al cargar la página: abre el WebSocket (`/ws`) y llama `GET /users/{user_id}` para saber si ya hay huella.
+2. Botón **"Tomar muestra inicial"** → `POST /enroll/start`. Dura **65 s** (5 s de estabilización + 60 s de
+   registro). Escucha `enroll_progress` y al final `enroll_result`.
+3. Botón **"Iniciar vigilancia"** → `POST /monitor/start`. Llegan eventos `decision` cada ~2.5 s.
+4. Botón **"Detener"** → `POST /stop` (cancela lo que haya y cierra la conexión con la banda).
 
-Uso típico:
+Mientras corre una operación, deshabilita los botones (usa `phase`, ver §5). Tras un registro o una vigilancia
+la conexión con la banda queda abierta (`connected: true`) para poder encadenar la siguiente sin reconectar;
+`POST /stop` la cierra.
 
-```python
-engine = AuthEngine("models/modelo_ecg.pt")      # cargar UNA vez al arrancar el servidor
-template = engine.enroll(muestras_60s)           # np.ndarray (128,); guardar por usuario
-monitor = engine.new_monitor(template)           # uno por usuario conectado
-resultado = monitor.step(ultimas_1950_muestras)  # cada ~2.5 s
-```
+---
 
-Guardar/cargar la huella: `np.savez(path, template=template, checkpoint=nombre_modelo)` y al cargar
-**verificar que `checkpoint` coincide** con el modelo en uso; si no, pedir un nuevo registro (las huellas de
-modelos distintos no son comparables).
+## 4. Rutas HTTP
 
-### Endpoints sugeridos
+Todas devuelven JSON. Los `user_id` solo admiten letras, números y guiones (1 a 40 caracteres); otro valor
+devuelve `422`.
 
-| Método | Ruta | Función |
+| Método y ruta | Cuerpo | Respuesta |
 |---|---|---|
-| POST | `/enroll/start` | Inicia el registro de un usuario (5 s de espera + 60 s) |
-| GET | `/enroll/status` | Progreso y resultado del registro (o error de señal mala) |
-| POST | `/monitor/start` | Empieza la vigilancia |
-| WS | `/monitor/stream` | Empuja `{t, status, score, smoothed}` cada ~2.5 s |
-| POST | `/monitor/stop` | Termina |
+| `GET /health` | — | `{"ok": true, "mode": "simulate" \| "polar", "model": "modelo_v3.pt", "threshold": 0.31}` |
+| `GET /state` | — | El estado completo (igual que el evento `state`, sin `type`). Sirve para **sondeo** si no usas WebSocket. |
+| `GET /users/{user_id}` | — | `{"user_id": "ana", "enrolled": true}` |
+| `DELETE /users/{user_id}` | — | `{"user_id": "ana", "deleted": true}` (borra la huella y el contador de fallos) |
+| `POST /enroll/start` | `{"user_id": "ana"}` | `202 {"accepted": true, "user_id": "ana"}`. El resultado llega **por WebSocket** o en `/state`. |
+| `POST /monitor/start` | `{"user_id": "ana"}` | `202 {"accepted": true, "user_id": "ana"}` |
+| `POST /stop` | — | `{"phase": "idle"}` |
+| `POST /sim/scenario` | `{"scenario": "..."}` | Solo con `--simulate`. Ver §7. |
+
+**Errores** (formato `{"detail": {"code": "...", "message": "..."}}`):
+
+| Código HTTP | `code` | Cuándo |
+|---|---|---|
+| 404 | `NOT_ENROLLED` | `monitor/start` para alguien sin huella: hay que registrar primero |
+| 409 | `BUSY` | Ya hay un registro o vigilancia en curso (si acaba de terminar uno, espera un instante y reintenta) |
+| 409 | `TEMPLATE_MODEL_MISMATCH` | La huella es de otro modelo (se cambió el modelo): hay que registrar de nuevo |
+| 422 | (lista de FastAPI) | `user_id` inválido o cuerpo mal formado; `detail` es una lista, no un objeto |
+
+Los errores que ocurren **durante** una operación (banda no encontrada, conexión perdida) no son respuestas HTTP:
+llegan como evento `error` por WebSocket y quedan en `last_error` de `/state`.
 
 ---
 
-## 7. Reglas de decisión (ya implementadas; no las cambies sin hablar con el equipo)
+## 5. WebSocket `ws://127.0.0.1:8000/ws`
 
-- **Cada 2.5 s** se evalúa la ventana más reciente de 5 s (50 % de traslape).
-- **Promedio de las últimas 6 ventanas** (~15 s): una ventana mala no bloquea al usuario legítimo.
-- **Umbral actual: 0.31** (similitud coseno), calculado con las grabaciones del Polar existentes. Es
-  provisional: se recalibrará con el modelo definitivo. **Haz que sea configurable.** Lo que se observó en pruebas:
-  - Usuario legítimo: similitud ~0.90–0.99.
-  - Otra persona: ~−0.10 a 0.30.
-- **Señal mala = sin decisión** (ni acepta ni rechaza). Se detecta con `check_quality`.
-- **Reinicio tras pausa:** con 2 pasos seguidos de señal mala (~5 s) se borra el promedio acumulado. Esto
-  evita que alguien que se ponga la banda después herede el promedio del usuario anterior. No lo quites.
-- Un impostor puede tardar hasta ~7 s en ser rechazado (por el promedio). Es normal.
-- Si dejan de llegar muestras ~15 s, tratarlo como conexión perdida.
+Al conectar, **lo primero que llega es un evento `state`** con la situación actual (así, si recargas la página
+a media operación, te recuperas). Después llegan eventos; todos son JSON con un campo `type`.
 
-La interfaz debería mostrar tres estados distintos: autenticado, no autenticado y "sin señal / señal mala".
+### `state` — foto del estado (al conectar y en cada cambio de `phase`)
+
+```json
+{
+  "type": "state",
+  "phase": "idle",                 // "idle" | "connecting" | "enrolling" | "monitoring"
+  "connected": false,              // ¿hay conexión abierta con la banda?
+  "user_id": null,
+  "enroll": {
+    "stage": null,                 // null | "settling" | "recording"
+    "elapsed_s": 0.0, "total_s": 60.0,
+    "signal_ok": null,             // null = aún sin medir; true/false = calidad de señal reciente
+    "codes": [],                   // problemas de señal actuales (ver §6)
+    "consecutive_failures": 0,     // registros fallidos seguidos de ESTE usuario
+    "last_failure": null           // {"codes": [...], "messages": [...]} del último registro fallido
+  },
+  "monitor": null,                 // último evento decision (o status "WARMING_UP" al empezar)
+  "last_error": null               // {"code": "...", "message": "..."} o null
+}
+```
+
+### `enroll_progress` — cada ~1 s durante el registro
+
+```json
+{"type": "enroll_progress", "stage": "recording", "elapsed_s": 35.0, "total_s": 60.0,
+ "signal_ok": true, "codes": []}
+```
+
+`stage` pasa por `"settling"` (5 s, `total_s: 5`) y luego `"recording"` (60 s, `total_s: 60`). Progreso total =
+`(stage == "settling" ? elapsed_s : 5 + elapsed_s) / 65`. `signal_ok` es `null` hasta que hay ~10 s de señal y
+luego se actualiza cada 2 s: úsalo para avisar **en vivo** ("ponte derecho/a y no te muevas") sin esperar al final.
+
+### `enroll_result` — una vez, al terminar el registro
+
+```json
+{"type": "enroll_result", "ok": true,  "user_id": "ana", "consecutive_failures": 0, "codes": [], "messages": []}
+{"type": "enroll_result", "ok": false, "user_id": "ana", "consecutive_failures": 3,
+ "codes": ["MOVEMENT_ARTIFACT"], "messages": ["Hay movimiento o mal contacto: ponte derecho/a y no te muevas."]}
+```
+
+- `ok: true` → la huella quedó guardada; `consecutive_failures` vuelve a 0.
+- `ok: false` → **no** se guardó nada. `consecutive_failures` cuenta los fallos seguidos de ese `user_id`
+  (se guarda en memoria del servidor: se pierde al reiniciarlo). `messages` son textos en español listos para mostrar.
+
+### `decision` — cada ~2.5 s durante la vigilancia
+
+```json
+{"type": "decision", "t": 3.01, "status": "AUTHENTICATED", "authenticated": true,
+ "score": 0.987, "smoothed": 0.987, "threshold": 0.31,
+ "bad_signal_streak": 0, "rejection_streak": 0, "hr_bpm": 70.3, "codes": []}
+```
+
+| Campo | Significado |
+|---|---|
+| `t` | Segundos desde que empezó la vigilancia |
+| `status` | `"AUTHENTICATED"`, `"REJECTED"` o `"BAD_SIGNAL"` (sin decisión) |
+| `authenticated` | `true`/`false`, o `null` si `BAD_SIGNAL`. **Es el campo para el semáforo.** |
+| `score` | Similitud (coseno, de −1 a 1) de **esta** ventana con la huella; `null` si `BAD_SIGNAL` |
+| `smoothed` | Promedio de las últimas 6 ventanas (~15 s). **Con este se decide** (≥ `threshold` ⇒ autenticado) |
+| `threshold` | Umbral usado (0.31) |
+| `bad_signal_streak` | Decisiones **seguidas** con señal mala. 3 ≈ 7.5 s |
+| `rejection_streak` | Decisiones **seguidas** `REJECTED`. 3 ≈ 7.5 s |
+| `hr_bpm` | Ritmo cardiaco estimado (puede ser `null`) |
+| `codes` | Si `BAD_SIGNAL`, motivo(s) (ver §6); si no, `[]` |
+
+Valores típicos: el usuario legítimo da `score` de 0.90 a 0.99; otra persona, de −0.10 a 0.30. Al cambiar de
+persona el rechazo puede tardar hasta ~7 s (por el promedio). Durante los primeros segundos de la vigilancia
+`/state` trae `monitor.status = "WARMING_UP"` (hasta ~15 s si la conexión era nueva).
+
+### `error` — algo falló a media operación
+
+```json
+{"type": "error", "code": "NO_DEVICE", "message": "No se encontró el sensor. ..."}
+```
+
+| `code` | Significa | Qué mostrar |
+|---|---|---|
+| `NO_DEVICE` | No se encontró la banda tras ~10 s de búsqueda | "Ponte la banda, humedécela y reintenta" |
+| `CONNECTION_FAILED` | Bluetooth apagado/sin permisos u otro fallo al conectar | Mostrar `message` |
+| `CONNECTION_LOST` | Dejó de llegar señal (~5 s en registro, ~15 s en vigilancia) | "Se perdió la banda" |
+
+Después de un `error` el servidor vuelve a `phase: "idle"` y cierra la conexión con la banda.
 
 ---
 
-## 8. Limitaciones conocidas (pónlas en la interfaz o la documentación)
+## 6. "¿De dónde saco...?" — recetas para la interfaz
 
-- **Se entrenó con ~15 personas** y pocas sesiones por persona. Con usuarios nuevos desconocidos el error
-  puede ser mayor que el ~7 % medido con personas ya vistas.
-- El umbral se calibró con personas que el modelo ya conocía.
-- El rendimiento no es parejo entre personas: una de las personas del dataset quedó casi al azar y otras dos
-  con ~8–9 % de error.
-- Sensible a movimiento y mal contacto: la banda debe ir bien húmeda y ajustada.
-- Con el modelo actual el registro y la prueba del mismo día son la versión fácil; entre días es más difícil.
-- El modelo es de un solo canal (la derivación del Polar), no de ECG clínico.
+| Quiero... | Lo obtengo de... |
+|---|---|
+| Botón "tomar muestra inicial" | `POST /enroll/start {"user_id"}` |
+| Saber si hay que registrar primero | `GET /users/{id}` → `enrolled` |
+| Barra de progreso del registro | `enroll_progress` (ver fórmula en §5) |
+| Aviso en vivo "ponte derecho/a y no te muevas" durante el registro | `enroll_progress.signal_ok === false` (y `codes`) |
+| **Pop-up "falló 3 veces"** | `enroll_result.ok === false && enroll_result.consecutive_failures >= 3` (también en `state.enroll.consecutive_failures`) |
+| Texto a mostrar tras un fallo | `enroll_result.messages` (o traducir `codes` con la tabla de abajo) |
+| Semáforo verde/rojo/gris | `decision.authenticated` → `true` / `false` / `null` |
+| Aviso "se te está rechazando" | `decision.rejection_streak >= 3` |
+| Aviso "ajusta la banda" en vigilancia | `decision.bad_signal_streak >= 3` (motivo en `codes`) |
+| Mostrar ritmo cardiaco | `decision.hr_bpm` |
+| Medidor / gráfica de similitud | `decision.smoothed` frente a `decision.threshold` |
+| Banda desconectada | evento `error` con `CONNECTION_LOST` / `NO_DEVICE` |
+| Bloquear botones mientras trabaja | `state.phase !== "idle"` |
+
+Los números "3" de los avisos son decisión del frontend: el backend solo entrega los contadores.
+
+### Códigos de problema de señal (`codes`)
+
+| `code` | Significado | Mensaje en español (viene en `messages`) |
+|---|---|---|
+| `FLAT_SIGNAL` | No llega señal (banda floja/seca) | No llega señal: revisa que la banda esté puesta y con los electrodos húmedos. |
+| `INVALID_VALUES` | Valores no válidos | La señal trae valores no válidos: ajusta la banda y repite. |
+| `MOVEMENT_ARTIFACT` | Picos por movimiento o mal contacto | Hay movimiento o mal contacto: ponte derecho/a y no te muevas. |
+| `FEW_BEATS` | Casi no se detectan latidos | Casi no se detectan latidos: ajusta la banda y humedece los electrodos. |
+| `IMPOSSIBLE_HEART_RATE` | Ritmo imposible (fuera de 40–180 lpm) | Se detecta un ritmo cardiaco imposible: probablemente mal contacto. |
+| `IRREGULAR_RHYTHM` | Ritmo muy irregular | El ritmo es muy irregular: quédate quieto/a y respira normal. |
+| `SIGNAL_GAP` | Hueco de más de 2 s sin latidos | Se perdió la señal unos segundos: la banda se despegó o se movió. |
+| `POOR_SIGNAL` | Señal mala sin motivo específico | La señal no es buena: ajusta la banda y quédate quieto/a. |
+
+Puede venir más de un código a la vez. Usa los `codes` como identificadores estables; los textos pueden cambiar.
 
 ---
 
-## 9. Privacidad y datos
+## 7. Desarrollar sin banda: modo simulado
 
-- El **ECG y las huellas son datos biométricos.** No los subas al repo. Están ignorados en `.gitignore`
-  (`data/raw/`, `data/processed/`, `data/live/`, `data/live/`); respeta eso. Los modelos sí se versionan.
-- La huella (`template`, 128 números) es el dato sensible mínimo: guárdala cifrada o fuera del repo, por
-  usuario, con consentimiento, y permite borrarla.
-- No guardes el ECG crudo de los usuarios de la web salvo que sea necesario y con consentimiento explícito.
-- Los participantes de la recolección tienen ID anónimo (`P01`, `P02`, ...). No intentes ligarlos a personas.
+Con `--simulate` el backend genera un ECG sintético y puedes **provocar situaciones** para probar la interfaz:
+
+`POST /sim/scenario` con `{"scenario": "<nombre>"}` — cambia lo que "pasa" desde ese instante:
+
+| `scenario` | Efecto | Lo que verás |
+|---|---|---|
+| `same_person` | La misma persona del registro (por defecto) | `AUTHENTICATED`, `score` ~0.98 |
+| `other_person` | Otra persona se pone la banda | Tras unos segundos `REJECTED`, `score` ~0.2, sube `rejection_streak` |
+| `bad_signal` | Banda floja (señal plana) | `BAD_SIGNAL` con `codes: ["FLAT_SIGNAL"]`; si se pone **antes** de un registro, el registro falla |
+| `movement` | Picos de movimiento | `BAD_SIGNAL` con `MOVEMENT_ARTIFACT` |
+
+Receta para probar el pop-up de "3 fallos": `POST /sim/scenario {"scenario":"bad_signal"}` y llama a
+`POST /enroll/start` tres veces (con `--speed 20` cada registro dura segundos).
+
+Esta señal es **sintética**; los puntajes reales con la banda serán distintos (ver §9). El modo simulado sirve
+para probar la interfaz, no para evaluar el modelo.
 
 ---
 
-## 10. Pendientes del equipo del modelo (pueden cambiar cosas)
+## 8. Ejemplo completo de uso (HTTP + WebSocket, Python)
 
-- Elegir el modelo definitivo y copiarlo a `models/modelo_ecg.pt`.
-- Recalibrar el umbral con el modelo final.
-- Evaluar con personas nuevas entre días (faltan sesiones de las personas reservadas).
-- Mejorar el requirements (`torch` no aparece).
+```python
+import json, httpx
+from websockets.sync.client import connect
 
-Para dudas del modelo o de los datos, pregunta al equipo antes de modificar `src/`.
+B = "http://127.0.0.1:8000"
+with connect("ws://127.0.0.1:8000/ws") as ws:
+    print(json.loads(ws.recv())["phase"])                    # estado inicial: "idle"
+    httpx.post(B + "/enroll/start", json={"user_id": "ana"})
+    while (ev := json.loads(ws.recv()))["type"] != "enroll_result":
+        pass                                                  # aquí actualizas la barra con enroll_progress
+    print(ev["ok"], ev["consecutive_failures"])
+    while json.loads(ws.recv()).get("phase") != "idle":      # espera el state que cierra la operación
+        pass
+    httpx.post(B + "/monitor/start", json={"user_id": "ana"})
+    for _ in range(10):
+        ev = json.loads(ws.recv())
+        if ev["type"] == "decision":
+            print(ev["status"], ev["smoothed"], ev["rejection_streak"])
+    httpx.post(B + "/stop")
+```
+
+En JavaScript el WebSocket es el estándar del navegador: `new WebSocket("ws://127.0.0.1:8000/ws")`,
+`onmessage = e => JSON.parse(e.data)`.
+
+---
+
+## 9. Lo que el frontend debe tener presente (limitaciones)
+
+- Entrenado con ~15 personas y pocas sesiones: con usuarios nuevos el error puede ser mayor que el ~7 % medido
+  con personas ya vistas. El umbral (0.31) es provisional y se recalibrará con el modelo final.
+- El rendimiento no es parejo entre personas (una del dataset quedó casi al azar).
+- Es sensible a movimiento y mal contacto: la banda debe ir bien húmeda y ajustada.
+- Un impostor puede tardar hasta ~7 s en ser rechazado; tras una pausa de señal (≥ 2 decisiones malas, ~5 s)
+  se reinicia el promedio para que nadie herede la sesión del usuario anterior.
+- Una operación a la vez, una sola banda.
+- Si el backend se reinicia se pierde el contador `consecutive_failures` (las huellas sí persisten).
+
+## 10. Privacidad
+
+- El ECG y las huellas son **datos biométricos**. No subas al repo `data/raw/`, `data/processed/` ni `data/live/`
+  (están en `.gitignore`). Los **modelos entrenados sí** se versionan en `models/`.
+- La huella (128 números) es el dato sensible mínimo: guárdala por usuario, con consentimiento, y ofrece
+  borrarla (`DELETE /users/{id}`). El backend no guarda el ECG crudo.
+- Los participantes de la recolección tienen ID anónimo (`P01`, `P02`...). No intentes ligarlos a personas.
+
+## 11. Para quien mantenga el backend
+
+- Implementación de referencia: `src/api.py` (servidor), `src/live.py` (lógica de decisión: huella, promedio de
+  ventanas, reinicio), `src/session.py::PolarSource` (lectura de la banda), `src/quality.py` (calidad de señal).
+- **Contrato de la señal (no cambiar):** 130 Hz, muestras crudas en µV, ventana de 650 muestras (5 s), filtro
+  pasa-banda 0.5–40 Hz de fase cero, z-score por ventana, embedding de 128 números normalizado a longitud 1;
+  similitud = producto punto. Todo el preprocesamiento está en `src/windowing.py::signal_to_windows`: úsalo, no lo
+  reescribas. Para cada decisión se filtran las últimas 1950 muestras (15 s) y se evalúa la última ventana.
+- La huella guardada depende del modelo (`data/live/<id>.npz` incluye el nombre del `.pt`); si cambias de
+  modelo hay que registrar de nuevo (el backend lo avisa con `TEMPLATE_MODEL_MISMATCH`).
+- Pruebas: `python -m pytest tests/test_api.py` (usa modo simulado acelerado, no necesita banda).
