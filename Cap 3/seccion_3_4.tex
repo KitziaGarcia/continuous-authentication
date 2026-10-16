@@ -1,0 +1,94 @@
+\section{Construcción e implementación del prototipo}
+\label{sec:construccion}
+
+Esta sección describe cómo el diseño se convirtió en un prototipo funcional: la organización del software, la adquisición de datos con el sensor, el protocolo de recolección, las pruebas parciales y los cambios realizados durante las iteraciones.
+
+\subsection{Hardware}
+
+El prototipo utiliza una banda pectoral Polar H10, que registra un canal de ECG a 130~Hz y lo transmite por Bluetooth Low Energy a una computadora. Antes de cada grabación se humedecen los electrodos de la banda para asegurar el contacto. El entrenamiento se realiza en una computadora portátil HP OmniBook X con 16~GB de RAM y CPU de 6 núcleos, sin GPU. \pendiente{agregar fotografía de la banda}
+
+\subsection{Implementación del software}
+
+El software se desarrolló en Python 3.14 con PyTorch 2.14 (versión para CPU), NumPy 2.3, SciPy 1.16, scikit-learn, Matplotlib 3.10 y Bleak 3.0 para la conexión Bluetooth, y se organizó de forma modular para facilitar su explicación, prueba y mantenimiento.
+
+\begin{table}[htbp]
+\centering
+\caption{Módulos del software.}
+\label{tab:modulos}
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Módulo} & \textbf{Función} \\
+\midrule
+\texttt{config} & Todos los parámetros, la semilla y la lista de personas \emph{hold-out} \\
+\texttt{record}, \texttt{check} & Conexión BLE con el Polar y chequeo rápido de la lectura antes de grabar \\
+\texttt{protocol}, \texttt{session}, \texttt{status} & Protocolo de sesiones, grabación guiada con nombres automáticos de archivo y seguimiento del avance \\
+\texttt{quality} & Control de calidad de la señal (señal plana, ruido, picos anómalos, número de latidos) \\
+\texttt{windowing}, \texttt{data} & Filtrado, ventaneo, conjuntos de datos, particiones por persona y aumento de datos \\
+\texttt{public\_data} & Carga y remuestreo de la base pública ECG-ID \\
+\texttt{model} & Red neuronal de embeddings \\
+\texttt{train}, \texttt{checkpoint} & Preentrenamiento, ajuste fino, entrenamiento solo Polar y guardado de modelos con archivo JSON de configuración y métricas \\
+\texttt{evaluate} & EER, ROC, FAR/FRR, intervalos \emph{bootstrap} y tablas de resultados \\
+\texttt{synthetic} & Señales sintéticas para pruebas \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Cada etapa de entrenamiento se ejecuta con un solo comando y los modelos se guardan como versiones numeradas junto con un archivo que registra la configuración, la semilla, la lista de personas \emph{hold-out}, la versión de los datos y las métricas. Solo se almacenan los pesos del codificador.
+
+\subsection{Protocolo de recolección de datos}
+
+Con el Polar H10 se grabaron 20 voluntarios con identificadores anónimos fijos (P01, P02, \dots). Cada voluntario realiza \textbf{3 sesiones en días distintos}, con una separación de 2 a 3 días, para medir la variación de la señal entre días. Cada sesión dura aproximadamente 5.5 minutos y se divide en cuatro actividades:
+
+\begin{table}[htbp]
+\centering
+\caption{Actividades de cada sesión de grabación.}
+\label{tab:sesion}
+\small
+\begin{tabular}{l c}
+\toprule
+\textbf{Actividad} & \textbf{Duración (min)} \\
+\midrule
+Reposo & 2 \\
+Lectura & 1.5 \\
+Resolución de problemas & 1 \\
+Hablando & 0.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El programa guía al voluntario, evalúa la calidad de cada actividad y permite repetir una si salió mal. Los datos crudos no se suben al repositorio. Cada participante firmó un formato de consentimiento informado que especificaba las actividades que se realizarían, los cuidados durante la grabación, el uso que se daría a los datos (exclusivamente de investigación, con identificadores anónimos) y que la grabación no implicaba riesgos para su salud. \pendiente{elaborar y recabar el formato firmado; anexarlo al documento}
+
+\subsection{Calibración y validación de instrumentos}
+
+La calidad de cada actividad se verifica automáticamente con \texttt{quality}, y antes de grabar se corre un chequeo de unos 12~s con \texttt{check} que advierte si hay que ajustar la banda. Para el preentrenamiento se comprobó la frecuencia de muestreo de la base pública y se remuestreó a 130~Hz.
+
+\subsection{Integración y pruebas parciales}
+
+Cada módulo cuenta con pruebas automáticas con señales sintéticas (por ejemplo, forma de salida y norma del embedding, ausencia de fugas de personas \emph{hold-out} hacia el entrenamiento, evaluación con casos de EER conocido, guardado y carga de modelos, y comprobación de la calidad de señal). Primero se verificó el modelo y los datos por separado, después el entrenamiento y la evaluación, y finalmente la adquisición con el sensor.
+
+\subsection{Iteraciones del prototipo}
+
+\begin{table}[htbp]
+\centering
+\caption{Iteraciones del prototipo.}
+\label{tab:iteraciones}
+\small
+\begin{tabularx}{\textwidth}{c X X}
+\toprule
+\textbf{Versión} & \textbf{Implementación principal} & \textbf{Propósito} \\
+\midrule
+1 & Red de embeddings, entrenamiento y evaluación; preentrenamiento con ECG-ID (modelo v1) & Comprobar que la red aprende a distinguir personas \\
+2 & Adquisición con el Polar, control de calidad y sesiones guiadas de cuatro actividades & Obtener datos propios con un protocolo repetible \\
+3 & Recolección con los 20 voluntarios y ajuste fino con el Polar & Adaptar la red al sensor y a las personas del estudio \\
+4 & Lógica de decisión continua (3 rechazos, nueva muestra, bloqueo) y, de ser necesario, mejoras de preprocesamiento & Detectar un impostor durante el examen \\
+5 & Interfaz del examen de unas 30 preguntas de comprensión lectora y pruebas de tiempo de detección & Integrar el sistema completo \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\pendiente{las versiones 1 y 2 corresponden a lo ya implementado (confirmado en el historial de git); las versiones 3 a 5 son el plan de trabajo actual. Ajustar al entregar, indicando para cada versión el problema detectado, el cambio realizado y la razón técnica}
+
+\subsection{Simulación del examen}
+
+El examen simulado consta de unas 30 preguntas de comprensión lectora: se presentan lecturas y, después de cada una, aproximadamente 5 preguntas. Mientras el usuario lo contesta, el sistema verifica su identidad de manera continua con la lógica descrita en la Sección~\ref{sec:decision}. \pendiente{definir la plataforma, la duración y las lecturas empleadas}

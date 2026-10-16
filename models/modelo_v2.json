@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "mode": "finetune",
+  "created_utc": "2026-10-16T01:17:21.769966+00:00",
+  "seed": 42,
+  "holdout_ids": [
+    "P13",
+    "P14"
+  ],
+  "data_fingerprint": "f686457df3e6",
+  "config": {
+    "seed": 42,
+    "fs": 130,
+    "window_samples": 650,
+    "window_overlap": 0.5,
+    "band_low_hz": 0.5,
+    "band_high_hz": 40.0,
+    "embedding_dim": 128,
+    "stem_channels": 16,
+    "stage_channels": [
+      32,
+      64,
+      128,
+      128
+    ],
+    "kernel_size": 5,
+    "batch_size": 64,
+    "label_smoothing": 0.1,
+    "weight_decay": 0.0001,
+    "patience": 5,
+    "pretrain_epochs": 30,
+    "pretrain_lr": 0.001,
+    "finetune_head_epochs": 5,
+    "finetune_head_lr": 0.001,
+    "finetune_full_epochs": 20,
+    "finetune_full_lr": 0.0001,
+    "polar_only_epochs": 40,
+    "polar_only_lr": 0.001,
+    "jitter_std": 0.02,
+    "magnitude_warp": 0.1,
+    "warp_strength": 0.05,
+    "wander_amplitude": 0.1,
+    "holdout_ids": [
+      "P13",
+      "P14"
+    ],
+    "min_holdout_people": 2,
+    "pretrain_val_fraction": 0.1,
+    "pretrain_val_mode": "same_session",
+    "data_dir": "data/processed",
+    "models_dir": "models",
+    "bootstrap_samples": 1000
+  },
+  "metrics": {
+    "best_val_eer": 0.07499999999999998,
+    "stage_a": {
+      "best_val_eer": 0.07499999999999998,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 1.050277506498466,
+          "val_eer": 0.08452380952380954
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.6342492054279586,
+          "val_eer": 0.07797619047619045
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.6007483740498248,
+          "val_eer": 0.0785714285714286
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.5919255766653477,
+          "val_eer": 0.07499999999999998
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.5871207131479019,
+          "val_eer": 0.07559523809523808
+        }
+      ]
+    },
+    "stage_b": {
+      "best_val_eer": 0.07499999999999998,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.5945530919204081,
+          "val_eer": 0.07623299319727891
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.5852174817171312,
+          "val_eer": 0.07682823129251701
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.5809487592905087,
+          "val_eer": 0.07565901360544217
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.579427092595208,
+          "val_eer": 0.0779549319727891
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.5772042937744829,
+          "val_eer": 0.07512755102040816
+        }
+      ]
+    }
+  },
+  "parent": "modelo_v1.pt"
+}

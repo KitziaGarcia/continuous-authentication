@@ -28,9 +28,11 @@ class QualityReport:
     hr_bpm: float = float("nan")
     rr_variation: float = float("nan")
     spike_ratio: float = float("nan")
+    peak_indices: np.ndarray = field(default_factory=lambda: np.array([], dtype=int))   # en muestras de `raw`
 
 
-def check_quality(raw, fs: int = 130) -> QualityReport:
+def check_quality(raw, fs: int = 130, min_peaks: int = MIN_PEAKS) -> QualityReport:
+    """`min_peaks` se puede bajar para segmentos cortos (el chequeo rápido de ~12 s)."""
     raw = np.asarray(raw, dtype=np.float64)
     if not np.isfinite(raw).all():
         return QualityReport(False, ["La señal contiene NaN o valores no válidos."])
@@ -49,9 +51,10 @@ def check_quality(raw, fs: int = 130) -> QualityReport:
     if spike > MAX_SPIKE_RATIO:
         issues.append(f"Pico de amplitud anormal ({spike:.1f} veces lo normal): artefacto de contacto o movimiento.")
     peaks, _ = find_peaks(x, distance=int(0.3 * fs), prominence=0.5 * ref)
-    if len(peaks) < MIN_PEAKS:
+    peaks = peaks + edge                                # de vuelta a las muestras originales (se recortó `edge` al inicio)
+    if len(peaks) < min_peaks:
         issues.append(f"Se detectan muy pocos latidos ({len(peaks)}): la señal parece ruido o no hay buen contacto.")
-        return QualityReport(False, issues, n_peaks=len(peaks), spike_ratio=spike)
+        return QualityReport(False, issues, n_peaks=len(peaks), spike_ratio=spike, peak_indices=peaks)
     rr = np.diff(peaks) / fs
     hr = 60.0 / float(np.median(rr))
     rr_var = float(rr.std() / rr.mean())
@@ -61,4 +64,4 @@ def check_quality(raw, fs: int = 130) -> QualityReport:
         issues.append(f"Ritmo muy irregular (variación {rr_var:.2f}): movimiento o mal contacto.")
     if float(rr.max()) > MAX_RR_GAP_S:
         issues.append(f"Hueco de {rr.max():.1f} s sin latidos: se perdió la señal (banda despegada).")
-    return QualityReport(not issues, issues, len(peaks), hr, rr_var, spike)
+    return QualityReport(not issues, issues, len(peaks), hr, rr_var, spike, peaks)

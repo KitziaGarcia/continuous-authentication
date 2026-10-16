@@ -8,10 +8,11 @@ import numpy as np
 import torch
 
 # IDs de participantes Polar que NUNCA se usan para preentrenar ni entrenar.
-# Sirven para evaluar con impostores que la red jamás vio. Editar UNA vez, al
-# decidir quiénes serán el hold-out (mínimo 2) y no cambiarlo después, o los
-# resultados dejan de ser comparables.  Ejemplo: ("P08", "P09")
-HOLDOUT_IDS: tuple[str, ...] = ()
+# Sirven para evaluar con impostores que la red jamás vio. Plan con 20 personas:
+# 14 entrenamiento / 2 validación / 4 hold-out (prueba final). Escoger al azar UNA
+# vez, después de recolectar y antes de entrenar con Polar, y no cambiarlo después,
+# o los resultados dejan de ser comparables.  Ejemplo: ("P08", "P09", "P15", "P19")
+HOLDOUT_IDS: tuple[str, ...] = ("P13", "P14")
 
 
 @dataclass(frozen=True)

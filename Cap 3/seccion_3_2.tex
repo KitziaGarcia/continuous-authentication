@@ -1,0 +1,130 @@
+\section{Generación, evaluación y selección de alternativas}
+\label{sec:alternativas}
+
+Esta sección muestra cómo se generaron distintas propuestas para resolver el problema y por qué se eligió una de ellas. Las técnicas de creatividad no son las alternativas finales: son procedimientos para generar ideas que después se organizan, comparan y seleccionan.
+
+% NOTA PARA EL EQUIPO: las ideas, tablas y calificaciones de esta sección son una
+% PROPUESTA de partida. Deben discutirse y ajustarse según lo que el equipo realmente
+% consideró, y sustentarse con literatura o pruebas preliminares. Conserven evidencias
+% (fotos de la lluvia de ideas, mapa mental) para anexarlas.
+
+\subsection{Técnicas para la generación de ideas}
+
+\subsubsection{Lluvia de ideas}
+
+Pregunta generadora: ¿qué sensor, qué representación de la señal y qué modelo podrían utilizarse para verificar de forma continua la identidad de una persona a partir de su ECG? Las ideas obtenidas fueron: banda Polar H10, un sensor de ECG de diseño propio, otros equipos comerciales de mayor costo (por ejemplo, Movesense o Zephyr BioHarness), señal cruda o latidos segmentados, rasgos manuales (intervalos y amplitudes de las ondas P, QRS y T), máquina de vectores de soporte (SVM), red neuronal convolucional 1D como clasificador, red 1D con embeddings, pérdida de tripleta, preentrenamiento con una base de datos pública y suavizado de las decisiones en el tiempo. \pendiente{confirmar con el equipo qué equipo comercial más caro se consideró}
+
+\subsubsection{Mapa mental}
+
+Se colocó en el centro el concepto <<autenticación continua con ECG>> y se crearon ramas para adquisición, preprocesamiento, representación de la señal, modelo, entrenamiento, decisión continua, interfaz y validación. El mapa permitió verificar que las propuestas contemplaran el sistema completo y no solamente la red neuronal. \pendiente{insertar figura del mapa mental}
+
+\subsubsection{SCAMPER}
+
+\begin{table}[htbp]
+\centering
+\caption{Aplicación de SCAMPER al sistema de autenticación continua.}
+\label{tab:scamper}
+\small
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+\textbf{Acción} & \textbf{Pregunta aplicada} & \textbf{Ejemplo de idea} \\
+\midrule
+Sustituir & ¿Qué componente puede reemplazarse? & Sustituir rasgos manuales por rasgos aprendidos por una red \\
+Combinar & ¿Qué elementos pueden trabajar juntos? & Combinar preentrenamiento público con ajuste fino con datos del Polar \\
+Adaptar & ¿Qué solución externa puede aprovecharse? & Adaptar el aprendizaje de métricas usado en reconocimiento facial \\
+Modificar & ¿Qué característica puede cambiarse? & Cambiar la longitud de la ventana de 5~s \\
+Otros usos & ¿Puede un elemento cumplir otra función? & Usar la penúltima capa de un clasificador como huella de identidad \\
+Eliminar & ¿Qué elemento no es indispensable? & Eliminar la detección explícita de picos R y trabajar sobre la señal filtrada \\
+Reordenar & ¿Qué ocurre al cambiar el orden? & Suavizar decisiones en el tiempo en lugar de decidir por ventana aislada \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Combinación de elementos y matriz morfológica}
+
+La matriz morfológica combina opciones de distintos subsistemas para construir alternativas completas y técnicamente coherentes.
+
+\begin{table}[htbp]
+\centering
+\caption{Matriz morfológica del sistema.}
+\label{tab:morfologica}
+\small
+\begin{tabularx}{\textwidth}{l X X X}
+\toprule
+\textbf{Función} & \textbf{Opción 1} & \textbf{Opción 2} & \textbf{Opción 3} \\
+\midrule
+Adquisición & Polar H10 & Sensor de ECG de diseño propio & Equipo comercial de mayor costo \\
+Entrada del modelo & Rasgos manuales & Ventana cruda filtrada & Latidos segmentados \\
+Modelo & SVM & CNN 1D como clasificador & CNN 1D con embeddings \\
+Pérdida & Entropía cruzada & Tripleta & ArcFace \\
+Datos de entrenamiento & Solo Polar & Preentrenado y ajustado & Solo base pública \\
+Decisión & Por ventana & Promedio móvil & Acumulación de evidencia \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Alternativas de solución obtenidas}
+
+\begin{table}[htbp]
+\centering
+\caption{Alternativas conceptuales.}
+\label{tab:alternativas}
+\small
+\begin{tabularx}{\textwidth}{l X X X}
+\toprule
+\textbf{Alternativa} & \textbf{Configuración} & \textbf{Ventaja principal} & \textbf{Limitación principal} \\
+\midrule
+A: clásica & Polar H10, rasgos manuales, SVM, decisión por ventana & Pocos datos necesarios y fácil de explicar & Depende de detectar con precisión las ondas; menor capacidad de generalizar a personas nuevas \\
+B: embeddings con preentrenamiento & Polar H10, ventana filtrada, CNN 1D residual con embeddings, preentrenamiento público y ajuste fino, entropía cruzada & Aprende rasgos automáticamente; permite registrar personas nuevas sin reentrenar; el preentrenamiento compensa pocos voluntarios & Diferencia entre la base pública y el Polar; requiere más tiempo de entrenamiento \\
+C: aprendizaje de métricas avanzado & Igual que B pero con pérdida de tripleta o ArcFace y detección de picos R & Mayor separación potencial entre identidades & Mayor complejidad y sensibilidad a hiperparámetros con pocos datos \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Criterios de evaluación}
+
+\begin{table}[htbp]
+\centering
+\caption{Criterios de evaluación y ponderación.}
+\label{tab:criterios}
+\small
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\textbf{Criterio} & \textbf{Ponderación} & \textbf{Justificación} \\
+\midrule
+Capacidad de generalizar a personas nuevas & 30\,\% & El sistema debe funcionar con usuarios que la red nunca vio \\
+Viabilidad con pocos datos & 20\,\% & Solo se cuenta con 20 voluntarios, una cantidad pequeña para entrenar redes profundas \\
+Costo computacional & 15\,\% & Solo se dispone de CPU \\
+Facilidad de implementación y explicación & 20\,\% & El equipo debe dominar cada componente y cumplir el plazo \\
+Aprovechamiento del sensor disponible & 15\,\% & El Polar H10 ya está en poder del equipo \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Cada alternativa se califica del 1 al 5, donde 1 es un desempeño muy deficiente y 5 uno excelente. El resultado ponderado se obtiene multiplicando la calificación por la ponderación; la suma permite comparar las alternativas.
+
+\begin{table}[htbp]
+\centering
+\caption{Matriz de decisión (calificaciones preliminares, por justificar).}
+\label{tab:decision}
+\small
+\begin{tabular}{l c c c c}
+\toprule
+\textbf{Criterio} & \textbf{Pond.} & \textbf{A} & \textbf{B} & \textbf{C} \\
+\midrule
+Generalización a personas nuevas & 0.30 & 2 & 4 & 5 \\
+Viabilidad con pocos datos & 0.20 & 4 & 4 & 2 \\
+Costo computacional & 0.15 & 5 & 4 & 3 \\
+Facilidad de implementación y explicación & 0.20 & 4 & 4 & 2 \\
+Aprovechamiento del sensor & 0.15 & 4 & 4 & 4 \\
+\midrule
+\textbf{Total ponderado} & 1.00 & 3.55 & 4.00 & 3.35 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\pendiente{justificar cada calificación con literatura, pruebas preliminares o cálculos; las cifras mostradas son un borrador}
+
+\subsection{Selección y justificación}
+
+Después de aplicar las técnicas de creatividad se obtuvieron tres alternativas de solución, evaluadas según su capacidad de generalizar a personas nuevas, su viabilidad con pocos datos, su costo computacional, su facilidad de implementación y el aprovechamiento del sensor disponible. La alternativa B obtuvo la mayor puntuación porque ofrece un equilibrio adecuado entre capacidad de generalización y viabilidad: el uso de embeddings permite registrar usuarios nuevos solo calculando su plantilla, y el preentrenamiento con una base de datos pública mitiga la escasez de voluntarios. La alternativa C se consideró una mejora futura en caso de que el error obtenido con B no fuera suficiente, por lo que la pérdida de tripleta y ArcFace se dejaron deliberadamente fuera de esta versión. En cuanto al sensor, se consideró construir uno propio, pero se encontró que el Polar H10 es más preciso, por lo que se descartó. Los equipos comerciales de mayor costo no ofrecían una ventaja que justificara su precio, y el Polar H10 cuenta con estudios que lo validan frente a un ECG de referencia. Por lo anterior, se seleccionó la alternativa B, con el Polar H10, como base para el diseño detallado.

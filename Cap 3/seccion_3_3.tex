@@ -1,0 +1,163 @@
+\section{Modelado, cálculos, simulación y diseño detallado}
+\label{sec:diseno}
+
+Esta sección explica técnicamente cómo se diseñó la alternativa seleccionada antes de construirla, de modo que otra persona pueda comprender la arquitectura del sistema y reproducir el diseño.
+
+\subsection{Arquitectura general}
+
+El sistema se organiza como una cadena de bloques independientes:
+\begin{center}
+\emph{Polar H10} $\rightarrow$ adquisición BLE $\rightarrow$ control de calidad $\rightarrow$ filtrado y ventaneo $\rightarrow$ red de embeddings $\rightarrow$ similitud coseno con la plantilla $\rightarrow$ decisión
+\end{center}
+\pendiente{insertar diagrama de bloques}
+
+La red (los pesos) se mantiene separada de la base de plantillas y de la lógica de decisión. Así, registrar a un usuario nuevo solo requiere calcular su plantilla, sin reentrenar la red.
+
+\subsection{Adquisición y preprocesamiento de la señal}
+
+La banda Polar H10 entrega el ECG a $f_s = 130$~Hz. La señal se procesa de la siguiente forma:
+\begin{enumerate}
+  \item \textbf{Filtro pasa-banda} de 0.5 a 40~Hz, que elimina la deriva de la línea base y atenúa el ruido muscular de alta frecuencia. La frecuencia de Nyquist es de 65~Hz, por lo que la banda es válida.
+  \item \textbf{Ventaneo} en segmentos de 5~s, es decir, $5 \times 130 = 650$ muestras, con 50\,\% de traslape.
+  \item \textbf{Normalización z-score por ventana}, para eliminar diferencias de amplitud debidas al contacto de los electrodos:
+  \begin{equation}
+    \tilde{x}_i = \frac{x_i - \mu}{\sigma}
+  \end{equation}
+  donde $\mu$ y $\sigma$ son la media y la desviación estándar de la ventana.
+\end{enumerate}
+Cada ventana es un tensor de forma $(1, 650)$. El sistema no detecta explícitamente los picos R para el modelo: la red extrae por sí misma las características morfológicas y temporales.
+
+\subsection{Red neuronal de embeddings}
+
+\subsubsection{Tipo de red}
+
+Se utiliza una red neuronal convolucional unidimensional (1D-CNN) con bloques residuales, usada como \textbf{extractor de embeddings} (aprendizaje de métricas) y no como clasificador final. Su salida es un vector de 128 dimensiones con norma L2 igual a 1, de modo que la similitud coseno entre dos ventanas indica si provienen de la misma persona.
+
+\subsubsection{Arquitectura capa por capa}
+
+\begin{table}[htbp]
+\centering
+\caption{Arquitectura de la red para una ventana de entrada $(1, 650)$.}
+\label{tab:arquitectura}
+\small
+\begin{tabularx}{\textwidth}{c l X c c c}
+\toprule
+\textbf{\#} & \textbf{Bloque} & \textbf{Operación} & \textbf{Kernel / stride} & \textbf{Canales} & \textbf{Salida} \\
+\midrule
+0 & Entrada & Ventana z-score & -- & 1 & $1 \times 650$ \\
+1 & Stem & Conv1d + BatchNorm + ReLU & 7 / 1 & $1 \rightarrow 16$ & $16 \times 650$ \\
+2 & Etapa 1 & Bloque residual & 5 / 2 & $16 \rightarrow 32$ & $32 \times 325$ \\
+3 & Etapa 2 & Bloque residual & 5 / 2 & $32 \rightarrow 64$ & $64 \times 163$ \\
+4 & Etapa 3 & Bloque residual & 5 / 2 & $64 \rightarrow 128$ & $128 \times 82$ \\
+5 & Etapa 4 & Bloque residual & 5 / 2 & $128 \rightarrow 128$ & $128 \times 41$ \\
+6 & Pooling global & Promedio sobre el tiempo & -- & 128 & 128 \\
+7 & Embedding & Capa densa & -- & $128 \rightarrow 128$ & 128 \\
+8 & Normalización & L2 & -- & 128 & 128 (norma 1) \\
+9 & Cabeza & Capa densa sobre el embedding sin normalizar (solo entrenamiento) & -- & $128 \rightarrow N$ & $N$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Todas las convoluciones usan \texttt{bias=False}, pues la normalización por lotes (BatchNorm) ya aporta el desplazamiento. La red tiene \textbf{371{,}024 parámetros} en el codificador; la cabeza agrega $128N + N$ parámetros, con $N$ igual al número de personas de entrenamiento, y se descarta al terminar.
+
+\subsubsection{Bloque residual}
+
+Cada etapa usa el mismo bloque. La rama principal aplica una convolución con $k=5$ y \emph{stride} 2, BatchNorm y ReLU, y después una segunda convolución con $k=5$ y \emph{stride} 1 seguida de BatchNorm. El atajo (\emph{skip connection}) es una convolución de $1\times1$ con \emph{stride} 2 seguida de BatchNorm, para que las dimensiones coincidan en la suma. La ReLU se aplica después de sumar ambas ramas:
+\begin{equation}
+  \mathbf{y} = \mathrm{ReLU}\big(F(\mathbf{x}) + S(\mathbf{x})\big)
+\end{equation}
+donde $F$ es la rama principal y $S$ el atajo. El \emph{stride} 2 reduce a la mitad la longitud temporal en cada etapa ($650 \rightarrow 325 \rightarrow 163 \rightarrow 82 \rightarrow 41$); con ello el campo receptivo de la última etapa abarca varios latidos.
+
+\subsubsection{Embedding y similitud}
+
+El pooling global promedio hace que la huella sea independiente de en qué punto de la ventana cae cada latido. La salida se normaliza:
+\begin{equation}
+  \mathbf{e} = \frac{\mathbf{z}}{\lVert \mathbf{z} \rVert_2}
+\end{equation}
+y la similitud entre una ventana con embedding $\mathbf{e}$ y una plantilla $\mathbf{t}$ es el coseno del ángulo entre ambos, que al estar normalizados equivale al producto punto:
+\begin{equation}
+  s(\mathbf{e}, \mathbf{t}) = \mathbf{e} \cdot \mathbf{t}
+\end{equation}
+La plantilla de una persona es el promedio de los embeddings de su sesión de enrolamiento. La identidad se acepta si $s$ supera un umbral $\tau$.
+
+\subsection{Estrategia de entrenamiento}
+
+\begin{enumerate}
+  \item \textbf{Preentrenamiento} con la base pública ECG-ID, remuestreada a 130~Hz: la red se entrena como clasificador de identidades con entropía cruzada y \emph{label smoothing} de 0.1. Su propósito es aprender rasgos generales del ECG.
+  \item \textbf{Ajuste fino} con los voluntarios del Polar: se reemplaza la cabeza por una nueva. En la etapa A se congelan el stem y las tres primeras etapas (con su BatchNorm en modo evaluación) y se entrenan la última etapa, el embedding y la cabeza; en la etapa B se descongela toda la red con una tasa de aprendizaje diez veces menor.
+  \item \textbf{Alternativa solo Polar}: mismo procedimiento sin preentrenamiento, seleccionado con una bandera de configuración. Permite medir si el preentrenamiento realmente ayuda.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\caption{Hiperparámetros por etapa de entrenamiento.}
+\label{tab:hiperparametros}
+\small
+\begin{tabularx}{\textwidth}{X c c X}
+\toprule
+\textbf{Etapa} & \textbf{Épocas} & \textbf{Tasa de aprendizaje} & \textbf{Qué se entrena} \\
+\midrule
+Preentrenamiento (público) & 30 & $10^{-3}$ & Toda la red y la cabeza \\
+Ajuste fino A & 5 & $10^{-3}$ & Última etapa, embedding y cabeza nueva \\
+Ajuste fino B & 20 & $10^{-4}$ & Toda la red \\
+Solo Polar & 40 & $10^{-3}$ & Toda la red y la cabeza \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Se utiliza el optimizador AdamW con $\text{weight decay} = 10^{-4}$, planificador de coseno (\emph{CosineAnnealingLR}), tamaño de lote de 64 y semilla fija igual a 42. La detención temprana se basa en el \textbf{EER de validación} con paciencia de 5 épocas, y no en la exactitud de clasificación, porque el objetivo es separar personas que la red no ha visto. Durante el entrenamiento se aplica aumento de datos: ruido gaussiano (desviación 0.02), deformación de magnitud (0.10), deformación temporal (0.05) y deriva de línea base (amplitud 0.10).
+
+\subsection{Partición de los datos}
+
+Las particiones se hacen siempre \textbf{por persona} y nunca por ventana, porque las ventanas de una misma persona están correlacionadas y mezclarlas inflaría el desempeño.
+
+\begin{table}[htbp]
+\centering
+\caption{Grupos de personas utilizados.}
+\label{tab:particion}
+\small
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+\textbf{Grupo} & \textbf{Uso} & \textbf{Regla} \\
+\midrule
+Personas de ECG-ID & Preentrenamiento & Nunca se mezclan con las del Polar \\
+Polar: entrenamiento & Ajuste fino o entrenamiento solo Polar & Sesiones 1 y 2 entrenan; la sesión 3 sirve como verificación entre días \\
+Polar: validación & Detención temprana y umbral & Personas no vistas; nunca actualizan los pesos \\
+Polar: \emph{hold-out} & Prueba final & Se usan una sola vez, al final \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Con 20 voluntarios la partición prevista es de 14 personas de entrenamiento, 2 de validación y 4 de prueba (\emph{hold-out}), con un mínimo de 2 personas \emph{hold-out}. Como mejora opcional, puede usarse validación cruzada por persona en 5 pliegues de 4 personas, de modo que las 20 sirvan una vez como personas no vistas. La lista de validación y de \emph{hold-out} se elige al azar una sola vez, después de recolectar los datos y antes de entrenar con datos Polar, y se registra en el archivo de configuración; el código se detiene con un error si alguna de esas personas aparece en los datos de entrenamiento. Con 4 personas de prueba hay solo 12 combinaciones plantilla--impostor, por lo que el EER final tendrá intervalos de confianza amplios.
+
+\subsection{Métricas de evaluación}
+
+\begin{itemize}
+  \item \textbf{Pares genuinos}: ventanas de una sesión posterior contra la plantilla de la misma persona (entre sesiones).
+  \item \textbf{Pares impostores}: ventanas de una persona contra la plantilla de otra.
+  \item \textbf{FAR} (tasa de falsa aceptación) y \textbf{FRR} (tasa de falso rechazo) para un umbral dado, y la \textbf{EER}, el punto en que ambas son iguales:
+  \begin{equation}
+    \mathrm{FAR}(\tau) = \mathrm{FRR}(\tau) = \mathrm{EER}
+  \end{equation}
+  \item Curva ROC y AUC.
+  \item El umbral $\tau$ se elige en el punto de EER con datos de validación únicamente. Los intervalos de confianza se obtienen por \emph{bootstrap} remuestreando personas (1000 repeticiones), y cada cifra se reporta junto con el número de pares genuinos e impostores en que se basa.
+\end{itemize}
+
+\subsection{Diseño de la decisión continua}
+\label{sec:decision}
+
+La decisión final no se basa en una sola ventana, pues una lectura aislada puede fallar por un movimiento o por mal contacto de los electrodos. La regla de decisión continua es la siguiente:
+
+\begin{enumerate}
+  \item Cada 2.5~s se obtiene una ventana nueva y se calcula su similitud coseno con la plantilla del usuario.
+  \item Si la similitud es mayor o igual que el umbral $\tau$, la ventana se acepta y el contador de rechazos consecutivos se reinicia a cero.
+  \item Si es menor, se rechaza y el contador aumenta en uno. Mientras el contador sea menor que 3, el usuario no percibe nada.
+  \item Con 3 rechazos consecutivos aparece una ventana emergente que pide al usuario sentarse derecho y permanecer quieto unos segundos, y el sistema toma una nueva muestra.
+  \item Si la nueva muestra es aceptada, el examen continúa y el contador se reinicia. Si es rechazada, el examen se bloquea.
+\end{enumerate}
+
+Dado que la primera ventana completa se obtiene a los 5~s y las siguientes a intervalos de 2.5~s, el aviso al usuario aparece como mínimo unos 10~s después de que comienza una suplantación, y el bloqueo ocurre después de la nueva muestra, de otros 5~s como mínimo. Si cada rechazo injustificado ocurriera de forma independiente con probabilidad igual a la FRR, la probabilidad de 3 consecutivos sería $\mathrm{FRR}^3$; esto es solo una aproximación, pues las ventanas traslapadas no son independientes, y la tasa real de bloqueos injustificados se medirá con grabaciones completas en el Capítulo~\ref{cap:resultados}. El valor de 3 rechazos es un parámetro de diseño que puede ajustarse con los resultados. Esta lógica es independiente de la red, que solo produce los embeddings.
+
+\subsection{Simulación y pruebas con señales sintéticas}
+
+Antes de contar con datos reales se construyó un generador de señales ECG sintéticas para verificar el funcionamiento de cada módulo. Con ellas se comprobó que la red devuelve la forma de salida esperada $(B, 128)$ con norma igual a 1, que el resultado es determinista en modo evaluación, y que un entrenamiento pequeño sobre un lote reduce la pérdida. También se comprobó que la evaluación da un EER cercano a 0 con puntuaciones perfectamente separables y cercano a 0.5 con puntuaciones aleatorias, que un guardado y carga del modelo producen los mismos embeddings, y que el programa se detiene si una persona \emph{hold-out} aparece en el entrenamiento.

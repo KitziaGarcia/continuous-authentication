@@ -249,7 +249,13 @@ def compare_models(embed_fns: dict, split: PolarSplit, cfg: Config) -> str:
     El umbral de cada modelo sale de su EER en VALIDACIÓN; el hold-out nunca lo decide.
     """
     enroll_val = first_session_table(split.train)
-    hold_enroll, hold_test = split_enroll_test(split.holdout, "cross_session")
+    # Si algún hold-out tiene una sola sesión no hay "otro día" contra el cual probar: se usa la
+    # misma sesión (primera mitad registra, segunda prueba) y la fila lo dice, porque es más optimista.
+    hold_mode = ("cross_session"
+                 if all(len(split.holdout.sessions_of(p)) >= 2 for p in split.holdout.persons())
+                 else "same_session")
+    hold_label = "entre sesiones" if hold_mode == "cross_session" else "misma sesión, más optimista"
+    hold_enroll, hold_test = split_enroll_test(split.holdout, hold_mode)
     # Misma sesión sobre VALIDACIÓN (ventanas que la red no usó para entrenar), no sobre el entrenamiento.
     same_enroll, same_test = split_enroll_test(split.val, "same_session")
     rows = []
@@ -258,7 +264,7 @@ def compare_models(embed_fns: dict, split: PolarSplit, cfg: Config) -> str:
         thr = eer(val.genuine, val.impostor)[1]
         n, s = cfg.bootstrap_samples, cfg.seed
         rows.append(make_row(f"{name} · vistos, entre sesiones (val)", val, thr, n, s))
-        rows.append(make_row(f"{name} · NO vistos (hold-out), entre sesiones",
+        rows.append(make_row(f"{name} · NO vistos (hold-out), {hold_label}",
                              run_protocol(fn, hold_enroll, hold_test), thr, n, s))
         rows.append(make_row(f"{name} · vistos, misma sesión (val)",
                              run_protocol(fn, same_enroll, same_test), thr, n, s))

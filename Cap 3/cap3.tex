@@ -1,0 +1,31 @@
+% ============================================================
+% Capítulo 3 - Diseño y desarrollo de la solución
+% Investigación en ingeniería
+%
+% Paquetes necesarios en el preámbulo del proyecto:
+%   \usepackage[utf8]{inputenc}   \usepackage[spanish]{babel}
+%   \usepackage{booktabs, tabularx, array, graphicx, amsmath, enumitem, xcolor}
+%
+% Cada sección vive en su propio archivo (seccion_3_X.tex). Copia los 6 archivos
+% a tu proyecto y usa \input{cap3} desde el documento principal.
+% ============================================================
+
+% Marca visible para lo que el equipo debe completar o confirmar.
+\newcommand{\pendiente}[1]{\textbf{\textcolor{red}{[POR DEFINIR: #1]}}}
+
+\chapter{Diseño y desarrollo de la solución}
+\label{cap:diseno}
+
+En este capítulo se describe el proceso de diseño y desarrollo de un sistema de autenticación continua basado en la señal electrocardiográfica (ECG) adquirida con una banda Polar H10. Se presentan los requerimientos de la solución, las alternativas tecnológicas consideradas, el diseño detallado del sistema, la construcción del prototipo y las características de la solución finalmente desarrollada.
+
+El proyecto se llevó a cabo mediante una metodología de prototipado iterativo. Primero se construyó un extractor de embeddings entrenado con una base de datos pública, después se incorporó la adquisición de señal con el sensor y el protocolo de recolección con voluntarios, y finalmente se integraron los módulos de decisión continua. Cada iteración permitió identificar problemas y mejorar el sistema. Las tablas de resultados, el desempeño medido y la comprobación de la hipótesis se presentan en el Capítulo~\ref{cap:resultados}.
+
+\input{seccion_3_1}
+\input{seccion_3_2}
+\input{seccion_3_3}
+\input{seccion_3_4}
+\input{seccion_3_5}
+
+\section*{Cierre del capítulo}
+
+En este capítulo se definieron los requerimientos funcionales, de desempeño y no funcionales del sistema; se generaron y compararon alternativas mediante técnicas de creatividad y una matriz de decisión; y se seleccionó una arquitectura basada en una red neuronal convolucional unidimensional con bloques residuales que produce embeddings de identidad. También se describieron el diseño de la red, el preprocesamiento, la estrategia de entrenamiento y la partición de datos por persona, así como la implementación modular del prototipo y su protocolo de recolección. En el siguiente capítulo se presentan los resultados de las pruebas experimentales, el análisis de los indicadores de desempeño y la comprobación del cumplimiento de los objetivos y de la hipótesis.

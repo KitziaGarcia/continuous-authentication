@@ -65,3 +65,20 @@ def test_nan_fails():
 
 def test_inverted_polarity_still_passes():
     assert check_quality(-_good(hr_bpm=72)).ok            # banda puesta al revés: la forma sigue siendo válida
+
+
+# --- Chequeo rápido: segmentos cortos y posición de los latidos detectados ---
+def test_short_segment_needs_a_lower_min_peaks_but_default_stays_strict():
+    raw = _good(seconds=9, hr_bpm=70)
+    strict = check_quality(raw)                                   # 7 s útiles ~ 8 latidos: por defecto exige 8 -> justo falla o pasa
+    relaxed = check_quality(raw, min_peaks=5)
+    assert relaxed.ok
+    few = check_quality(_good(seconds=5, hr_bpm=70))              # 5 s: tras recortar quedan ~3 s, muy pocos latidos
+    assert not few.ok and any("latidos" in i for i in few.issues)
+    assert strict.n_peaks == relaxed.n_peaks                       # el parámetro no cambia la detección, solo el mínimo exigido
+
+
+def test_report_includes_peak_positions_in_original_sample_coordinates():
+    r = check_quality(_good(seconds=20, hr_bpm=60))               # un latido por segundo: picos R cerca de k*130
+    assert len(r.peak_indices) == r.n_peaks >= 15
+    assert all(min(i % FS, FS - i % FS) <= 4 for i in r.peak_indices)

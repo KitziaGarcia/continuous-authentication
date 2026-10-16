@@ -1,0 +1,82 @@
+\section{Presentación de la solución desarrollada}
+\label{sec:solucion}
+
+Esta sección presenta el resultado final del proceso de diseño y construcción: qué solución se obtuvo, cómo funciona y cuáles son sus características. Aquí se describe lo que se construyó; el Capítulo~\ref{cap:resultados} demuestra qué tan bien funcionó.
+
+\subsection{Descripción de la solución}
+
+La solución desarrollada es un sistema de autenticación continua que verifica la identidad de una persona durante un examen simulado a partir de su ECG. El usuario se registra una vez mediante una sesión de enrolamiento, de la cual se obtiene su plantilla. Durante el examen, la banda Polar H10 transmite la señal por Bluetooth; el sistema la filtra y la divide en ventanas de 5~s con 50\,\% de traslape, y una red neuronal convolucional 1D residual genera un embedding por ventana. La similitud coseno entre el embedding y la plantilla se compara con un umbral calibrado con datos de validación para aceptar o rechazar la identidad. Los rechazos aislados no se muestran al usuario; con 3 rechazos consecutivos se le pide una nueva muestra y, si esta también falla, el examen se bloquea (Sección~\ref{sec:decision}). La primera decisión está disponible a los 5~s de iniciada la adquisición y las siguientes cada 2.5~s. La interfaz del examen está por definirse.
+
+\subsection{Secuencia de funcionamiento}
+
+\begin{enumerate}
+  \item Se coloca la banda y se verifica la calidad de la señal.
+  \item El usuario realiza el registro y se calcula su plantilla.
+  \item Inicia el examen y comienza la adquisición continua.
+  \item Cada 2.5~s (por el traslape) se procesa una nueva ventana de 5~s.
+  \item Se calcula la similitud con la plantilla y se decide si se acepta la identidad.
+  \item Los rechazos aislados no se notifican. Con 3 consecutivos aparece un aviso para sentarse derecho y se toma una nueva muestra; si también es rechazada, el examen se bloquea.
+\end{enumerate}
+
+\subsection{Ficha técnica}
+
+\begin{table}[htbp]
+\centering
+\caption{Ficha técnica de la solución.}
+\label{tab:ficha}
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Característica} & \textbf{Descripción} \\
+\midrule
+Tipo de sistema & Autenticación biométrica continua basada en ECG \\
+Sensor & Polar H10, un canal, 130~Hz, conexión BLE \\
+Entrada del modelo & Ventana de 650 muestras (5~s), filtrada y normalizada \\
+Modelo & CNN 1D residual de 371{,}024 parámetros \\
+Salida & Embedding de 128 dimensiones con norma L2 igual a 1 \\
+Comparación & Similitud coseno con la plantilla del usuario \\
+Entrenamiento & Preentrenamiento con ECG-ID y ajuste fino con voluntarios del Polar \\
+Hardware de cómputo & CPU, sin GPU \\
+Lenguaje y bibliotecas & Python, PyTorch, NumPy, SciPy, scikit-learn \\
+Datos registrados & Señal por sesión con ID anónimo, calidad y metadatos \\
+Aplicación & Verificación continua de identidad en un examen simulado \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Relación entre requerimientos e implementación}
+
+\begin{table}[htbp]
+\centering
+\caption{Relación general entre requerimientos e implementación.}
+\label{tab:req_impl}
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Requerimiento} & \textbf{Implementación en la solución} \\
+\midrule
+RF-01 Adquirir ECG & Módulo \texttt{record} con el Polar H10 por BLE \\
+RF-02 Calidad de la señal & Módulos \texttt{quality} y \texttt{check} \\
+RF-03 Embedding por ventana & Red 1D-CNN residual del módulo \texttt{model} \\
+RF-04 Plantilla del usuario & Promedio de embeddings de la sesión de enrolamiento \\
+RF-05 Decisión por similitud & Similitud coseno y umbral elegido en validación \\
+RD-01, RD-02 Desempeño en personas nuevas y entre días & Partición por persona y evaluación con \texttt{evaluate} \\
+RF-06, RD-03, RD-04 Detección de impostor sin molestar al legítimo & Regla de 3 rechazos consecutivos, nueva muestra y bloqueo \\
+RNF-01 Sin GPU & Red de 371{,}024 parámetros entrenable en CPU \\
+RNF-02 Reproducibilidad & Semilla fija y configuración centralizada en \texttt{config} \\
+RNF-03 Módulos separados & Red, plantillas y decisión en componentes independientes \\
+RNF-04 Anonimato & IDs fijos y datos fuera del repositorio \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Limitaciones conocidas}
+
+\begin{itemize}
+  \item El número de voluntarios es reducido, por lo que el EER del conjunto \emph{hold-out} se apoya en pocas combinaciones de personas e intervalos de confianza amplios. Los resultados se consideran una prueba de concepto.
+  \item La base pública ECG-ID usa derivaciones y equipo distintos al de la banda Polar, lo que genera una diferencia de dominio que el ajuste fino busca reducir.
+  \item Se utiliza un solo canal de ECG y un solo modelo de sensor.
+  \item Las sesiones se grabaron en un periodo corto de semanas, por lo que no se evalúan cambios de largo plazo en la señal.
+  \item La actividad durante el examen simulado es principalmente sedentaria; no se evaluó movimiento intenso ni estados emocionales extremos.
+  \item Las funciones de la pérdida de tripleta y ArcFace no se implementaron en esta versión.
+\end{itemize}

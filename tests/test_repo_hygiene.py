@@ -13,8 +13,6 @@ MUST_BE_IGNORED = [
     "data/processed/public/pub_Person_01__rec_01.npz",
     "data/descartadas/P01__2026-10-06__reposo__101500.npy",
     "data/piloto/processed/juanC__2026-10-01_2000.npz",
-    "models/modelo_v1.pt",
-    "models/modelo_v1.json",
     "reports/recordings/P01__2026-10-06.png",
     "reports/try_me.png",
 ]

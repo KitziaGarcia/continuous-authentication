@@ -1,0 +1,64 @@
+\section{Especificación de requerimientos}
+\label{sec:requerimientos}
+
+Esta sección establece qué debe hacer el sistema y bajo qué condiciones debe funcionar. Los requerimientos sirven como referencia para diseñar la solución y para comprobar, en el Capítulo~\ref{cap:resultados}, si el prototipo cumple con lo solicitado.
+
+\subsection{Descripción general del sistema}
+
+El sistema simula un examen en computadora. Mientras la persona lo contesta, una banda Polar H10 colocada en el pecho registra su ECG. Una red neuronal convierte ventanas sucesivas de la señal en vectores de características (\emph{embeddings}) y los compara con la plantilla creada en el registro inicial del usuario. De esta forma el sistema verifica de manera continua que quien contesta el examen es la misma persona que se registró, y no solo en el momento de iniciar sesión.
+
+\subsection{Requerimientos funcionales}
+
+\begin{itemize}
+  \item Adquirir la señal ECG del Polar H10 por Bluetooth Low Energy a 130~Hz.
+  \item Verificar la calidad de la señal antes y durante la grabación (señal plana, ruido excesivo, picos anómalos, latidos insuficientes).
+  \item Preprocesar la señal: filtro pasa-banda de 0.5 a 40~Hz, segmentación en ventanas de 5~s con 50\,\% de traslape y normalización z-score por ventana.
+  \item Generar un embedding L2-normalizado de 128 dimensiones por ventana.
+  \item Crear la plantilla de un usuario durante el registro (sesión de enrolamiento) a partir del promedio de sus embeddings.
+  \item Calcular la similitud coseno entre cada ventana nueva y la plantilla, y decidir si la identidad se acepta o se rechaza.
+  \item Aplicar una regla de decisión continua: los rechazos aislados no se muestran al usuario; tras 3 rechazos consecutivos se le pide una nueva muestra (por ejemplo, sentarse derecho y permanecer quieto unos segundos) y, si esta tampoco es aceptada, se bloquea el examen.
+  \item Entrenar y evaluar el modelo con personas que no participaron en el entrenamiento.
+  \item Registrar los datos de cada sesión con identificadores anónimos, para poder repetir los análisis.
+\end{itemize}
+
+\subsection{Requerimientos no funcionales y restricciones}
+
+\begin{itemize}
+  \item El entrenamiento debe ejecutarse en una computadora sin GPU (16~GB de RAM, CPU de 6 núcleos), en un tiempo del orden de minutos a una hora.
+  \item Los experimentos deben ser reproducibles: semilla fija, un único archivo de configuración y un comando por etapa de entrenamiento.
+  \item La red neuronal debe permanecer separada de la base de plantillas y de la lógica de decisión, de modo que cada componente pueda sustituirse sin modificar los demás.
+  \item Los datos fisiológicos deben tratarse de forma anónima y no deben publicarse en el repositorio.
+  \item El modelo debe poder explicarse por completo en cada una de sus partes por los integrantes del equipo.
+  \item Restricciones del proyecto: una muestra de 20 voluntarios, un solo canal de ECG, un solo sensor disponible y un plazo de desarrollo que concluye en noviembre de 2026.
+\end{itemize}
+
+\subsection{Tabla de requerimientos}
+
+\begin{table}[htbp]
+\centering
+\caption{Especificación de requerimientos y criterios de aceptación.}
+\label{tab:requerimientos}
+\small
+\begin{tabularx}{\textwidth}{l X l X}
+\toprule
+\textbf{Código} & \textbf{Requerimiento} & \textbf{Tipo} & \textbf{Criterio de aceptación} \\
+\midrule
+RF-01 & Adquirir ECG del Polar H10 a 130~Hz & Funcional & Se guardan sesiones completas sin pérdida de conexión \\
+RF-02 & Evaluar la calidad de la señal & Funcional & Una sesión con señal defectuosa se detecta y se repite \\
+RF-03 & Generar un embedding por ventana de 5~s & Funcional & Salida de dimensión 128 con norma L2 igual a 1 \\
+RF-04 & Crear la plantilla de cada usuario & Funcional & Plantilla construida solo con la sesión de enrolamiento \\
+RF-05 & Decidir identidad por similitud coseno & Funcional & Umbral fijado solo con datos de validación \\
+RF-06 & Aplicar la regla de decisión continua & Funcional & Rechazos aislados ocultos; con 3 consecutivos se pide nueva muestra y, si falla, se bloquea \\
+RD-01 & Distinguir personas nunca vistas por la red & Desempeño & EER medido en personas \emph{hold-out}, claramente por debajo del azar (50\,\%) y con intervalo de confianza que no lo incluya \\
+RD-02 & Mantener el desempeño entre días & Desempeño & EER entre sesiones de días distintos reportado con intervalo de confianza \\
+RD-03 & Detectar a un impostor durante el examen & Desempeño & Tras 3 rechazos consecutivos (unos 10~s) se solicita una nueva muestra; si esta también falla, se bloquea el examen \\
+RD-04 & No interrumpir innecesariamente al usuario legítimo & Desempeño & Los rechazos aislados no se notifican; la tasa de bloqueos injustificados se reporta en el Capítulo~\ref{cap:resultados} \\
+RNF-01 & Entrenar sin GPU & No funcional & Entrenamiento completo en CPU en menos de una hora \\
+RNF-02 & Reproducibilidad & No funcional & Misma semilla y configuración producen el mismo modelo \\
+RNF-03 & Separación entre red, plantillas y decisión & No funcional & Cada módulo se prueba de forma independiente \\
+RNF-04 & Anonimato de los participantes & No funcional & Identificadores fijos tipo P01 y datos excluidos del repositorio \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+No se fija una meta numérica rígida de EER: con 20 participantes y un solo canal, el objetivo es demostrar la viabilidad del enfoque. El criterio es que el EER quede claramente por debajo del azar y se compare con los valores reportados en el estado del arte del Capítulo~\ref{cap:marco}. Por ello, los resultados del proyecto se consideran una prueba de concepto.

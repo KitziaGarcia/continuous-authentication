@@ -67,9 +67,9 @@ class SimClock:
 
 
 class SimulatedSource:
-    def __init__(self, clock, fs: int = POLAR_FS, seed: int = 0):
+    def __init__(self, clock, fs: int = POLAR_FS, seed: int = 0, signal=None):
         self.clock, self.fs, self._t0 = clock, fs, None
-        self._sig = make_synthetic_signal(900, fs, seed=seed) * 400 + 20
+        self._sig = signal if signal is not None else make_synthetic_signal(900, fs, seed=seed) * 400 + 20
 
     async def start(self) -> None:
         self._t0 = self.clock()

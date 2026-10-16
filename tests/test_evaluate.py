@@ -233,6 +233,16 @@ def test_compare_models_produces_all_sections_for_each_model():
         assert line.count("|") == 9, line
 
 
+def test_compare_models_holdout_with_single_session_uses_same_session_and_says_so():
+    t = make_synthetic_table(n_people=6, n_sessions=3, windows_per_session=8, seed=31)
+    only_first = np.array([s == t.sessions_of(p)[0] for p, s in zip(t.participant_ids, t.session_ids)])
+    keep = ~np.isin(t.participant_ids, ["p4", "p5"]) | only_first   # p4 y p5: una sola sesión
+    split = split_polar(t.subset(keep), ("p4", "p5"))
+    cfg = dataclasses.replace(Config(), bootstrap_samples=20)
+    md = compare_models({"red": make_model_embed_fn(ECGEmbeddingNet(cfg))}, split, cfg)
+    assert "red · NO vistos (hold-out), misma sesión, más optimista" in md
+
+
 from src.checkpoint import save_checkpoint
 from src.data import save_window_file
 from src.evaluate import main as evaluate_main
