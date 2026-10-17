@@ -3,6 +3,10 @@ import {
   HeartPulse, LockKeyhole, Radio,
 } from "lucide-react";
 import { DIFFICULTIES, LEVELS } from "../config.js";
+import Button from "./ui/Button.jsx";
+import Card from "./ui/Card.jsx";
+import { Eyebrow, StepLabel } from "./ui/Label.jsx";
+import ProgressBar from "./ui/ProgressBar.jsx";
 
 function questionOptionsFor(level, difficulty) {
   if (level === "mixto") {
@@ -35,7 +39,7 @@ export function WelcomeScreen({
   return (
     <section className="welcome-layout">
       <div className="welcome-copy">
-        <div className="eyebrow"><span className="eyebrow-dot" /> EXPERIENCIA DE INVESTIGACIÓN</div>
+        <Eyebrow>EXPERIENCIA DE INVESTIGACIÓN</Eyebrow>
         <h1>Una evaluación<br />con <span>identidad continua.</span></h1>
         <p className="lead">Resuelve un examen breve de comprensión lectora mientras una banda ECG verifica que la señal siga correspondiendo a la misma sesión.</p>
         <div className="feature-row">
@@ -43,9 +47,9 @@ export function WelcomeScreen({
           <div><span className="feature-icon"><Radio size={18} /></span><span><b>Revisión en vivo</b><small>Señal y estado durante el examen</small></span></div>
         </div>
       </div>
-      <section className="setup-card panel">
+      <Card as="section" className="setup-card">
         <div className="card-heading">
-          <div><span className="step-label">CONFIGURAR SESIÓN</span><h2>Tu simulación</h2></div>
+          <div><StepLabel>CONFIGURAR SESIÓN</StepLabel><h2>Tu simulación</h2></div>
           <span className="setup-icon"><BookOpen size={20} /></span>
         </div>
         <label className="field-label" htmlFor="level">Nivel del examen</label>
@@ -78,11 +82,11 @@ export function WelcomeScreen({
           <LockKeyhole size={16} />
           <span>La plataforma usa una clave temporal y no almacena tus respuestas en una base de datos.</span>
         </div>
-        <button className="button button-primary button-full" onClick={onBegin} disabled={!apiAvailable}>
+        <Button full onClick={onBegin} disabled={!apiAvailable}>
           Preparar autenticación <ArrowRight size={17} />
-        </button>
+        </Button>
         <p className="small-disclaimer">Prototipo académico. No es un sistema de seguridad ni determina resultados de alto impacto.</p>
-      </section>
+      </Card>
       <div className="welcome-bottom"><span>POLAR H10 · ECG 130 HZ</span><span>PLATAFORMA DE PRUEBA</span></div>
     </section>
   );
@@ -95,14 +99,14 @@ export function EnrollmentScreen({
   return (
     <section className="center-stage">
       <div className="stage-heading">
-        <div className="eyebrow"><span className="eyebrow-dot" /> PASO 01 / AUTENTICACIÓN INICIAL</div>
+        <Eyebrow>PASO 01 / AUTENTICACIÓN INICIAL</Eyebrow>
         <h1>Prepara tu <span>muestra.</span></h1>
         <p>Primero crearemos una referencia temporal de tu señal. No buscamos tu nombre ni tu identidad civil.</p>
       </div>
-      <div className="enroll-card panel">
+      <Card className="enroll-card">
         <div className="sensor-illustration"><div className="pulse-ring"><HeartPulse size={30} /></div><span className="pulse-line" /></div>
         <div className="enroll-copy">
-          <span className="step-label">CLAVE DE ESTA SESIÓN</span>
+          <StepLabel>CLAVE DE ESTA SESIÓN</StepLabel>
           <div className="session-key">
             {userId}
             <button className="copy-key" onClick={() => navigator.clipboard?.writeText(userId)} aria-label="Copiar clave">
@@ -113,21 +117,21 @@ export function EnrollmentScreen({
           <p>{enrolled ? "La referencia se conservará solo para esta sesión de examen." : "Humedece los electrodos, coloca la banda firmemente y siéntate en una posición cómoda."}</p>
           <div className="enroll-progress">
             <div className="progress-label"><span>{enrollStage === "settling" ? "Estabilizando la señal" : "Capturando muestra"}</span><span>{enrollProgress}%</span></div>
-            <div className="progress-track"><span style={{ width: `${enrollProgress}%` }} /></div>
+            <ProgressBar value={enrollProgress} />
             <div className="progress-foot"><span>Tiempo aproximado: 65 segundos</span><span>{socketConnected ? "Canal en vivo activo" : "Conectando canal…"}</span></div>
           </div>
           {enrolled ? (
-            <button className="button button-primary button-full" onClick={onBeginExam} disabled={busy}>
+            <Button full onClick={onBeginExam} disabled={busy}>
               Iniciar examen <ArrowRight size={17} />
-            </button>
+            </Button>
           ) : (
-            <button className="button button-primary button-full" onClick={onStartEnrollment} disabled={busy || !apiAvailable || !socketConnected}>
+            <Button full onClick={onStartEnrollment} disabled={busy || !apiAvailable || !socketConnected}>
               {busy ? <><AudioLines size={17} className="animate-pulse" /> Esperando señal…</> : <><Radio size={17} /> Iniciar captura de 1 minuto</>}
-            </button>
+            </Button>
           )}
-          <button className="text-button back-link" onClick={onBack}>Volver a configuración</button>
+          <Button variant="text" className="back-link" onClick={onBack}>Volver a configuración</Button>
         </div>
-      </div>
+      </Card>
     </section>
   );
 }
@@ -135,9 +139,9 @@ export function EnrollmentScreen({
 export function ReadyScreen({ userId, questionCount, busy, onBeginExam }) {
   return (
     <section className="center-stage">
-      <div className="ready-card panel">
+      <Card className="ready-card">
         <div className="success-emblem"><BadgeCheck size={32} /></div>
-        <div className="eyebrow"><span className="eyebrow-dot" /> IDENTIDAD DE SESIÓN PREPARADA</div>
+        <Eyebrow>IDENTIDAD DE SESIÓN PREPARADA</Eyebrow>
         <h1>Todo listo para <span>comenzar.</span></h1>
         <p>La lectura inicial quedó asociada a <b>{userId}</b>. Durante el examen volveremos a comprobar la señal.</p>
         <div className="ready-summary">
@@ -145,10 +149,10 @@ export function ReadyScreen({ userId, questionCount, busy, onBeginExam }) {
           <span><HeartPulse size={17} /> Verificación ECG continua</span>
           <span><LockKeyhole size={17} /> Sin historial personal persistente</span>
         </div>
-        <button className="button button-primary button-full" onClick={onBeginExam} disabled={busy}>
+        <Button full onClick={onBeginExam} disabled={busy}>
           Entrar al examen <ArrowRight size={17} />
-        </button>
-      </div>
+        </Button>
+      </Card>
     </section>
   );
 }
@@ -160,22 +164,22 @@ export function RecoveryScreen({ recheckProgress, busy, onRetry, onAbandon }) {
 
   return (
     <section className="center-stage">
-      <div className="recovery-card panel">
+      <Card className="recovery-card">
         <div className="warning-emblem"><AlertCircle size={29} /></div>
-        <div className="eyebrow"><span className="eyebrow-dot amber" /> VERIFICACIÓN ADICIONAL</div>
+        <Eyebrow tone="amber">VERIFICACIÓN ADICIONAL</Eyebrow>
         <h1>Vamos a confirmar<br /><span>la señal.</span></h1>
         <p>La sesión está pausada. Comprueba que la banda esté bien colocada, humedece los electrodos si hace falta y mantente quieto.</p>
         {recheckProgress && (
           <div className="enroll-progress recovery-progress">
             <div className="progress-label"><span>{recheckProgress.stage === "settling" ? "Estabilizando" : "Leyendo señal"}</span><span>{Math.round(progress)}%</span></div>
-            <div className="progress-track"><span style={{ width: `${progress}%` }} /></div>
+            <ProgressBar value={progress} />
           </div>
         )}
-        <button className="button button-primary button-full" onClick={onRetry} disabled={busy || Boolean(recheckProgress)}>
+        <Button full onClick={onRetry} disabled={busy || Boolean(recheckProgress)}>
           {recheckProgress ? "Tomando muestra…" : "Ya ajusté la banda — comprobar"} <ArrowRight size={17} />
-        </button>
-        <button className="text-button back-link" onClick={onAbandon}>Salir de la simulación</button>
-      </div>
+        </Button>
+        <Button variant="text" className="back-link" onClick={onAbandon}>Salir de la simulación</Button>
+      </Card>
     </section>
   );
 }
@@ -183,15 +187,15 @@ export function RecoveryScreen({ recheckProgress, busy, onRetry, onAbandon }) {
 export function LockedScreen({ onHome }) {
   return (
     <section className="center-stage">
-      <div className="locked-card panel">
+      <Card className="locked-card">
         <div className="locked-emblem"><LockKeyhole size={29} /></div>
-        <div className="eyebrow"><span className="eyebrow-dot red" /> SESIÓN DETENIDA</div>
+        <Eyebrow tone="red">SESIÓN DETENIDA</Eyebrow>
         <h1>La verificación<br /><span>no fue superada.</span></h1>
         <p>La muestra adicional no coincidió con la referencia inicial. El examen simulado se detuvo y las respuestas no se calificaron.</p>
-        <button className="button button-primary button-full" onClick={onHome}>
+        <Button full onClick={onHome}>
           Volver al inicio <ArrowRight size={17} />
-        </button>
-      </div>
+        </Button>
+      </Card>
     </section>
   );
 }
@@ -199,17 +203,17 @@ export function LockedScreen({ onHome }) {
 export function ResultsScreen({ result, onHome }) {
   return (
     <section className="center-stage">
-      <div className="result-card panel">
+      <Card className="result-card">
         <div className="success-emblem"><BadgeCheck size={31} /></div>
-        <div className="eyebrow"><span className="eyebrow-dot" /> SIMULACIÓN COMPLETADA</div>
+        <Eyebrow>SIMULACIÓN COMPLETADA</Eyebrow>
         <h1>Buen trabajo<span>.</span></h1>
         <p>Terminaste el examen de comprensión lectora.</p>
         <div className="score-number">{result.percentage}<small>%</small></div>
         <div className="score-caption">{result.correct} correctas de {result.total}</div>
-        <button className="button button-primary button-full" onClick={onHome}>
+        <Button full onClick={onHome}>
           Volver al inicio <ArrowRight size={17} />
-        </button>
-      </div>
+        </Button>
+      </Card>
     </section>
   );
 }

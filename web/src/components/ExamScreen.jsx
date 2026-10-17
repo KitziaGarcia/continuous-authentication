@@ -4,6 +4,9 @@ import {
 } from "lucide-react";
 import { LEVELS } from "../config.js";
 import { formatDuration } from "../utils.js";
+import Button from "./ui/Button.jsx";
+import Card from "./ui/Card.jsx";
+import ProgressBar from "./ui/ProgressBar.jsx";
 
 export default function ExamScreen({
   questions, answers, currentIndex, decision, signalBad, elapsed, onAnswer,
@@ -33,16 +36,16 @@ export default function ExamScreen({
             <span>{displayStatus}</span>
           </div>
           <div className="timer-chip"><Clock3 size={15} /> {formatDuration(elapsed)}</div>
-          <button className="icon-button exit-button" onClick={onExitRequest} title="Salir del examen"><X size={17} /></button>
+          <Button variant="icon" className="exit-button" onClick={onExitRequest} title="Salir del examen"><X size={17} /></Button>
         </div>
       </div>
       <div className="exam-progress">
         <span>Pregunta {String(currentIndex + 1).padStart(2, "0")} <i>de</i> {String(questions.length).padStart(2, "0")}</span>
         <span>{answered} respondidas</span>
-        <div className="progress-track"><span style={{ width: `${progress}%` }} /></div>
+        <ProgressBar value={progress} />
       </div>
       <div className="exam-columns">
-        <article className="reading-card panel">
+        <Card as="article" className="reading-card">
           <div className="reading-meta">
             <span className="reading-number">LECTURA 0{passageIndex + 1}</span>
             <span>{LEVELS.find((item) => item.value === currentQuestion.level)?.label}</span>
@@ -50,8 +53,8 @@ export default function ExamScreen({
           <h2>{currentQuestion.passage_title}</h2>
           <p>{currentQuestion.passage_text}</p>
           <div className="reading-footer"><BookOpen size={15} /> Lee el texto y responde las preguntas asociadas.</div>
-        </article>
-        <article className="question-card panel">
+        </Card>
+        <Card as="article" className="question-card">
           <div className="question-top">
             <span className="question-index">PREGUNTA {String(currentIndex + 1).padStart(2, "0")}</span>
             <span className="difficulty-badge">{currentQuestion.difficulty}</span>
@@ -72,21 +75,21 @@ export default function ExamScreen({
           </div>
           {signalBad && <div className="inline-warning"><AlertCircle size={15} /> Pausamos las respuestas hasta recuperar una señal confiable.</div>}
           <div className="question-footer">
-            <button className="button button-quiet" onClick={onPrevious} disabled={currentIndex === 0}><ArrowLeft size={16} /> Anterior</button>
+            <Button variant="quiet" onClick={onPrevious} disabled={currentIndex === 0}><ArrowLeft size={16} /> Anterior</Button>
             {currentIndex === questions.length - 1 ? (
-              <button className="button button-primary" onClick={onFinishRequest} disabled={signalBad}>Finalizar <Check size={16} /></button>
+              <Button onClick={onFinishRequest} disabled={signalBad}>Finalizar <Check size={16} /></Button>
             ) : (
-              <button className="button button-primary" onClick={onNext} disabled={signalBad}>Siguiente <ArrowRight size={16} /></button>
+              <Button onClick={onNext} disabled={signalBad}>Siguiente <ArrowRight size={16} /></Button>
             )}
           </div>
-        </article>
+        </Card>
       </div>
-      <div className="monitor-strip panel">
+      <Card className="monitor-strip">
         <div className="monitor-title"><span className="monitor-pulse"><HeartPulse size={17} /></span><span><b>Autenticación continua</b><small>Señal procesada localmente por el backend</small></span></div>
         <div className="monitor-metric"><small>SIMILITUD</small><b>{decision?.smoothed == null ? "—" : decision.smoothed.toFixed(2)}</b></div>
         <div className="monitor-meter"><span style={{ width: `${Math.max(0, Math.min(100, ((decision?.smoothed ?? 0) + 1) * 50))}%` }} /></div>
         <div className="monitor-caption">{decision?.status === "AUTHENTICATED" ? "Coincide con la muestra inicial" : decision?.status === "BAD_SIGNAL" ? "Sin decisión: señal de baja calidad" : decision?.status === "REJECTED" ? "Se requiere revisar la muestra" : "Esperando la primera lectura"}</div>
-      </div>
+      </Card>
     </section>
   );
 }

@@ -2,6 +2,9 @@ import {
   Activity, AlertCircle, ArrowRight, AudioLines, BadgeCheck, Check, CircleHelp,
   LockKeyhole, Moon, Sun, Wifi, WifiOff, X,
 } from "lucide-react";
+import Button from "./ui/Button.jsx";
+import Card from "./ui/Card.jsx";
+import { StepLabel } from "./ui/Label.jsx";
 
 export function AppHeader({ apiStatus, socketConnected, theme, onToggleTheme }) {
   return (
@@ -18,9 +21,9 @@ export function AppHeader({ apiStatus, socketConnected, theme, onToggleTheme }) 
         <span className="connection-indicator" title={socketConnected ? "Canal en tiempo real activo" : "Canal en tiempo real desconectado"}>
           {socketConnected ? <Wifi size={16} /> : <WifiOff size={16} />}
         </span>
-        <button className="icon-button" onClick={onToggleTheme} aria-label="Cambiar tema">
+        <Button variant="icon" onClick={onToggleTheme} aria-label="Cambiar tema">
           {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
-        </button>
+        </Button>
       </div>
     </header>
   );
@@ -44,8 +47,8 @@ export function SessionModal({ modal, onClose, onContinue, onFinish, onAbandon }
 
   return (
     <div className="modal-backdrop" role="presentation">
-      <section className={`modal-card ${locked ? "modal-danger" : ""}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <button className="modal-close" onClick={onClose} aria-label="Cerrar aviso" disabled={persistent}><X size={17} /></button>
+      <Card as="section" className={`modal-card ${locked ? "modal-danger" : ""}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <Button variant="text" className="modal-close" onClick={onClose} aria-label="Cerrar aviso" disabled={persistent}><X size={17} /></Button>
         <div className={`modal-symbol ${warning ? "modal-symbol-warn" : ""} ${locked ? "modal-symbol-danger" : ""}`}>
           {modal.kind === "enrolled"
             ? <BadgeCheck size={23} />
@@ -55,28 +58,28 @@ export function SessionModal({ modal, onClose, onContinue, onFinish, onAbandon }
                 ? <LockKeyhole size={22} />
                 : <AlertCircle size={23} />}
         </div>
-        <span className="step-label">{modal.kind === "recovery" || modal.kind === "rechecking" ? "CONTROL DE IDENTIDAD" : "AVISO DE SESIÓN"}</span>
+        <StepLabel>{modal.kind === "recovery" || modal.kind === "rechecking" ? "CONTROL DE IDENTIDAD" : "AVISO DE SESIÓN"}</StepLabel>
         <h2 id="modal-title">{modal.title}</h2>
         <p>{modal.message}</p>
-        {modal.kind === "enrolled" && <button className="button button-primary button-full" onClick={onContinue}>Continuar <ArrowRight size={16} /></button>}
-        {modal.kind === "signal" && <button className="button button-primary button-full" onClick={onClose}>Entendido, revisaré la banda <Check size={16} /></button>}
-        {modal.kind === "recovery" && <button className="button button-primary button-full" onClick={onClose}>Ajustar banda y continuar <ArrowRight size={16} /></button>}
-        {modal.kind === "enroll-signal" && <button className="button button-primary button-full" onClick={onClose}>Entendido <Check size={16} /></button>}
-        {modal.kind === "recheck-signal" && <button className="button button-primary button-full" onClick={onClose}>Ajustar la banda <Check size={16} /></button>}
-        {modal.kind === "error" && <button className="button button-primary button-full" onClick={onClose}>Cerrar</button>}
+        {modal.kind === "enrolled" && <Button full onClick={onContinue}>Continuar <ArrowRight size={16} /></Button>}
+        {modal.kind === "signal" && <Button full onClick={onClose}>Entendido, revisaré la banda <Check size={16} /></Button>}
+        {modal.kind === "recovery" && <Button full onClick={onClose}>Ajustar banda y continuar <ArrowRight size={16} /></Button>}
+        {modal.kind === "enroll-signal" && <Button full onClick={onClose}>Entendido <Check size={16} /></Button>}
+        {modal.kind === "recheck-signal" && <Button full onClick={onClose}>Ajustar la banda <Check size={16} /></Button>}
+        {modal.kind === "error" && <Button full onClick={onClose}>Cerrar</Button>}
         {modal.kind === "finish" && (
           <div className="modal-actions">
-            <button className="button button-quiet" onClick={onClose}>Seguir revisando</button>
-            <button className="button button-primary" onClick={onFinish}>Finalizar examen <Check size={16} /></button>
+            <Button variant="quiet" onClick={onClose}>Seguir revisando</Button>
+            <Button onClick={onFinish}>Finalizar examen <Check size={16} /></Button>
           </div>
         )}
         {modal.kind === "abandon" && (
           <div className="modal-actions">
-            <button className="button button-quiet" onClick={onClose}>Continuar</button>
-            <button className="button button-primary" onClick={onAbandon}>Salir</button>
+            <Button variant="quiet" onClick={onClose}>Continuar</Button>
+            <Button onClick={onAbandon}>Salir</Button>
           </div>
         )}
-      </section>
+      </Card>
     </div>
   );
 }
