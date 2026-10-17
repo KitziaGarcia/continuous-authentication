@@ -80,3 +80,9 @@ hardware than the Polar chest strap, which is why fine-tuning on Polar data foll
 With fewer than 10 participants the hold-out evaluation rests on few impostor pairs. Reports print
 pair counts and person-level bootstrap intervals (shown as `n/a` with fewer than 3 people); treat
 early numbers as a proof of concept.
+
+## Web exam prototype
+The React/Vite frontend in `web/` uses the FastAPI backend in `src/api.py` for anonymous enrollment,
+continuous ECG checks and a JSON-backed reading-comprehension exam. It is a research simulation, not a
+security product. See [`docs/arquitectura_plataforma_web.md`](docs/arquitectura_plataforma_web.md) for the
+flow and [`docs/comandos_web.md`](docs/comandos_web.md) to install and run the web application.

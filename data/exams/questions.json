@@ -1,0 +1,82 @@
+{
+  "passages": [
+    {
+      "id": "secundaria-cuidado-agua",
+      "title": "El agua que no vemos",
+      "level": "secundaria",
+      "text": "En una ciudad, el agua que llega a las casas recorrió un camino largo: fue captada, tratada y distribuida por tuberías. Sin embargo, una parte importante se pierde antes de llegar a los hogares, debido a fugas pequeñas que pueden permanecer ocultas durante semanas. Por eso, reparar una fuga visible es útil, pero también lo es revisar periódicamente la red. En casa, cerrar la llave mientras se cepillan los dientes reduce el consumo, aunque el ahorro colectivo depende además de que las autoridades mantengan la infraestructura.",
+      "questions": [
+        {"id": "s01", "difficulty": "facil", "prompt": "¿Cuál es la idea principal del texto?", "choices": {"A": "El agua se distribuye sin pérdidas.", "B": "Cuidar el agua requiere acciones domésticas y mantenimiento de la red.", "C": "Las ciudades deberían dejar de tratar el agua.", "D": "Las fugas solo ocurren dentro de las casas."}, "answer": "B"},
+        {"id": "s02", "difficulty": "intermedia", "prompt": "¿Por qué una fuga pequeña puede ser difícil de atender?", "choices": {"A": "Puede permanecer oculta durante semanas.", "B": "Solo aparece cuando llueve.", "C": "No afecta la distribución.", "D": "Se encuentra siempre dentro de una vivienda."}, "answer": "A"},
+        {"id": "s03", "difficulty": "avanzada", "prompt": "¿Qué conclusión está mejor respaldada por el texto?", "choices": {"A": "El ahorro individual reemplaza el mantenimiento público.", "B": "Reparar solo las fugas visibles resuelve el problema completo.", "C": "La responsabilidad de cuidar el agua es compartida.", "D": "La distribución no necesita infraestructura."}, "answer": "C"},
+        {"id": "s07", "difficulty": "intermedia", "prompt": "¿Qué aporta revisar periódicamente la red de tuberías?", "choices": {"A": "Ayuda a encontrar pérdidas que todavía no son visibles.", "B": "Elimina la necesidad de tratar el agua.", "C": "Sustituye todas las acciones domésticas.", "D": "Aumenta la presión en cada vivienda."}, "answer": "A"},
+        {"id": "s08", "difficulty": "avanzada", "prompt": "¿Cuál afirmación contradice el enfoque del texto?", "choices": {"A": "Las fugas pequeñas también pueden importar.", "B": "El mantenimiento de la red contribuye al ahorro.", "C": "Las acciones de casa pueden reducir el consumo.", "D": "El cuidado del agua depende únicamente de cada hogar."}, "answer": "D"}
+      ]
+    },
+    {
+      "id": "secundaria-biblioteca",
+      "title": "Una biblioteca en movimiento",
+      "level": "secundaria",
+      "text": "La biblioteca de una colonia comenzó a prestar libros en una pequeña sala comunitaria. Como muchas personas vivían lejos, el equipo organizó visitas semanales a parques y escuelas. En cada parada, los lectores podían devolver libros, elegir otros y recomendar títulos. Al cabo de seis meses, aumentaron los préstamos, pero también surgió una nueva necesidad: registrar qué materiales interesaban en cada lugar para llevar colecciones más pertinentes. El proyecto mostró que acercar los libros ayuda, y que escuchar a los lectores permite mejorar el servicio.",
+      "questions": [
+        {"id": "s04", "difficulty": "facil", "prompt": "¿Qué cambio hizo la biblioteca para llegar a más personas?", "choices": {"A": "Cerró la sala comunitaria.", "B": "Organizó visitas a distintos espacios.", "C": "Dejó de prestar libros.", "D": "Cobró por las recomendaciones."}, "answer": "B"},
+        {"id": "s05", "difficulty": "intermedia", "prompt": "¿Qué nueva necesidad apareció al aumentar los préstamos?", "choices": {"A": "Llevar menos libros a todos los lugares.", "B": "Registrar los intereses de cada comunidad.", "C": "Eliminar las devoluciones.", "D": "Cambiar los parques por oficinas."}, "answer": "B"},
+        {"id": "s06", "difficulty": "avanzada", "prompt": "¿Qué enseñanza se desprende del proyecto?", "choices": {"A": "Un servicio mejora cuando se adapta a quienes lo usan.", "B": "Las bibliotecas funcionan mejor sin lectores.", "C": "Prestar más libros reduce la participación.", "D": "Las recomendaciones dificultan el acceso."}, "answer": "A"},
+        {"id": "s09", "difficulty": "intermedia", "prompt": "¿Por qué se organizaron visitas a parques y escuelas?", "choices": {"A": "Para limitar los préstamos a estudiantes.", "B": "Para acercar los libros a quienes vivían lejos.", "C": "Para reemplazar las recomendaciones.", "D": "Para cerrar la sala comunitaria."}, "answer": "B"},
+        {"id": "s10", "difficulty": "avanzada", "prompt": "¿Qué acción permitiría que las visitas fueran más pertinentes?", "choices": {"A": "Llevar siempre los mismos títulos.", "B": "Dejar de registrar los préstamos.", "C": "Usar las preferencias de cada lugar para elegir los libros.", "D": "Reducir las paradas semanales."}, "answer": "C"}
+      ]
+    },
+    {
+      "id": "preparatoria-suelo",
+      "title": "El suelo también es un ecosistema",
+      "level": "preparatoria",
+      "text": "A simple vista, el suelo parece una superficie inerte; no obstante, contiene comunidades de hongos, bacterias, insectos y raíces que transforman restos orgánicos en nutrientes disponibles. Cuando se retira toda la vegetación o se compacta el terreno con maquinaria, disminuyen los espacios por donde circulan el aire y el agua. Esto puede reducir la actividad biológica y facilitar la erosión. La cobertura vegetal no evita todos los daños, pero protege la superficie y contribuye a conservar la estructura del suelo. Por ello, evaluar un terreno exige observar tanto sus propiedades físicas como los procesos vivos que ocurren en él.",
+      "questions": [
+        {"id": "p01", "difficulty": "facil", "prompt": "¿Qué transforma los restos orgánicos en nutrientes?", "choices": {"A": "Únicamente la lluvia.", "B": "Las comunidades de organismos del suelo.", "C": "La maquinaria pesada.", "D": "La erosión."}, "answer": "B"},
+        {"id": "p02", "difficulty": "intermedia", "prompt": "¿Qué efecto puede tener compactar el terreno?", "choices": {"A": "Aumentar los espacios para aire y agua.", "B": "Disminuir la circulación de aire y agua.", "C": "Eliminar la erosión en cualquier condición.", "D": "Convertir el suelo en roca."}, "answer": "B"},
+        {"id": "p03", "difficulty": "avanzada", "prompt": "¿Por qué la cobertura vegetal se describe con cautela?", "choices": {"A": "Porque protege, pero no elimina todos los daños.", "B": "Porque no tiene relación con el suelo.", "C": "Porque solo sirve en terrenos inundados.", "D": "Porque impide toda actividad biológica."}, "answer": "A"},
+        {"id": "p07", "difficulty": "intermedia", "prompt": "¿Qué efecto puede tener conservar la cobertura vegetal?", "choices": {"A": "Aumenta la compactación.", "B": "Protege la superficie y ayuda a conservar la estructura.", "C": "Detiene todos los procesos del suelo.", "D": "Elimina los organismos microscópicos."}, "answer": "B"},
+        {"id": "p08", "difficulty": "avanzada", "prompt": "¿Qué enfoque propone el texto para evaluar un terreno?", "choices": {"A": "Observar únicamente su color.", "B": "Medir solo la presencia de insectos.", "C": "Considerar propiedades físicas y procesos biológicos.", "D": "Ignorar las raíces y la circulación del agua."}, "answer": "C"}
+      ]
+    },
+    {
+      "id": "preparatoria-transporte",
+      "title": "La hora de salida",
+      "level": "preparatoria",
+      "text": "Una encuesta municipal encontró que muchas personas tardaban menos en llegar al trabajo cuando compartían automóvil, pero el resultado no se debía únicamente a una mayor velocidad. Al reducirse el número de vehículos, algunas avenidas presentaban menos detenciones y se liberaban espacios de estacionamiento. La encuesta no demostró que compartir coche fuera la solución para todos: los horarios, las rutas y la disponibilidad de transporte público variaban entre barrios. El informe recomendó combinar varias medidas y medir sus efectos en distintos horarios antes de extenderlas a toda la ciudad.",
+      "questions": [
+        {"id": "p04", "difficulty": "facil", "prompt": "¿Qué encontró la encuesta sobre algunas personas que compartían automóvil?", "choices": {"A": "Siempre cambiaban de barrio.", "B": "En algunos casos tardaban menos en llegar.", "C": "Dejaban de usar las avenidas.", "D": "No necesitaban estacionamiento."}, "answer": "B"},
+        {"id": "p05", "difficulty": "intermedia", "prompt": "¿Por qué el informe no propone una única solución para toda la ciudad?", "choices": {"A": "Las condiciones varían entre barrios y horarios.", "B": "La encuesta no incluyó automóviles.", "C": "Todas las rutas son idénticas.", "D": "El transporte público tiene el mismo horario en todos lados."}, "answer": "A"},
+        {"id": "p06", "difficulty": "avanzada", "prompt": "¿Qué método de decisión recomienda el informe?", "choices": {"A": "Aplicar la medida sin observar resultados.", "B": "Probar combinaciones y evaluar sus efectos antes de ampliarlas.", "C": "Usar una sola avenida como evidencia definitiva.", "D": "Ignorar las diferencias de horario."}, "answer": "B"},
+        {"id": "p09", "difficulty": "intermedia", "prompt": "¿Qué factores, además de la velocidad, se relacionaron con el menor tiempo de traslado?", "choices": {"A": "Menos detenciones y más espacios disponibles.", "B": "Más vehículos en cada avenida.", "C": "Rutas idénticas en todos los barrios.", "D": "La eliminación del transporte público."}, "answer": "A"},
+        {"id": "p10", "difficulty": "avanzada", "prompt": "¿Qué límite tiene la evidencia de la encuesta?", "choices": {"A": "No incluye ninguna recomendación.", "B": "Solo mide la velocidad máxima.", "C": "Sus resultados no garantizan que la medida sirva igual en todos los barrios.", "D": "Demuestra que toda medida tiene el mismo efecto."}, "answer": "C"}
+      ]
+    },
+    {
+      "id": "universidad-datos",
+      "title": "La utilidad de una muestra",
+      "level": "universidad",
+      "text": "En investigación, una muestra pequeña no es automáticamente inútil; su valor depende de la pregunta, del método de selección y de la incertidumbre que se comunica. Una muestra de conveniencia puede ayudar a probar un instrumento o descubrir problemas de procedimiento, pero normalmente no representa a toda una población. Aumentar el tamaño reduce cierta variabilidad aleatoria, aunque no corrige por sí solo un sesgo sistemático de selección. En consecuencia, la calidad de una conclusión no se resume en el número de observaciones: también importa explicar cómo se obtuvieron y cuáles son sus límites.",
+      "questions": [
+        {"id": "u01", "difficulty": "facil", "prompt": "¿Una muestra pequeña carece siempre de utilidad?", "choices": {"A": "Sí, sin excepción.", "B": "No; puede servir para probar un instrumento o procedimiento.", "C": "Sí, si el estudio es exploratorio.", "D": "No, porque siempre representa a toda la población."}, "answer": "B"},
+        {"id": "u02", "difficulty": "intermedia", "prompt": "¿Qué no corrige necesariamente aumentar el tamaño de la muestra?", "choices": {"A": "Un sesgo sistemático de selección.", "B": "La variabilidad aleatoria.", "C": "La cantidad de observaciones.", "D": "El tiempo de recolección."}, "answer": "A"},
+        {"id": "u03", "difficulty": "avanzada", "prompt": "¿Qué criterio de calidad enfatiza el texto?", "choices": {"A": "El tamaño por encima de cualquier otro factor.", "B": "La transparencia sobre selección, método e incertidumbre.", "C": "La eliminación de toda limitación.", "D": "El uso exclusivo de muestras grandes."}, "answer": "B"},
+        {"id": "u07", "difficulty": "intermedia", "prompt": "¿Para qué puede ser útil una muestra de conveniencia?", "choices": {"A": "Para demostrar que toda la población piensa igual.", "B": "Para probar un instrumento o detectar problemas del procedimiento.", "C": "Para eliminar cualquier incertidumbre.", "D": "Para reemplazar la selección de participantes."}, "answer": "B"},
+        {"id": "u08", "difficulty": "avanzada", "prompt": "Si se aumenta una muestra sesgada, ¿qué problema podría persistir?", "choices": {"A": "La falta de observaciones.", "B": "La variabilidad aleatoria.", "C": "El sesgo sistemático de selección.", "D": "La imposibilidad de calcular un promedio."}, "answer": "C"}
+      ]
+    },
+    {
+      "id": "universidad-diseno",
+      "title": "Diseñar para la excepción",
+      "level": "universidad",
+      "text": "Un sistema suele evaluarse primero bajo condiciones normales, pero sus fallos más importantes pueden aparecer en situaciones poco frecuentes. Por ejemplo, una plataforma que responde rápido con una conexión estable podría perder datos cuando la red fluctúa. Diseñar para estas excepciones no significa optimizar cada caso imaginable: implica identificar fallos plausibles, establecer cómo se detectarán y decidir qué estado seguro debe adoptar el sistema. Las pruebas de recuperación son tan relevantes como las pruebas de funcionamiento ordinario, porque muestran si el servicio puede volver a operar sin ocultar errores ni corromper información.",
+      "questions": [
+        {"id": "u04", "difficulty": "facil", "prompt": "¿Qué situación ilustra un posible fallo de una plataforma?", "choices": {"A": "La red fluctúa y se pueden perder datos.", "B": "La conexión permanece estable.", "C": "El sistema responde en condiciones normales.", "D": "Las pruebas terminan rápidamente."}, "answer": "A"},
+        {"id": "u05", "difficulty": "intermedia", "prompt": "¿Qué significa diseñar para excepciones según el texto?", "choices": {"A": "Prever fallos plausibles y definir respuestas seguras.", "B": "Optimizar cada situación imaginable.", "C": "Evitar probar la recuperación.", "D": "Ocultar errores para mantener el servicio."}, "answer": "A"},
+        {"id": "u06", "difficulty": "avanzada", "prompt": "¿Por qué se consideran importantes las pruebas de recuperación?", "choices": {"A": "Porque sustituyen todas las pruebas normales.", "B": "Porque verifican la recuperación sin ocultar errores o dañar datos.", "C": "Porque garantizan que nunca habrá fallos.", "D": "Porque solo miden la velocidad de conexión."}, "answer": "B"},
+        {"id": "u09", "difficulty": "intermedia", "prompt": "¿Qué debería decidirse ante un fallo plausible?", "choices": {"A": "Qué estado seguro adoptará el sistema.", "B": "Cómo ocultarlo para no interrumpir.", "C": "Cómo evitar probarlo.", "D": "Cómo optimizar todos los casos imaginables."}, "answer": "A"},
+        {"id": "u10", "difficulty": "avanzada", "prompt": "¿Cuál es el alcance razonable del diseño para excepciones?", "choices": {"A": "Resolver todo evento imaginable.", "B": "Ignorar eventos infrecuentes.", "C": "Identificar fallos plausibles y definir detección y recuperación.", "D": "Probar solo la velocidad bajo condiciones normales."}, "answer": "C"}
+      ]
+    }
+  ]
+}

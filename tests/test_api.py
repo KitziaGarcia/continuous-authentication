@@ -50,6 +50,24 @@ def test_health_and_unknown_user(client):
     assert client.post("/enroll/start", json={"user_id": "mal id!"}).status_code == 422
 
 
+def test_loopback_cors_allows_localhost_and_ip_aliases(tmp_path):
+    cfg = Config()
+    net = ECGEmbeddingNet(cfg).eval()
+    ctl = Controller(make_model_embed_fn(net), cfg, "modelo_test.pt", simulate=True, template_dir=tmp_path / "live")
+    with TestClient(create_app(ctl, cors_origins=["http://127.0.0.1:5173"])) as c:
+        for origin in ("http://localhost:5173", "http://127.0.0.1:5173"):
+            response = c.options(
+                "/health",
+                headers={
+                    "Origin": origin,
+                    "Access-Control-Request-Method": "GET",
+                    "Access-Control-Request-Headers": "content-type",
+                },
+            )
+            assert response.status_code == 200
+            assert response.headers["access-control-allow-origin"] == origin
+
+
 def test_enroll_progress_and_result_over_websocket(client):
     with client.websocket_connect("/ws") as ws:
         assert ws.receive_json()["type"] == "state"
@@ -121,3 +139,33 @@ def test_user_id_cannot_escape_the_templates_folder(client):
         assert client.post("/enroll/start", json={"user_id": bad}).status_code == 422
         assert client.post("/monitor/start", json={"user_id": bad}).status_code == 422
     assert client.get("/users/..%2Fx").status_code in (404, 422)
+
+
+def test_exam_routes_keep_answer_key_in_backend(client):
+    response = client.get("/exam/questions?level=mixto&difficulty=todas&count=12")
+    assert response.status_code == 200
+    questions = response.json()["questions"]
+    assert len(questions) == 12
+    assert all("answer" not in question for question in questions)
+
+    grade = client.post("/exam/grade", json={"answers": [{"question_id": "s01", "answer": "B"}]})
+    assert grade.status_code == 200
+    assert grade.json()["percentage"] == 100
+
+
+def test_recheck_uses_the_existing_template_and_returns_a_result(client):
+    with client.websocket_connect("/ws") as ws:
+        ws.receive_json()
+        assert client.post("/enroll/start", json={"user_id": "ana"}).status_code == 202
+        result = collect_until(ws, "enroll_result")[-1]
+        assert result["ok"] is True
+        wait_idle(client)
+
+        assert client.post("/monitor/recheck", json={"user_id": "ana"}).status_code == 202
+        events = collect_until(ws, "recheck_result")
+
+    result = events[-1]
+    assert result["kind"] == "verified"
+    assert result["ok"] is True
+    assert result["threshold"] == 0.31
+    wait_idle(client)

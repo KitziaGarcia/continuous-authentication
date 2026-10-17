@@ -1,8 +1,7 @@
 # Guía de integración: cómo conectar el frontend con el backend de autenticación continua
 
-**Para quién es:** quien construya la web (y el asistente de IA que use, que **no** ve el resto del repo).
-Aquí está todo lo necesario para hablar con el backend. **La arquitectura y el framework del frontend los decides
-tú**; este documento solo define el contrato: qué ejecutar, qué rutas llamar y qué datos llegan.
+**Para quién es:** quien mantenga el frontend y el backend de la plataforma web.
+El frontend vive en `web/` (React, Vite y Tailwind); este documento define el contrato HTTP/WebSocket que utiliza.
 
 > **Estado: prototipo de investigación (tesis).** El error medido entre días con personas ya vistas es de ~7 %
 > (EER). **No es un sistema de seguridad real**; no lo presentes como tal en la interfaz.
@@ -60,11 +59,19 @@ usuarios se guardan en `data/live/<user_id>.npz` (ignorado por git).
                                                                             [idle, banda cerrada]
 ```
 
-1. Al cargar la página: abre el WebSocket (`/ws`) y llama `GET /users/{user_id}` para saber si ya hay huella.
+1. Al cargar la página: abre el WebSocket (`/ws`) y comprueba `GET /health`.
 2. Botón **"Tomar muestra inicial"** → `POST /enroll/start`. Dura **65 s** (5 s de estabilización + 60 s de
    registro). Escucha `enroll_progress` y al final `enroll_result`.
-3. Botón **"Iniciar vigilancia"** → `POST /monitor/start`. Llegan eventos `decision` cada ~2.5 s.
-4. Botón **"Detener"** → `POST /stop` (cancela lo que haya y cierra la conexión con la banda).
+3. La aplicación solicita preguntas con `GET /exam/questions` y comienza el examen junto con
+   `POST /monitor/start`. Llegan eventos `decision` cada ~2.5 s.
+4. Tres rechazos consecutivos pausan el examen. El usuario puede ajustar la banda y pedir una muestra
+   de verificación con `POST /monitor/recheck`; esa muestra se compara con la plantilla existente y nunca
+   la reemplaza. Si no coincide, el frontend detiene el examen.
+5. La calidad de señal baja genera avisos de colocación y pausa la interacción con las preguntas, pero
+   **no** cuenta como rechazo de identidad. La señal debe recuperarse antes de continuar.
+6. Al terminar, la aplicación envía las respuestas a `POST /exam/grade`; la calificación se calcula en el
+   backend. El banco y sus claves viven en `data/exams/questions.json`, sin base de datos.
+7. `POST /stop` cancela la vigilancia y cierra la conexión con la banda.
 
 Mientras corre una operación, deshabilita los botones (usa `phase`, ver §5). Tras un registro o una vigilancia
 la conexión con la banda queda abierta (`connected: true`) para poder encadenar la siguiente sin reconectar;
@@ -85,6 +92,9 @@ devuelve `422`.
 | `DELETE /users/{user_id}` | — | `{"user_id": "ana", "deleted": true}` (borra la huella y el contador de fallos) |
 | `POST /enroll/start` | `{"user_id": "ana"}` | `202 {"accepted": true, "user_id": "ana"}`. El resultado llega **por WebSocket** o en `/state`. |
 | `POST /monitor/start` | `{"user_id": "ana"}` | `202 {"accepted": true, "user_id": "ana"}` |
+| `POST /monitor/recheck` | `{"user_id": "ana"}` | `202`; el resultado llega como `recheck_result` por WebSocket |
+| `GET /exam/questions?level=mixto&difficulty=todas&count=12` | — | Preguntas sin clave de respuesta |
+| `POST /exam/grade` | `{"answers": [{"question_id": "s01", "answer": "B"}]}` | Calificación y retroalimentación al finalizar |
 | `POST /stop` | — | `{"phase": "idle"}` |
 | `POST /sim/scenario` | `{"scenario": "..."}` | Solo con `--simulate`. Ver §7. |
 
@@ -189,6 +199,30 @@ persona el rechazo puede tardar hasta ~7 s (por el promedio). Durante los primer
 | `CONNECTION_LOST` | Dejó de llegar señal (~5 s en registro, ~15 s en vigilancia) | "Se perdió la banda" |
 
 Después de un `error` el servidor vuelve a `phase: "idle"` y cierra la conexión con la banda.
+
+### Revalidación y examen
+
+`POST /monitor/recheck` realiza 3 s de estabilización y 10 s de lectura. Envía progreso como
+`recheck_progress` y termina con uno de estos eventos:
+
+```json
+{"type": "recheck_result", "kind": "verified", "ok": true, "score": 0.97, "threshold": 0.31}
+{"type": "recheck_result", "kind": "identity", "ok": false, "score": 0.12, "threshold": 0.31}
+{"type": "recheck_result", "kind": "signal", "ok": false, "score": null,
+ "codes": ["FLAT_SIGNAL"], "messages": ["No llega señal: revisa la banda."]}
+```
+
+`kind: "signal"` permite volver a colocar la banda y reintentar; no se interpreta como impostura.
+`kind: "identity"` confirma que la nueva muestra no superó el umbral. Una muestra verificada reanuda
+`POST /monitor/start` con la plantilla original.
+
+Los eventos `decision` separan `BAD_SIGNAL` de `REJECTED`. Tras tres ventanas consecutivas `BAD_SIGNAL`,
+el frontend muestra un aviso de calidad y desactiva las respuestas mientras no haya señal confiable. Tras
+tres `REJECTED` consecutivos, solicita revalidación y, si esta vuelve a fallar por identidad, bloquea la
+simulación. Las ventanas con señal mala no incrementan el contador de rechazos del modelo.
+
+El API del examen devuelve solo enunciados, opciones y lecturas. La respuesta correcta permanece en
+`data/exams/questions.json` y se revela únicamente en el resultado de `POST /exam/grade`.
 
 ---
 
@@ -295,6 +329,8 @@ En JavaScript el WebSocket es el estándar del navegador: `new WebSocket("ws://1
   (están en `.gitignore`). Los **modelos entrenados sí** se versionan en `models/`.
 - La huella (128 números) es el dato sensible mínimo: guárdala por usuario, con consentimiento, y ofrece
   borrarla (`DELETE /users/{id}`). El backend no guarda el ECG crudo.
+- La web genera una clave aleatoria `EX-...` para cada sesión; no solicita nombre ni correo. La calificación
+  y las respuestas se mantienen en memoria del navegador y no se persisten en el backend.
 - Los participantes de la recolección tienen ID anónimo (`P01`, `P02`...). No intentes ligarlos a personas.
 
 ## 11. Para quien mantenga el backend
@@ -307,4 +343,4 @@ En JavaScript el WebSocket es el estándar del navegador: `new WebSocket("ws://1
   reescribas. Para cada decisión se filtran las últimas 1950 muestras (15 s) y se evalúa la última ventana.
 - La huella guardada depende del modelo (`data/live/<id>.npz` incluye el nombre del `.pt`); si cambias de
   modelo hay que registrar de nuevo (el backend lo avisa con `TEMPLATE_MODEL_MISMATCH`).
-- Pruebas: `python -m pytest tests/test_api.py` (usa modo simulado acelerado, no necesita banda).
+- Pruebas: `python -m pytest tests/test_api.py tests/test_exam.py` (usa modo simulado acelerado, no necesita banda).

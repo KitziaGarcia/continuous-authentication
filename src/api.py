@@ -13,6 +13,7 @@ import re
 import time
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
@@ -21,9 +22,10 @@ from pydantic import BaseModel, Field
 
 from src.checkpoint import load_checkpoint
 from src.config import Config
+from src.exam import ExamBank
 from src.errors import CheckpointError
 from src.evaluate import make_model_embed_fn
-from src.live import AUTH, BAD_SIGNAL, REJECT, make_template, monitor
+from src.live import AUTH, BAD_SIGNAL, REJECT, make_template, monitor, score_window
 from src.quality import HR_RANGE, MAX_RR_GAP_S, MAX_RR_VARIATION, MAX_SPIKE_RATIO, check_quality
 from src.record import POLAR_FS
 from src.session import ConnectionLost, PolarSource
@@ -33,6 +35,7 @@ from src.windowing import signal_to_windows
 
 DEFAULT_THRESHOLD = 0.31      # similitud coseno; provisional (se recalibra con el modelo final)
 SETTLE_S, ENROLL_S = 5.0, 60.0
+RECHECK_SETTLE_S, RECHECK_RECORD_S = 3.0, 10.0
 USER_ID = re.compile(r"[A-Za-z0-9-]{1,40}")
 
 STATUS = {AUTH: "AUTHENTICATED", REJECT: "REJECTED", BAD_SIGNAL: "BAD_SIGNAL"}
@@ -72,6 +75,19 @@ def quality_codes(q, raw, min_peaks: int, fs: int = POLAR_FS) -> list:
         if len(q.peak_indices) > 1 and np.diff(q.peak_indices).max() / fs > MAX_RR_GAP_S:
             codes.append("SIGNAL_GAP")
     return codes or ["POOR_SIGNAL"]
+
+
+def _loopback_origin_aliases(origins) -> list[str]:
+    """Allow localhost and 127.0.0.1 as equivalent local frontend origins."""
+    allowed = set(origins)
+    for origin in origins:
+        parsed = urlsplit(origin)
+        if parsed.scheme not in {"http", "https"} or parsed.hostname not in {"localhost", "127.0.0.1"}:
+            continue
+        alias_host = "localhost" if parsed.hostname == "127.0.0.1" else "127.0.0.1"
+        port = f":{parsed.port}" if parsed.port is not None else ""
+        allowed.add(f"{parsed.scheme}://{alias_host}{port}")
+    return sorted(allowed)
 
 
 # ---------------------------------------------------------------- fuente simulada
@@ -320,6 +336,46 @@ class Controller:
         finally:
             self.set_state(phase="idle")
 
+    async def run_recheck(self, user_id: str, template: np.ndarray) -> None:
+        self.state["last_error"] = None
+        self.set_state(phase="rechecking", user_id=user_id)
+        try:
+            await self.open_source()
+            self.set_state(phase="rechecking")
+            src = self.source
+            for elapsed in range(1, int(RECHECK_SETTLE_S + RECHECK_RECORD_S) + 1):
+                await self.sleep(1.0)
+                stage = "settling" if elapsed <= RECHECK_SETTLE_S else "recording"
+                stage_elapsed = elapsed if stage == "settling" else elapsed - RECHECK_SETTLE_S
+                total = RECHECK_SETTLE_S if stage == "settling" else RECHECK_RECORD_S
+                self.emit({"type": "recheck_progress", "stage": stage, "elapsed_s": stage_elapsed,
+                           "total_s": total})
+            raw = src.take(src.n_samples() - int(RECHECK_RECORD_S * POLAR_FS), src.n_samples())
+            quality = check_quality(raw, POLAR_FS, min_peaks=8)
+            codes = quality_codes(quality, raw, 8)
+            if not quality.ok:
+                self.emit({"type": "recheck_result", "kind": "signal", "ok": False, "score": None,
+                           "codes": codes, "messages": [SIGNAL_MESSAGES[code] for code in codes]})
+                return
+            windows = signal_to_windows(raw, POLAR_FS, self.cfg)
+            if not len(windows):
+                codes = ["POOR_SIGNAL"]
+                self.emit({"type": "recheck_result", "kind": "signal", "ok": False, "score": None,
+                           "codes": codes, "messages": [SIGNAL_MESSAGES[code] for code in codes]})
+                return
+            scores = [score_window(self.embed, template, window) for window in windows]
+            score = float(np.mean(scores))
+            verified = score >= self.threshold
+            self.emit({"type": "recheck_result", "kind": "identity" if not verified else "verified",
+                       "ok": verified, "score": score, "threshold": self.threshold, "codes": [],
+                       "messages": []})
+        except ConnectionLost as exc:
+            if self.state["last_error"] is None:
+                self.fail("CONNECTION_LOST", str(exc))
+            await self.close_source()
+        finally:
+            self.set_state(phase="idle")
+
 
 # ---------------------------------------------------------------- API
 class UserBody(BaseModel):
@@ -329,10 +385,24 @@ class UserBody(BaseModel):
 class ScenarioBody(BaseModel):
     scenario: Literal["same_person", "other_person", "bad_signal", "movement"]
 
+class ExamAnswer(BaseModel):
+    question_id: str = Field(min_length=1, max_length=80)
+    answer: Literal["A", "B", "C", "D"] | None
 
-def create_app(ctl: Controller, cors_origins=("*",)) -> FastAPI:
+
+class ExamAnswers(BaseModel):
+    answers: list[ExamAnswer] = Field(max_length=30)
+
+
+def create_app(ctl: Controller, cors_origins=("*",), exam_bank: ExamBank | None = None) -> FastAPI:
     app = FastAPI(title="Autenticación continua con ECG")
-    app.add_middleware(CORSMiddleware, allow_origins=list(cors_origins), allow_methods=["*"], allow_headers=["*"])
+    bank = exam_bank or ExamBank()
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=_loopback_origin_aliases(cors_origins),
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     @app.get("/health")
     def health():
@@ -342,6 +412,15 @@ def create_app(ctl: Controller, cors_origins=("*",)) -> FastAPI:
     @app.get("/state")
     def state():
         return ctl.state
+
+    @app.get("/exam/questions")
+    def exam_questions(level: str = "mixto", difficulty: str = "todas", count: int = 12):
+        questions = bank.select(level, difficulty, count)
+        return {"questions": questions, "count": len(questions)}
+
+    @app.post("/exam/grade")
+    def exam_grade(body: ExamAnswers):
+        return bank.grade([answer.model_dump() for answer in body.answers])
 
     @app.get("/users/{user_id}")
     def user(user_id: str):
@@ -371,6 +450,15 @@ def create_app(ctl: Controller, cors_origins=("*",)) -> FastAPI:
         template = ctl.load_template(body.user_id)
         ctl.start(ctl.run_monitor, body.user_id, template)
         return {"accepted": True, "user_id": body.user_id}
+
+    @app.post("/monitor/recheck", status_code=202)
+    async def monitor_recheck(body: UserBody):
+        if ctl.task is not None and not ctl.task.done():
+            raise HTTPException(409, {"code": "BUSY", "message": f"Ya hay una operación en curso ({ctl.state['phase']})."})
+        template = ctl.load_template(body.user_id)
+        ctl.start(ctl.run_recheck, body.user_id, template)
+        return {"accepted": True, "user_id": body.user_id,
+                "settle_s": RECHECK_SETTLE_S, "record_s": RECHECK_RECORD_S}
 
     @app.post("/stop")
     async def stop():
