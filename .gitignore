@@ -13,3 +13,4 @@ reports/*.png
 data/piloto/
 data/descartadas/
 data/live/
+/metrics/

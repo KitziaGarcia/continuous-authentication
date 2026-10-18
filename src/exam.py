@@ -10,6 +10,7 @@ from fastapi import HTTPException
 
 LEVELS = {"secundaria", "preparatoria", "universidad"}
 DIFFICULTIES = {"facil", "intermedia", "avanzada"}
+QUESTION_COUNTS = {5, 10, 20, 30}
 DEFAULT_BANK = Path(__file__).resolve().parent.parent / "data" / "exams" / "questions.json"
 
 
@@ -58,14 +59,19 @@ class ExamBank:
             raise HTTPException(422, "Nivel de examen inválido.")
         if difficulty not in DIFFICULTIES | {"todas"}:
             raise HTTPException(422, "Dificultad inválida.")
-        if not 1 <= count <= 30:
-            raise HTTPException(422, "La cantidad de preguntas debe estar entre 1 y 30.")
+        if count not in QUESTION_COUNTS:
+            raise HTTPException(422, "La cantidad debe ser 5, 10, 20 o 30 preguntas.")
         eligible = [
             question for question in self.questions.values()
             if (level == "mixto" or question["level"] == level)
             and (difficulty == "todas" or question["difficulty"] == difficulty)
         ]
-        chosen = random.SystemRandom().sample(eligible, min(count, len(eligible)))
+        if len(eligible) < count:
+            raise HTTPException(
+                422,
+                f"Hay {len(eligible)} preguntas para esa combinación; se solicitaron {count}.",
+            )
+        chosen = random.SystemRandom().sample(eligible, count)
         chosen.sort(key=lambda item: (item["passage_id"], item["id"]))
         return [
             {key: question[key] for key in (

@@ -81,8 +81,10 @@ El JSON del servidor contiene lecturas, preguntas, opciones y respuestas correct
 selecciona el nivel, dificultad y cantidad, y omite las claves. `POST /exam/grade` recibe las respuestas
 finales y devuelve el resumen. No se guardan intentos ni calificaciones en una base persistente.
 
-El banco incluido es contenido de demostración (30 preguntas en seis lecturas breves). La interfaz ajusta
-las cantidades disponibles al nivel y dificultad elegidos. Las respuestas no contestadas se califican como
+El banco incluido contiene preguntas originales de demostración: 30 preguntas por dificultad
+(fácil, intermedia y avanzada) para cada nivel (secundaria, preparatoria y universidad), distribuidas
+en lecturas breves. La interfaz permite elegir 5, 10, 20 o 30 preguntas del nivel y dificultad elegidos.
+Las respuestas no contestadas se califican como
 incorrectas, sin sustituirlas por una opción arbitraria.
 
 ## Datos y límites

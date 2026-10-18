@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Activity, AlertCircle, ArrowLeft, ArrowRight, BookOpen, Check, CheckCircle2,
   Clock3, HeartPulse, ShieldCheck, X,
@@ -9,9 +10,11 @@ import Card from "./ui/Card.jsx";
 import ProgressBar from "./ui/ProgressBar.jsx";
 
 export default function ExamScreen({
-  questions, answers, currentIndex, decision, signalBad, elapsed, onAnswer,
+  questions, answers, currentIndex, decision, wearerLabel,
+  onConfirmWearer, signalBad, elapsed, onAnswer,
   onPrevious, onNext, onFinishRequest, onExitRequest,
 }) {
+  const [wearerDraft, setWearerDraft] = useState(wearerLabel);
   const currentQuestion = questions[currentIndex];
   const answered = Object.keys(answers).length;
   const progress = questions.length ? ((currentIndex + 1) / questions.length) * 100 : 0;
@@ -89,6 +92,29 @@ export default function ExamScreen({
         <div className="monitor-metric"><small>SIMILITUD</small><b>{decision?.smoothed == null ? "—" : decision.smoothed.toFixed(2)}</b></div>
         <div className="monitor-meter"><span style={{ width: `${Math.max(0, Math.min(100, ((decision?.smoothed ?? 0) + 1) * 50))}%` }} /></div>
         <div className="monitor-caption">{decision?.status === "AUTHENTICATED" ? "Coincide con la muestra inicial" : decision?.status === "BAD_SIGNAL" ? "Sin decisión: señal de baja calidad" : decision?.status === "REJECTED" ? "Se requiere revisar la muestra" : "Esperando la primera lectura"}</div>
+        <div className="research-label">
+          <label className="research-label-field">
+            <span>¿Quién lleva la banda ahora?</span>
+            <select value={wearerDraft} onChange={(event) => setWearerDraft(event.target.value)}>
+              <option value="original">Participante original — genuine</option>
+              <option value="impostor">Otra persona — impostor</option>
+              <option value="unknown">No confirmado — unknown</option>
+            </select>
+          </label>
+          <Button
+            variant="quiet"
+            onClick={() => onConfirmWearer(wearerDraft)}
+          >
+            Aplicar etiqueta
+          </Button>
+          <small>
+            {wearerLabel === "original"
+              ? "Lecturas nuevas: genuine (misma persona que se enroló)"
+              : wearerLabel === "impostor"
+                ? "Lecturas nuevas: impostor (persona distinta)"
+                : "Lecturas nuevas: unknown hasta confirmar"}
+          </small>
+        </div>
       </Card>
     </section>
   );

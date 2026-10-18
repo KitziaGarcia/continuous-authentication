@@ -6,9 +6,9 @@ from src.exam import ExamBank
 
 def test_selected_exam_questions_do_not_include_the_answer_key():
     bank = ExamBank()
-    questions = bank.select("mixto", "todas", 12)
+    questions = bank.select("mixto", "todas", 10)
 
-    assert len(questions) == 12
+    assert len(questions) == 10
     assert all("answer" not in question for question in questions)
     assert all("passage_text" in question and "choices" in question for question in questions)
 
@@ -47,3 +47,30 @@ def test_level_and_question_count_are_validated():
         bank.select("doctorado", "todas", 5)
     with pytest.raises(HTTPException):
         bank.select("mixto", "todas", 31)
+    with pytest.raises(HTTPException):
+        bank.select("mixto", "todas", 12)
+
+
+@pytest.mark.parametrize("level", ["secundaria", "preparatoria", "universidad"])
+@pytest.mark.parametrize("difficulty", ["facil", "intermedia", "avanzada"])
+def test_bank_supports_30_questions_for_every_level_and_difficulty(level, difficulty):
+    bank = ExamBank()
+
+    available = sum(
+        question["level"] == level and question["difficulty"] == difficulty
+        for question in bank.questions.values()
+    )
+    assert available == 30
+
+    questions = bank.select(level, difficulty, 30)
+
+    assert len(questions) == 30
+    assert all(question["level"] == level for question in questions)
+    assert all(question["difficulty"] == difficulty for question in questions)
+
+
+@pytest.mark.parametrize("count", [5, 10, 20, 30])
+def test_bank_returns_exactly_the_requested_supported_count(count):
+    bank = ExamBank()
+
+    assert len(bank.select("secundaria", "todas", count)) == count

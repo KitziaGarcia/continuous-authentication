@@ -6,11 +6,66 @@
       "level": "secundaria",
       "text": "En una ciudad, el agua que llega a las casas recorrió un camino largo: fue captada, tratada y distribuida por tuberías. Sin embargo, una parte importante se pierde antes de llegar a los hogares, debido a fugas pequeñas que pueden permanecer ocultas durante semanas. Por eso, reparar una fuga visible es útil, pero también lo es revisar periódicamente la red. En casa, cerrar la llave mientras se cepillan los dientes reduce el consumo, aunque el ahorro colectivo depende además de que las autoridades mantengan la infraestructura.",
       "questions": [
-        {"id": "s01", "difficulty": "facil", "prompt": "¿Cuál es la idea principal del texto?", "choices": {"A": "El agua se distribuye sin pérdidas.", "B": "Cuidar el agua requiere acciones domésticas y mantenimiento de la red.", "C": "Las ciudades deberían dejar de tratar el agua.", "D": "Las fugas solo ocurren dentro de las casas."}, "answer": "B"},
-        {"id": "s02", "difficulty": "intermedia", "prompt": "¿Por qué una fuga pequeña puede ser difícil de atender?", "choices": {"A": "Puede permanecer oculta durante semanas.", "B": "Solo aparece cuando llueve.", "C": "No afecta la distribución.", "D": "Se encuentra siempre dentro de una vivienda."}, "answer": "A"},
-        {"id": "s03", "difficulty": "avanzada", "prompt": "¿Qué conclusión está mejor respaldada por el texto?", "choices": {"A": "El ahorro individual reemplaza el mantenimiento público.", "B": "Reparar solo las fugas visibles resuelve el problema completo.", "C": "La responsabilidad de cuidar el agua es compartida.", "D": "La distribución no necesita infraestructura."}, "answer": "C"},
-        {"id": "s07", "difficulty": "intermedia", "prompt": "¿Qué aporta revisar periódicamente la red de tuberías?", "choices": {"A": "Ayuda a encontrar pérdidas que todavía no son visibles.", "B": "Elimina la necesidad de tratar el agua.", "C": "Sustituye todas las acciones domésticas.", "D": "Aumenta la presión en cada vivienda."}, "answer": "A"},
-        {"id": "s08", "difficulty": "avanzada", "prompt": "¿Cuál afirmación contradice el enfoque del texto?", "choices": {"A": "Las fugas pequeñas también pueden importar.", "B": "El mantenimiento de la red contribuye al ahorro.", "C": "Las acciones de casa pueden reducir el consumo.", "D": "El cuidado del agua depende únicamente de cada hogar."}, "answer": "D"}
+        {
+          "id": "s01",
+          "difficulty": "facil",
+          "prompt": "¿Cuál es la idea principal del texto?",
+          "choices": {
+            "A": "El agua se distribuye sin pérdidas.",
+            "B": "Cuidar el agua requiere acciones domésticas y mantenimiento de la red.",
+            "C": "Las ciudades deberían dejar de tratar el agua.",
+            "D": "Las fugas solo ocurren dentro de las casas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "s02",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué una fuga pequeña puede ser difícil de atender?",
+          "choices": {
+            "A": "Puede permanecer oculta durante semanas.",
+            "B": "Solo aparece cuando llueve.",
+            "C": "No afecta la distribución.",
+            "D": "Se encuentra siempre dentro de una vivienda."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "s03",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué conclusión está mejor respaldada por el texto?",
+          "choices": {
+            "A": "El ahorro individual reemplaza el mantenimiento público.",
+            "B": "Reparar solo las fugas visibles resuelve el problema completo.",
+            "C": "La responsabilidad de cuidar el agua es compartida.",
+            "D": "La distribución no necesita infraestructura."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "s07",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué aporta revisar periódicamente la red de tuberías?",
+          "choices": {
+            "A": "Ayuda a encontrar pérdidas que todavía no son visibles.",
+            "B": "Elimina la necesidad de tratar el agua.",
+            "C": "Sustituye todas las acciones domésticas.",
+            "D": "Aumenta la presión en cada vivienda."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "s08",
+          "difficulty": "avanzada",
+          "prompt": "¿Cuál afirmación contradice el enfoque del texto?",
+          "choices": {
+            "A": "Las fugas pequeñas también pueden importar.",
+            "B": "El mantenimiento de la red contribuye al ahorro.",
+            "C": "Las acciones de casa pueden reducir el consumo.",
+            "D": "El cuidado del agua depende únicamente de cada hogar."
+          },
+          "answer": "D"
+        }
       ]
     },
     {
@@ -19,11 +74,1098 @@
       "level": "secundaria",
       "text": "La biblioteca de una colonia comenzó a prestar libros en una pequeña sala comunitaria. Como muchas personas vivían lejos, el equipo organizó visitas semanales a parques y escuelas. En cada parada, los lectores podían devolver libros, elegir otros y recomendar títulos. Al cabo de seis meses, aumentaron los préstamos, pero también surgió una nueva necesidad: registrar qué materiales interesaban en cada lugar para llevar colecciones más pertinentes. El proyecto mostró que acercar los libros ayuda, y que escuchar a los lectores permite mejorar el servicio.",
       "questions": [
-        {"id": "s04", "difficulty": "facil", "prompt": "¿Qué cambio hizo la biblioteca para llegar a más personas?", "choices": {"A": "Cerró la sala comunitaria.", "B": "Organizó visitas a distintos espacios.", "C": "Dejó de prestar libros.", "D": "Cobró por las recomendaciones."}, "answer": "B"},
-        {"id": "s05", "difficulty": "intermedia", "prompt": "¿Qué nueva necesidad apareció al aumentar los préstamos?", "choices": {"A": "Llevar menos libros a todos los lugares.", "B": "Registrar los intereses de cada comunidad.", "C": "Eliminar las devoluciones.", "D": "Cambiar los parques por oficinas."}, "answer": "B"},
-        {"id": "s06", "difficulty": "avanzada", "prompt": "¿Qué enseñanza se desprende del proyecto?", "choices": {"A": "Un servicio mejora cuando se adapta a quienes lo usan.", "B": "Las bibliotecas funcionan mejor sin lectores.", "C": "Prestar más libros reduce la participación.", "D": "Las recomendaciones dificultan el acceso."}, "answer": "A"},
-        {"id": "s09", "difficulty": "intermedia", "prompt": "¿Por qué se organizaron visitas a parques y escuelas?", "choices": {"A": "Para limitar los préstamos a estudiantes.", "B": "Para acercar los libros a quienes vivían lejos.", "C": "Para reemplazar las recomendaciones.", "D": "Para cerrar la sala comunitaria."}, "answer": "B"},
-        {"id": "s10", "difficulty": "avanzada", "prompt": "¿Qué acción permitiría que las visitas fueran más pertinentes?", "choices": {"A": "Llevar siempre los mismos títulos.", "B": "Dejar de registrar los préstamos.", "C": "Usar las preferencias de cada lugar para elegir los libros.", "D": "Reducir las paradas semanales."}, "answer": "C"}
+        {
+          "id": "s04",
+          "difficulty": "facil",
+          "prompt": "¿Qué cambio hizo la biblioteca para llegar a más personas?",
+          "choices": {
+            "A": "Cerró la sala comunitaria.",
+            "B": "Organizó visitas a distintos espacios.",
+            "C": "Dejó de prestar libros.",
+            "D": "Cobró por las recomendaciones."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "s05",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué nueva necesidad apareció al aumentar los préstamos?",
+          "choices": {
+            "A": "Llevar menos libros a todos los lugares.",
+            "B": "Registrar los intereses de cada comunidad.",
+            "C": "Eliminar las devoluciones.",
+            "D": "Cambiar los parques por oficinas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "s06",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué enseñanza se desprende del proyecto?",
+          "choices": {
+            "A": "Un servicio mejora cuando se adapta a quienes lo usan.",
+            "B": "Las bibliotecas funcionan mejor sin lectores.",
+            "C": "Prestar más libros reduce la participación.",
+            "D": "Las recomendaciones dificultan el acceso."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "s09",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué se organizaron visitas a parques y escuelas?",
+          "choices": {
+            "A": "Para limitar los préstamos a estudiantes.",
+            "B": "Para acercar los libros a quienes vivían lejos.",
+            "C": "Para reemplazar las recomendaciones.",
+            "D": "Para cerrar la sala comunitaria."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "s10",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué acción permitiría que las visitas fueran más pertinentes?",
+          "choices": {
+            "A": "Llevar siempre los mismos títulos.",
+            "B": "Dejar de registrar los préstamos.",
+            "C": "Usar las preferencias de cada lugar para elegir los libros.",
+            "D": "Reducir las paradas semanales."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-huerto-escolar",
+      "title": "El huerto después de la lluvia",
+      "level": "secundaria",
+      "text": "En el huerto escolar, el grupo notó que los bancales cercanos al muro conservaban la humedad más tiempo que los expuestos al sol. En vez de regar todos por igual, midieron la humedad con una varilla de madera y anotaron los resultados durante dos semanas. Descubrieron también que una capa de hojas secas reducía la evaporación, aunque debía dejarse libre el tallo para evitar que se pudriera. Con esos datos reorganizaron los turnos de riego. El cambio no produjo más agua: permitió usarla donde hacía falta y reconocer que cada zona del huerto tenía condiciones distintas.",
+      "questions": [
+        {
+          "id": "g01",
+          "difficulty": "facil",
+          "prompt": "¿Qué zona del huerto conservaba la humedad por más tiempo?",
+          "choices": {
+            "A": "La del centro del patio.",
+            "B": "La cercana al muro.",
+            "C": "La expuesta al sol todo el día.",
+            "D": "La que no tenía bancales."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g02",
+          "difficulty": "facil",
+          "prompt": "¿Con qué instrumento revisaron la humedad?",
+          "choices": {
+            "A": "Un termómetro.",
+            "B": "Una varilla de madera.",
+            "C": "Una regla metálica.",
+            "D": "Una lupa."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g03",
+          "difficulty": "facil",
+          "prompt": "¿Qué material extendieron sobre la tierra?",
+          "choices": {
+            "A": "Arena húmeda.",
+            "B": "Hojas secas.",
+            "C": "Plástico oscuro.",
+            "D": "Piedras grandes."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g04",
+          "difficulty": "intermedia",
+          "prompt": "¿Para qué anotaron mediciones durante dos semanas?",
+          "choices": {
+            "A": "Para decidir el riego a partir de observaciones.",
+            "B": "Para demostrar que todas las zonas eran iguales.",
+            "C": "Para evitar que crecieran plantas.",
+            "D": "Para calcular la altura del muro."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g05",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué dejaron libre el tallo al cubrir la tierra?",
+          "choices": {
+            "A": "Para evitar que el tallo se pudriera.",
+            "B": "Para que las hojas recibieran más luz.",
+            "C": "Para que el bancal perdiera humedad.",
+            "D": "Para distinguir las plantas por color."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g06",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué cambió el grupo después de reunir los datos?",
+          "choices": {
+            "A": "La cantidad de bancales.",
+            "B": "La ubicación del muro.",
+            "C": "El horario y la distribución de los turnos de riego.",
+            "D": "La duración de las dos semanas."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g07",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué principio guía la decisión de regar de manera distinta?",
+          "choices": {
+            "A": "Confiar únicamente en la apariencia de las hojas.",
+            "B": "Ajustar el uso de recursos a las necesidades observadas.",
+            "C": "Evitar tomar medidas antes de cosechar.",
+            "D": "Aplicar el mismo tratamiento sin importar las condiciones."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g08",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué permite inferir el texto sobre la capa de hojas?",
+          "choices": {
+            "A": "Puede ayudar a conservar agua, pero requiere colocarse con cuidado.",
+            "B": "Elimina la necesidad de observar la humedad.",
+            "C": "Aumenta por igual la luz en todos los bancales.",
+            "D": "Hace que el riego sea innecesario en cualquier estación."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g67",
+          "difficulty": "facil",
+          "prompt": "¿Qué decisión tomaron sobre los turnos de riego?",
+          "choices": {
+            "A": "Los dejaron iguales para todas las zonas.",
+            "B": "Los cancelaron durante dos semanas.",
+            "C": "Regaron solo los bancales al sol.",
+            "D": "Los reorganizaron usando las observaciones."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g68",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué resultado buscaban al regar donde hacía falta?",
+          "choices": {
+            "A": "Usar el agua de acuerdo con las condiciones de cada zona.",
+            "B": "Hacer que todos los bancales recibieran idéntica cantidad.",
+            "C": "Evitar el crecimiento de las plantas.",
+            "D": "Probar que medir la humedad no era necesario."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-mapas-barrio",
+      "title": "Un mapa hecho entre vecinos",
+      "level": "secundaria",
+      "text": "Para preparar un mapa de rutas seguras hacia la escuela, una clase pidió a las familias que señalaran cruces difíciles, banquetas estrechas y lugares con buena iluminación. El primer borrador mostró que varias personas evitaban una calle que en el plano oficial parecía directa. Al caminarla en distintos horarios, el grupo descubrió que unos árboles ocultaban una lámpara y que, al salir de una fábrica, el tránsito aumentaba. El mapa final no indicó una única ruta perfecta: señaló alternativas y explicó en qué momentos convenía cada una. También dejó claro que el plano debía revisarse si cambiaban las condiciones.",
+      "questions": [
+        {
+          "id": "g09",
+          "difficulty": "facil",
+          "prompt": "¿Para qué elaboró el grupo el mapa?",
+          "choices": {
+            "A": "Para localizar fábricas en toda la ciudad.",
+            "B": "Para organizar rutas seguras hacia la escuela.",
+            "C": "Para medir la altura de los árboles.",
+            "D": "Para reemplazar las calles del barrio."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g10",
+          "difficulty": "facil",
+          "prompt": "¿Quiénes aportaron observaciones al proyecto?",
+          "choices": {
+            "A": "Los trabajadores de la fábrica únicamente.",
+            "B": "Las familias.",
+            "C": "Solo los conductores de autobús.",
+            "D": "Visitantes de otras ciudades."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g11",
+          "difficulty": "facil",
+          "prompt": "¿Qué ocultaban algunos árboles?",
+          "choices": {
+            "A": "La entrada de la escuela.",
+            "B": "Una parada de tren.",
+            "C": "Un cruce peatonal nuevo.",
+            "D": "Una lámpara."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g12",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué la calle directa no siempre era la preferida?",
+          "choices": {
+            "A": "Las condiciones observadas allí podían dificultar el trayecto.",
+            "B": "El plano oficial prohibía caminarla.",
+            "C": "La clase no conocía su ubicación.",
+            "D": "Las familias querían evitar toda calle iluminada."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g13",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué circunstancia hacía aumentar el tránsito en ciertos momentos?",
+          "choices": {
+            "A": "El cierre de la escuela.",
+            "B": "La salida de una fábrica.",
+            "C": "La caída de las hojas.",
+            "D": "La elaboración del mapa."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g14",
+          "difficulty": "intermedia",
+          "prompt": "¿Cómo presentó el mapa las rutas disponibles?",
+          "choices": {
+            "A": "Sin mencionar iluminación ni cruces.",
+            "B": "Como una sola ruta válida para todos.",
+            "C": "Como alternativas adecuadas según el momento.",
+            "D": "Como trayectos que nunca deben cambiar."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g15",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el grupo caminó la calle en distintos horarios?",
+          "choices": {
+            "A": "Para encontrar una ruta más larga sin motivo.",
+            "B": "Para demostrar que el plano oficial era siempre correcto.",
+            "C": "Para evitar preguntar a las familias.",
+            "D": "Para comprobar cómo variaban las condiciones a lo largo del día."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g16",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué rasgo hace más útil al mapa final que a una indicación única?",
+          "choices": {
+            "A": "Reconoce que la seguridad depende del contexto y puede cambiar.",
+            "B": "Evita compartir información sobre el barrio.",
+            "C": "Presenta solo las calles más cortas.",
+            "D": "Asegura que ningún trayecto tendrá inconvenientes."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g69",
+          "difficulty": "facil",
+          "prompt": "¿Qué aspecto del camino registró la clase?",
+          "choices": {
+            "A": "El precio de los autobuses.",
+            "B": "La iluminación de algunos lugares.",
+            "C": "La profundidad de los ríos.",
+            "D": "La cantidad de tiendas abiertas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g70",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué debía ocurrir para que el mapa siguiera siendo confiable?",
+          "choices": {
+            "A": "Quitar las rutas alternativas.",
+            "B": "Imprimirlo una sola vez y no corregirlo.",
+            "C": "Revisarlo si las condiciones del barrio cambiaban.",
+            "D": "Evitar caminar por las calles."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-reparar-ropa",
+      "title": "La segunda vida de una chamarra",
+      "level": "secundaria",
+      "text": "Cuando el cierre de su chamarra se rompió, Lucía pensó en reemplazarla, pero su abuelo le mostró cómo descoser solo la parte dañada. En el taller escolar, varias personas aprendieron a cambiar cierres y remendar codos con retazos de prendas que ya no usaban. No todas las reparaciones quedaron invisibles: algunas conservaron puntadas de colores que sus dueños eligieron. Al final, el grupo comparó el tiempo y los materiales empleados con los de comprar prendas nuevas. La actividad no afirmó que reparar siempre sea posible, pero sí mostró que aprender una técnica sencilla puede prolongar el uso de muchas cosas.",
+      "questions": [
+        {
+          "id": "g17",
+          "difficulty": "facil",
+          "prompt": "¿Qué se le rompió a Lucía?",
+          "choices": {
+            "A": "La suela de sus zapatos.",
+            "B": "El cierre de su chamarra.",
+            "C": "El asa de una mochila.",
+            "D": "Un botón de su camisa."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g18",
+          "difficulty": "facil",
+          "prompt": "¿Qué material usaron para remendar algunas prendas?",
+          "choices": {
+            "A": "Tiras de plástico nuevo.",
+            "B": "Hojas de papel.",
+            "C": "Retazos de ropa que ya no usaban.",
+            "D": "Piezas de madera."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g19",
+          "difficulty": "facil",
+          "prompt": "¿Qué eligieron algunas personas para sus puntadas?",
+          "choices": {
+            "A": "Nombres de calles.",
+            "B": "Tamaños de botones.",
+            "C": "Marcas de fábrica.",
+            "D": "Colores."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g20",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué hizo el abuelo antes de sustituir la chamarra?",
+          "choices": {
+            "A": "Enseñó a descoser únicamente la zona dañada.",
+            "B": "Tiró la prenda sin revisarla.",
+            "C": "Compró un taller de costura.",
+            "D": "Cambió todos los retazos por tela nueva."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g21",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué comparó el grupo al terminar la actividad?",
+          "choices": {
+            "A": "El precio de las máquinas de coser.",
+            "B": "El tiempo y los materiales de reparar frente a comprar nuevo.",
+            "C": "Los colores de todas las prendas.",
+            "D": "La edad de los participantes."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g22",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el texto aclara que no todas las reparaciones quedaron invisibles?",
+          "choices": {
+            "A": "Para indicar que nadie aprendió a coser.",
+            "B": "Para afirmar que los remiendos siempre fracasan.",
+            "C": "Para mostrar que reparar también puede transformar el aspecto de una prenda.",
+            "D": "Para probar que solo sirven las prendas nuevas."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g23",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué postura adopta el texto sobre reparar?",
+          "choices": {
+            "A": "Solo resulta útil si la reparación no se nota.",
+            "B": "Es obligatorio en cualquier circunstancia.",
+            "C": "No tiene efecto sobre la duración de las prendas.",
+            "D": "Puede extender el uso de objetos, aunque no siempre sea viable."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g24",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué aprendizaje podría aplicarse más allá de la costura?",
+          "choices": {
+            "A": "Una habilidad práctica puede reducir reemplazos prematuros.",
+            "B": "Todo objeto dañado debe desecharse de inmediato.",
+            "C": "Comparar alternativas impide tomar decisiones.",
+            "D": "Los retazos no pueden reutilizarse."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g71",
+          "difficulty": "facil",
+          "prompt": "¿En qué lugar aprendieron varias personas a reparar prendas?",
+          "choices": {
+            "A": "En la biblioteca.",
+            "B": "En una fábrica de ropa.",
+            "C": "En el mercado del barrio.",
+            "D": "En el taller escolar."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g72",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué finalidad tuvo comparar el tiempo y los materiales?",
+          "choices": {
+            "A": "Valorar la reparación frente a comprar prendas nuevas.",
+            "B": "Elegir qué persona cosía más rápido.",
+            "C": "Averiguar quién había diseñado la chamarra.",
+            "D": "Decidir qué colores debían prohibirse."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-ruido-aula",
+      "title": "El ruido que también se mide",
+      "level": "secundaria",
+      "text": "En una escuela, los grupos se quejaban del ruido del pasillo durante la lectura. En lugar de pedir silencio sin más, un equipo registró durante una semana cuándo aumentaba el volumen y qué actividades ocurrían cerca. Los picos coincidían con el cambio de clase y con el traslado de sillas para una actividad deportiva. La dirección probó dos ajustes: mover parte del material antes del recreo y dejar abierta una sala de estudio alejada del pasillo. Después, el equipo volvió a medir. El ruido no desapareció, pero bajó durante el horario de lectura. La experiencia les enseñó a buscar causas concretas antes de proponer soluciones.",
+      "questions": [
+        {
+          "id": "g25",
+          "difficulty": "facil",
+          "prompt": "¿Cuándo se quejaban del ruido los grupos?",
+          "choices": {
+            "A": "En las vacaciones.",
+            "B": "Durante la lectura.",
+            "C": "Mientras hacían exámenes en casa.",
+            "D": "Antes de llegar a la escuela."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g26",
+          "difficulty": "facil",
+          "prompt": "¿Durante cuánto tiempo registró el equipo el volumen?",
+          "choices": {
+            "A": "Un semestre.",
+            "B": "Un día.",
+            "C": "Una semana.",
+            "D": "Un mes."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g27",
+          "difficulty": "intermedia",
+          "prompt": "¿Con qué momentos coincidían los picos de ruido?",
+          "choices": {
+            "A": "Con la apertura de la biblioteca.",
+            "B": "Con la hora de lectura silenciosa únicamente.",
+            "C": "Con la salida de vacaciones.",
+            "D": "Con el cambio de clase y el movimiento de sillas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g28",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué alternativa se ofreció a quienes necesitaban leer lejos del pasillo?",
+          "choices": {
+            "A": "Una sala de estudio alejada.",
+            "B": "El gimnasio durante el recreo.",
+            "C": "Un salón junto a las sillas.",
+            "D": "La oficina de dirección."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g29",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué aporta la segunda medición?",
+          "choices": {
+            "A": "Demuestra que el ruido nunca existió.",
+            "B": "Permite comprobar si los ajustes coincidieron con una mejora.",
+            "C": "Sustituye la observación de sus causas.",
+            "D": "Prueba que toda escuela tiene el mismo problema."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g30",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué resultado describe con precisión el texto?",
+          "choices": {
+            "A": "Las mediciones hicieron aumentar el ruido.",
+            "B": "La escuela quedó completamente en silencio.",
+            "C": "El ruido bajó en un horario concreto, aunque no desapareció.",
+            "D": "La sala nueva eliminó todas las actividades."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g31",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué método de resolución de problemas se desprende de la experiencia?",
+          "choices": {
+            "A": "Suponer que una queja identifica por sí sola la causa.",
+            "B": "Elegir una solución antes de conocer el problema.",
+            "C": "Evitar medir para no modificar las rutinas.",
+            "D": "Observar patrones, intervenir y revisar los resultados."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g73",
+          "difficulty": "facil",
+          "prompt": "¿Qué se dejó abierta para ofrecer un lugar más tranquilo?",
+          "choices": {
+            "A": "La puerta de la fábrica.",
+            "B": "Una sala de estudio.",
+            "C": "Una ventana del gimnasio.",
+            "D": "La entrada del patio."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g74",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué causa del ruido se relacionó con la actividad deportiva?",
+          "choices": {
+            "A": "La apertura de la sala de estudio.",
+            "B": "La lectura en silencio.",
+            "C": "El traslado de sillas.",
+            "D": "La anotación de los resultados."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-insectos-luz",
+      "title": "Luces para orientarse",
+      "level": "secundaria",
+      "text": "El club de ciencias observó que, en ciertas noches, muchas polillas volaban alrededor de las lámparas del patio y pocas llegaban a las plantas con flores. Para explorar el fenómeno, cubrieron una luminaria durante una noche y dejaron otra encendida como comparación; no capturaron insectos ni cambiaron las plantas. Cerca de la luz cubierta vieron menos vueltas en el aire y más visitas a las flores, aunque el viento también varió entre las dos zonas. El equipo anotó que una sola observación no bastaba para explicar el comportamiento de todas las especies. Propuso repetir la prueba en otras noches y registrar también el clima.",
+      "questions": [
+        {
+          "id": "g32",
+          "difficulty": "facil",
+          "prompt": "¿Qué insectos observó el club alrededor de las lámparas?",
+          "choices": {
+            "A": "Polillas.",
+            "B": "Abejas.",
+            "C": "Hormigas.",
+            "D": "Libélulas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g33",
+          "difficulty": "facil",
+          "prompt": "¿Qué zona usaron para comparar la lámpara cubierta?",
+          "choices": {
+            "A": "Un aula sin ventanas.",
+            "B": "Otra zona con una luminaria encendida.",
+            "C": "Un jardín sin flores.",
+            "D": "Un patio sin plantas ni luces."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g34",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué observaron cerca de la luz cubierta?",
+          "choices": {
+            "A": "La desaparición de todas las plantas.",
+            "B": "Más vueltas y ninguna visita a las flores.",
+            "C": "Menos vuelos en círculos y más visitas a las flores.",
+            "D": "El mismo resultado en cada especie y zona."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g35",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué factor cambió entre las dos zonas?",
+          "choices": {
+            "A": "La hora de salida de clases.",
+            "B": "El número de edificios.",
+            "C": "El tipo de flores.",
+            "D": "El viento."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g36",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el equipo no consideró concluyente una sola observación?",
+          "choices": {
+            "A": "Porque el viento varió y distintas especies podrían comportarse de otra manera.",
+            "B": "Porque no había ninguna lámpara encendida.",
+            "C": "Porque las flores no recibieron visitas.",
+            "D": "Porque se capturaron demasiados insectos."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g37",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué mejora metodológica propone el club?",
+          "choices": {
+            "A": "Cambiar simultáneamente todas las plantas y lámparas.",
+            "B": "Repetir la prueba y registrar las condiciones climáticas.",
+            "C": "Evitar anotar las diferencias entre las zonas.",
+            "D": "Afirmar que el resultado se aplica a todas las especies."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g38",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué límite debe tenerse presente al interpretar la comparación?",
+          "choices": {
+            "A": "Las plantas fueron reemplazadas a mitad de la prueba.",
+            "B": "El equipo no registró ninguna visita a flores.",
+            "C": "Las zonas diferían en viento, además de en iluminación.",
+            "D": "La prueba duró varias estaciones."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g75",
+          "difficulty": "facil",
+          "prompt": "¿Qué hicieron para explorar el efecto de la lámpara?",
+          "choices": {
+            "A": "Trasladaron el club a una fábrica.",
+            "B": "Retiraron todas las flores del patio.",
+            "C": "Encendieron las lámparas durante el día.",
+            "D": "Cubrieron una luminaria y dejaron otra encendida."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g76",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué dos aspectos sugirieron registrar en pruebas futuras?",
+          "choices": {
+            "A": "Las visitas de insectos y el clima.",
+            "B": "El color de las paredes y la edad de los árboles.",
+            "C": "El número de estudiantes y sus calificaciones.",
+            "D": "La hora de clases y los nombres de las flores."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-podcast-historia",
+      "title": "Voces para un archivo local",
+      "level": "secundaria",
+      "text": "Un grupo de estudiantes decidió grabar relatos de personas mayores sobre los cambios de su barrio. Antes de entrevistar, acordaron pedir permiso, explicar dónde se compartirían los audios y ofrecer la posibilidad de retirar una grabación. Al revisar el material, descubrieron que dos vecinos recordaban de manera distinta el año en que se inauguró el mercado. En vez de elegir una versión por mayoría, buscaron una fotografía fechada y un recorte de periódico. El episodio final distinguió entre lo que cada persona recordaba y lo que los documentos permitían confirmar. Así, el proyecto conservó las voces sin convertir cada recuerdo en un dato indiscutible.",
+      "questions": [
+        {
+          "id": "g39",
+          "difficulty": "facil",
+          "prompt": "¿Sobre qué tema entrevistaron a personas mayores?",
+          "choices": {
+            "A": "La historia de otros países.",
+            "B": "La construcción de una nave espacial.",
+            "C": "Las reglas de un torneo.",
+            "D": "Los cambios del barrio."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g40",
+          "difficulty": "facil",
+          "prompt": "¿Qué acordaron antes de grabar las entrevistas?",
+          "choices": {
+            "A": "Pedir permiso y explicar el uso de los audios.",
+            "B": "Publicar todas las voces sin avisar.",
+            "C": "Eliminar los documentos escritos.",
+            "D": "Elegir quién tenía mejor memoria."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g41",
+          "difficulty": "intermedia",
+          "prompt": "¿En qué no coincidían los dos vecinos?",
+          "choices": {
+            "A": "En la ubicación de sus casas actuales.",
+            "B": "En el año de inauguración del mercado.",
+            "C": "En el nombre de la escuela.",
+            "D": "En el contenido de las fotografías."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g42",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué consultaron para investigar la diferencia entre recuerdos?",
+          "choices": {
+            "A": "Una lista de compras y una novela.",
+            "B": "Un mapa meteorológico y una receta.",
+            "C": "Una fotografía fechada y un recorte de periódico.",
+            "D": "Una encuesta sin fecha."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g43",
+          "difficulty": "avanzada",
+          "prompt": "¿Cómo trató el grupo los testimonios que diferían?",
+          "choices": {
+            "A": "Cambió la fecha para que ambos tuvieran razón.",
+            "B": "Descartó ambos porque no coincidían.",
+            "C": "Escogió la versión de quien habló primero.",
+            "D": "Los contrastó con documentos y separó recuerdo de confirmación."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g44",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué valor ético muestra la opción de retirar una grabación?",
+          "choices": {
+            "A": "Reconoce que las personas conservan control sobre su participación.",
+            "B": "Garantiza que todo recuerdo sea exacto.",
+            "C": "Evita que el equipo consulte otras fuentes.",
+            "D": "Obliga a publicar todas las entrevistas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g45",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué distinción central hace el episodio final?",
+          "choices": {
+            "A": "Separa a los vecinos por edad.",
+            "B": "Diferencia lo recordado de lo que los documentos confirman.",
+            "C": "Considera que las fotos son recuerdos orales.",
+            "D": "Trata cada testimonio como una prueba definitiva."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g77",
+          "difficulty": "facil",
+          "prompt": "¿Qué podían hacer las personas con una grabación si cambiaban de opinión?",
+          "choices": {
+            "A": "Cambiar la fecha del mercado.",
+            "B": "Pedir que se retirara.",
+            "C": "Borrar el periódico.",
+            "D": "Editar la fotografía fechada."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g78",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué buscaban comprobar los documentos consultados?",
+          "choices": {
+            "A": "La edad de los estudiantes.",
+            "B": "El lugar donde se grabó cada entrevista.",
+            "C": "La fecha de inauguración del mercado.",
+            "D": "El uso futuro de los audios."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-envases-reuso",
+      "title": "El recorrido de los envases",
+      "level": "secundaria",
+      "text": "La cooperativa escolar instaló recipientes para separar envases, pero al primer mes encontró muchos vasos con restos de bebida mezclados con papel. En lugar de añadir más contenedores, estudiantes observaron cómo se usaban y entrevistaron al personal de limpieza. Supieron que las etiquetas pequeñas se desprendían y que algunos recipientes estaban lejos de las mesas. Diseñaron letreros con dibujos, acercaron los depósitos y acordaron revisar su contenido cada viernes. La separación mejoró, aunque el equipo decidió seguir midiendo el error: una mejora inicial no demostraba que el hábito se mantendría durante todo el año.",
+      "questions": [
+        {
+          "id": "g46",
+          "difficulty": "facil",
+          "prompt": "¿Qué materiales aparecían mezclados incorrectamente?",
+          "choices": {
+            "A": "Latas y herramientas.",
+            "B": "Hojas secas y tierra.",
+            "C": "Vasos con restos de bebida y papel.",
+            "D": "Libros y envases de vidrio."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g47",
+          "difficulty": "facil",
+          "prompt": "¿A quiénes entrevistaron los estudiantes?",
+          "choices": {
+            "A": "A los conductores de autobús.",
+            "B": "A los fabricantes de bebidas.",
+            "C": "A los vecinos de otra ciudad.",
+            "D": "Al personal de limpieza."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g48",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué algunas etiquetas no ayudaban a separar los residuos?",
+          "choices": {
+            "A": "Se desprendían.",
+            "B": "Tenían dibujos demasiado grandes.",
+            "C": "Estaban en todos los recipientes.",
+            "D": "Se colocaban junto a las mesas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g49",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué modificaciones hicieron tras observar el uso de los recipientes?",
+          "choices": {
+            "A": "Retiraron todos los contenedores.",
+            "B": "Usaron letreros con dibujos y acercaron los depósitos.",
+            "C": "Dejaron de hablar con limpieza.",
+            "D": "Mezclaron papel y vasos deliberadamente."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g50",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué eligieron observar e entrevistar antes de añadir contenedores?",
+          "choices": {
+            "A": "Para evitar que el personal participara.",
+            "B": "Para confirmar que los recipientes eran innecesarios.",
+            "C": "Para identificar las causas prácticas del error antes de decidir una solución.",
+            "D": "Para impedir que los estudiantes vieran el problema."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g51",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué demuestra la decisión de revisar el contenido cada viernes?",
+          "choices": {
+            "A": "Que medir el error empeora el hábito.",
+            "B": "Que ya considera perfecta la separación.",
+            "C": "Que los letreros no tienen ninguna función.",
+            "D": "Que el grupo busca comprobar y sostener el cambio en el tiempo."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g52",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué conclusión evita el equipo al final?",
+          "choices": {
+            "A": "Que una mejora inicial garantice un hábito duradero.",
+            "B": "Que los dibujos sean fáciles de reconocer.",
+            "C": "Que la ubicación influya en el uso.",
+            "D": "Que medir permita observar cambios."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-cielo-nocturno",
+      "title": "Una noche para mirar el cielo",
+      "level": "secundaria",
+      "text": "El club de astronomía planeó observar una lluvia de meteoros desde la cancha, pero al llegar encontró nubes sobre el horizonte. La profesora propuso esperar un rato y comparar el cielo con una aplicación que mostraba la nubosidad prevista. Mientras tanto, el grupo apagó las luces cercanas para que los ojos se adaptaran a la oscuridad. Al abrirse un claro, alcanzaron a contar varios destellos, aunque cada estudiante miró una parte distinta del cielo. No presentaron el conteo como una cifra completa: anotaron la duración de la observación y reconocieron que las nubes y la atención limitada pudieron ocultar algunos meteoros.",
+      "questions": [
+        {
+          "id": "g53",
+          "difficulty": "facil",
+          "prompt": "¿Qué fenómeno quería observar el club?",
+          "choices": {
+            "A": "Un eclipse solar total.",
+            "B": "Una lluvia de meteoros.",
+            "C": "Una aurora dentro del aula.",
+            "D": "El movimiento de los barcos."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g54",
+          "difficulty": "facil",
+          "prompt": "¿Qué cubría inicialmente el horizonte?",
+          "choices": {
+            "A": "Una cortina.",
+            "B": "Humo de una fogata.",
+            "C": "Nubes.",
+            "D": "Una montaña nueva."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g55",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué apagaron las luces cercanas?",
+          "choices": {
+            "A": "Para acortar el tiempo de observación.",
+            "B": "Para cargar la aplicación del teléfono.",
+            "C": "Para hacer desaparecer las nubes.",
+            "D": "Para permitir que los ojos se adaptaran a la oscuridad."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g56",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué consultaron mientras esperaban un claro?",
+          "choices": {
+            "A": "Una aplicación con el pronóstico de nubosidad.",
+            "B": "Un catálogo de telescopios nuevos.",
+            "C": "El horario de los autobuses.",
+            "D": "Una lista de nombres de estrellas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g57",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el grupo no trató su conteo como una cifra completa?",
+          "choices": {
+            "A": "Nadie observó ningún destello.",
+            "B": "Las nubes y la atención repartida pudieron ocultar meteoros.",
+            "C": "La aplicación contó cada meteoro con exactitud.",
+            "D": "El grupo conocía el número antes de mirar."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g58",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué limitación introduce que cada estudiante mirara una parte distinta?",
+          "choices": {
+            "A": "La oscuridad se volvió imposible de medir.",
+            "B": "Todos vieron exactamente los mismos destellos.",
+            "C": "No todos observaron el mismo campo visual.",
+            "D": "La duración dejó de ser relevante."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g59",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué práctica refleja mejor la cautela del grupo?",
+          "choices": {
+            "A": "Contar como visibles los destellos que no vieron.",
+            "B": "Anunciar un total definitivo sin indicar cuánto observaron.",
+            "C": "Ignorar las nubes porque el cielo se despejó un momento.",
+            "D": "Registrar condiciones y límites junto con el resultado."
+          },
+          "answer": "D"
+        }
+      ]
+    },
+    {
+      "id": "secundaria-mercado-temporada",
+      "title": "Lo que trae cada temporada",
+      "level": "secundaria",
+      "text": "En el mercado del barrio, la mesa de frutas ofrecía casi siempre las mismas variedades, incluso cuando algunas llegaban desde muy lejos. Una asociación de productores propuso colocar un calendario sencillo con los meses de cosecha local y probar recetas con los ingredientes disponibles. Varias familias participaron en las degustaciones, pero algunas no reconocían ciertos frutos por sus nombres regionales. Los vendedores añadieron dibujos y explicaciones breves sobre su sabor y preparación. Al cabo de unas semanas, se vendieron más productos locales, aunque el equipo señaló que el precio y la costumbre también influyen en las compras. El calendario acercó información; no decidió por sí solo lo que cada familia podía elegir.",
+      "questions": [
+        {
+          "id": "g60",
+          "difficulty": "facil",
+          "prompt": "¿Qué vendía la mesa de frutas casi siempre?",
+          "choices": {
+            "A": "Las mismas variedades.",
+            "B": "Únicamente semillas para sembrar.",
+            "C": "Alimentos preparados por las familias.",
+            "D": "Productos que no eran frutas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g61",
+          "difficulty": "facil",
+          "prompt": "¿Qué propuso la asociación de productores?",
+          "choices": {
+            "A": "Cerrar el mercado durante la temporada.",
+            "B": "Un calendario de cosecha local y recetas.",
+            "C": "Cambiar todos los nombres regionales.",
+            "D": "Vender solo frutas importadas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g62",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué dificultaba que algunas familias reconocieran ciertos frutos?",
+          "choices": {
+            "A": "Los frutos no se cosechaban nunca.",
+            "B": "No había dibujos en las recetas.",
+            "C": "No conocían sus nombres regionales.",
+            "D": "El calendario indicaba demasiados precios."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g63",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué agregaron los vendedores para orientar a las familias?",
+          "choices": {
+            "A": "Etiquetas sin información.",
+            "B": "Más variedades importadas.",
+            "C": "Una lista de horarios escolares.",
+            "D": "Dibujos y explicaciones de sabor y preparación."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g64",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué otros factores, además de la información, reconoce el texto en las decisiones de compra?",
+          "choices": {
+            "A": "El precio y la costumbre.",
+            "B": "La cantidad de recetas escritas.",
+            "C": "El color de los calendarios.",
+            "D": "La distancia entre las mesas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "g65",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué significa que el calendario no decidía por sí solo lo que una familia podía elegir?",
+          "choices": {
+            "A": "El calendario impedía comprar productos locales.",
+            "B": "La información ayuda, pero existen otras condiciones que influyen en la elección.",
+            "C": "Los precios no afectaban las compras.",
+            "D": "Las familias debían seguir todas las recetas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "g66",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué conclusión está mejor apoyada por el aumento de ventas?",
+          "choices": {
+            "A": "El calendario eliminó cualquier diferencia de precio.",
+            "B": "Todas las familias cambiaron sus hábitos por completo.",
+            "C": "La información y la familiaridad pueden favorecer el interés por productos locales.",
+            "D": "Los nombres regionales dejaron de existir."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "g79",
+          "difficulty": "facil",
+          "prompt": "¿Qué actividad hicieron varias familias en el mercado?",
+          "choices": {
+            "A": "Grabaron un episodio de radio.",
+            "B": "Sembraron los árboles del patio.",
+            "C": "Repararon las mesas de venta.",
+            "D": "Participaron en degustaciones."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "g80",
+          "difficulty": "avanzada",
+          "prompt": "¿Cuál afirmación distingue mejor la función del calendario de la decisión de compra?",
+          "choices": {
+            "A": "El calendario informa sobre temporadas, pero no elimina otros factores de elección.",
+            "B": "El calendario fija los precios y obliga a comprar.",
+            "C": "El calendario reemplaza las preferencias familiares.",
+            "D": "El calendario demuestra que toda fruta local se vende más."
+          },
+          "answer": "A"
+        }
       ]
     },
     {
@@ -32,11 +1174,66 @@
       "level": "preparatoria",
       "text": "A simple vista, el suelo parece una superficie inerte; no obstante, contiene comunidades de hongos, bacterias, insectos y raíces que transforman restos orgánicos en nutrientes disponibles. Cuando se retira toda la vegetación o se compacta el terreno con maquinaria, disminuyen los espacios por donde circulan el aire y el agua. Esto puede reducir la actividad biológica y facilitar la erosión. La cobertura vegetal no evita todos los daños, pero protege la superficie y contribuye a conservar la estructura del suelo. Por ello, evaluar un terreno exige observar tanto sus propiedades físicas como los procesos vivos que ocurren en él.",
       "questions": [
-        {"id": "p01", "difficulty": "facil", "prompt": "¿Qué transforma los restos orgánicos en nutrientes?", "choices": {"A": "Únicamente la lluvia.", "B": "Las comunidades de organismos del suelo.", "C": "La maquinaria pesada.", "D": "La erosión."}, "answer": "B"},
-        {"id": "p02", "difficulty": "intermedia", "prompt": "¿Qué efecto puede tener compactar el terreno?", "choices": {"A": "Aumentar los espacios para aire y agua.", "B": "Disminuir la circulación de aire y agua.", "C": "Eliminar la erosión en cualquier condición.", "D": "Convertir el suelo en roca."}, "answer": "B"},
-        {"id": "p03", "difficulty": "avanzada", "prompt": "¿Por qué la cobertura vegetal se describe con cautela?", "choices": {"A": "Porque protege, pero no elimina todos los daños.", "B": "Porque no tiene relación con el suelo.", "C": "Porque solo sirve en terrenos inundados.", "D": "Porque impide toda actividad biológica."}, "answer": "A"},
-        {"id": "p07", "difficulty": "intermedia", "prompt": "¿Qué efecto puede tener conservar la cobertura vegetal?", "choices": {"A": "Aumenta la compactación.", "B": "Protege la superficie y ayuda a conservar la estructura.", "C": "Detiene todos los procesos del suelo.", "D": "Elimina los organismos microscópicos."}, "answer": "B"},
-        {"id": "p08", "difficulty": "avanzada", "prompt": "¿Qué enfoque propone el texto para evaluar un terreno?", "choices": {"A": "Observar únicamente su color.", "B": "Medir solo la presencia de insectos.", "C": "Considerar propiedades físicas y procesos biológicos.", "D": "Ignorar las raíces y la circulación del agua."}, "answer": "C"}
+        {
+          "id": "p01",
+          "difficulty": "facil",
+          "prompt": "¿Qué transforma los restos orgánicos en nutrientes?",
+          "choices": {
+            "A": "Únicamente la lluvia.",
+            "B": "Las comunidades de organismos del suelo.",
+            "C": "La maquinaria pesada.",
+            "D": "La erosión."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "p02",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué efecto puede tener compactar el terreno?",
+          "choices": {
+            "A": "Aumentar los espacios para aire y agua.",
+            "B": "Disminuir la circulación de aire y agua.",
+            "C": "Eliminar la erosión en cualquier condición.",
+            "D": "Convertir el suelo en roca."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "p03",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué la cobertura vegetal se describe con cautela?",
+          "choices": {
+            "A": "Porque protege, pero no elimina todos los daños.",
+            "B": "Porque no tiene relación con el suelo.",
+            "C": "Porque solo sirve en terrenos inundados.",
+            "D": "Porque impide toda actividad biológica."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "p07",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué efecto puede tener conservar la cobertura vegetal?",
+          "choices": {
+            "A": "Aumenta la compactación.",
+            "B": "Protege la superficie y ayuda a conservar la estructura.",
+            "C": "Detiene todos los procesos del suelo.",
+            "D": "Elimina los organismos microscópicos."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "p08",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué enfoque propone el texto para evaluar un terreno?",
+          "choices": {
+            "A": "Observar únicamente su color.",
+            "B": "Medir solo la presencia de insectos.",
+            "C": "Considerar propiedades físicas y procesos biológicos.",
+            "D": "Ignorar las raíces y la circulación del agua."
+          },
+          "answer": "C"
+        }
       ]
     },
     {
@@ -45,11 +1242,1154 @@
       "level": "preparatoria",
       "text": "Una encuesta municipal encontró que muchas personas tardaban menos en llegar al trabajo cuando compartían automóvil, pero el resultado no se debía únicamente a una mayor velocidad. Al reducirse el número de vehículos, algunas avenidas presentaban menos detenciones y se liberaban espacios de estacionamiento. La encuesta no demostró que compartir coche fuera la solución para todos: los horarios, las rutas y la disponibilidad de transporte público variaban entre barrios. El informe recomendó combinar varias medidas y medir sus efectos en distintos horarios antes de extenderlas a toda la ciudad.",
       "questions": [
-        {"id": "p04", "difficulty": "facil", "prompt": "¿Qué encontró la encuesta sobre algunas personas que compartían automóvil?", "choices": {"A": "Siempre cambiaban de barrio.", "B": "En algunos casos tardaban menos en llegar.", "C": "Dejaban de usar las avenidas.", "D": "No necesitaban estacionamiento."}, "answer": "B"},
-        {"id": "p05", "difficulty": "intermedia", "prompt": "¿Por qué el informe no propone una única solución para toda la ciudad?", "choices": {"A": "Las condiciones varían entre barrios y horarios.", "B": "La encuesta no incluyó automóviles.", "C": "Todas las rutas son idénticas.", "D": "El transporte público tiene el mismo horario en todos lados."}, "answer": "A"},
-        {"id": "p06", "difficulty": "avanzada", "prompt": "¿Qué método de decisión recomienda el informe?", "choices": {"A": "Aplicar la medida sin observar resultados.", "B": "Probar combinaciones y evaluar sus efectos antes de ampliarlas.", "C": "Usar una sola avenida como evidencia definitiva.", "D": "Ignorar las diferencias de horario."}, "answer": "B"},
-        {"id": "p09", "difficulty": "intermedia", "prompt": "¿Qué factores, además de la velocidad, se relacionaron con el menor tiempo de traslado?", "choices": {"A": "Menos detenciones y más espacios disponibles.", "B": "Más vehículos en cada avenida.", "C": "Rutas idénticas en todos los barrios.", "D": "La eliminación del transporte público."}, "answer": "A"},
-        {"id": "p10", "difficulty": "avanzada", "prompt": "¿Qué límite tiene la evidencia de la encuesta?", "choices": {"A": "No incluye ninguna recomendación.", "B": "Solo mide la velocidad máxima.", "C": "Sus resultados no garantizan que la medida sirva igual en todos los barrios.", "D": "Demuestra que toda medida tiene el mismo efecto."}, "answer": "C"}
+        {
+          "id": "p04",
+          "difficulty": "facil",
+          "prompt": "¿Qué encontró la encuesta sobre algunas personas que compartían automóvil?",
+          "choices": {
+            "A": "Siempre cambiaban de barrio.",
+            "B": "En algunos casos tardaban menos en llegar.",
+            "C": "Dejaban de usar las avenidas.",
+            "D": "No necesitaban estacionamiento."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "p05",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué el informe no propone una única solución para toda la ciudad?",
+          "choices": {
+            "A": "Las condiciones varían entre barrios y horarios.",
+            "B": "La encuesta no incluyó automóviles.",
+            "C": "Todas las rutas son idénticas.",
+            "D": "El transporte público tiene el mismo horario en todos lados."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "p06",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué método de decisión recomienda el informe?",
+          "choices": {
+            "A": "Aplicar la medida sin observar resultados.",
+            "B": "Probar combinaciones y evaluar sus efectos antes de ampliarlas.",
+            "C": "Usar una sola avenida como evidencia definitiva.",
+            "D": "Ignorar las diferencias de horario."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "p09",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué factores, además de la velocidad, se relacionaron con el menor tiempo de traslado?",
+          "choices": {
+            "A": "Menos detenciones y más espacios disponibles.",
+            "B": "Más vehículos en cada avenida.",
+            "C": "Rutas idénticas en todos los barrios.",
+            "D": "La eliminación del transporte público."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "p10",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué límite tiene la evidencia de la encuesta?",
+          "choices": {
+            "A": "No incluye ninguna recomendación.",
+            "B": "Solo mide la velocidad máxima.",
+            "C": "Sus resultados no garantizan que la medida sirva igual en todos los barrios.",
+            "D": "Demuestra que toda medida tiene el mismo efecto."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-bancos-semillas",
+      "title": "Una reserva para el futuro",
+      "level": "preparatoria",
+      "text": "En una comunidad serrana, varias familias comenzaron a guardar semillas de maíz, frijol y calabaza después de que una sequía redujera la cosecha. Cada lote se etiqueta con origen, fecha y condiciones de cultivo; una parte se presta para sembrarse. Al terminar la temporada, quienes reciben semillas devuelven una cantidad acordada, suficiente para mantener la reserva. El registro ayuda a reconocer variedades resistentes al frío y evita depender de la memoria de una sola persona. La iniciativa no elimina el riesgo climático, aunque amplía las opciones de recuperación.",
+      "questions": [
+        {
+          "id": "prep-gen-001",
+          "difficulty": "facil",
+          "prompt": "¿Qué cultivos se mencionan en la reserva?",
+          "choices": {
+            "A": "Origen, fecha y condiciones de cultivo.",
+            "B": "Maíz, frijol y calabaza.",
+            "C": "Trigo, arroz y cebada.",
+            "D": "Café, cacao y algodón."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-002",
+          "difficulty": "facil",
+          "prompt": "¿Qué datos lleva la etiqueta de cada lote?",
+          "choices": {
+            "A": "Para conservar la reserva mediante un intercambio acordado.",
+            "B": "Precio, comprador y lugar de venta.",
+            "C": "Peso, color y receta familiar.",
+            "D": "Origen, fecha y condiciones de cultivo."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-003",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué se devuelven semillas después de la temporada?",
+          "choices": {
+            "A": "Para conservar la reserva mediante un intercambio acordado.",
+            "B": "Ayuda a reconocer variedades resistentes al frío.",
+            "C": "Para reemplazar el registro escrito por recuerdos.",
+            "D": "Para garantizar cosechas idénticas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-004",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué aporta el registro además de identificar los lotes?",
+          "choices": {
+            "A": "El banco amplía la recuperación, pero no suprime el riesgo climático.",
+            "B": "Predice con exactitud la próxima sequía.",
+            "C": "Ayuda a reconocer variedades resistentes al frío.",
+            "D": "Demuestra que una variedad siempre rinde más."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-005",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué limitación reconoce el texto?",
+          "choices": {
+            "A": "Maíz, frijol y calabaza.",
+            "B": "El banco amplía la recuperación, pero no suprime el riesgo climático.",
+            "C": "La reserva solo sirve si cada familia cultiva una especie.",
+            "D": "El registro impide devolver semillas."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-movilidad-peatonal",
+      "title": "Cruzar la avenida",
+      "level": "preparatoria",
+      "text": "En el barrio de San Miguel, una avenida dividía la escuela del mercado y obligaba a caminar hasta el único semáforo. Un conteo vecinal mostró que el cruce más usado no coincidía con el punto de mayor visibilidad. El comité propuso pintar un paso peatonal, ampliar la banqueta y reubicar un puesto que obstruía la vista. Tras una prueba de un mes, hubo menos cruces fuera de la zona señalada, aunque el tránsito siguió intenso. El municipio aceptó revisar los datos antes de decidir si instala un semáforo.",
+      "questions": [
+        {
+          "id": "prep-gen-006",
+          "difficulty": "facil",
+          "prompt": "¿Qué lugares separaba la avenida?",
+          "choices": {
+            "A": "Un puesto.",
+            "B": "La escuela y el mercado.",
+            "C": "El hospital y la estación.",
+            "D": "La plaza y el río."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-007",
+          "difficulty": "facil",
+          "prompt": "¿Qué obstruía la vista en el cruce?",
+          "choices": {
+            "A": "El cruce más usado no era el de mayor visibilidad.",
+            "B": "Un puente.",
+            "C": "Una parada de autobús.",
+            "D": "Un puesto."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-008",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué mostró el conteo vecinal?",
+          "choices": {
+            "A": "El cruce más usado no era el de mayor visibilidad.",
+            "B": "Disminuyeron los cruces fuera de la zona señalada.",
+            "C": "La avenida estaba vacía todo el día.",
+            "D": "Todos preferían caminar hasta el semáforo."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-009",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué resultado se observó durante la prueba?",
+          "choices": {
+            "A": "La prueba aportó evidencia para valorar una intervención mayor.",
+            "B": "Desapareció el tránsito intenso.",
+            "C": "Disminuyeron los cruces fuera de la zona señalada.",
+            "D": "Se instaló de inmediato un semáforo."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-010",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el municipio revisaría los datos antes de instalar un semáforo?",
+          "choices": {
+            "A": "La escuela y el mercado.",
+            "B": "La prueba aportó evidencia para valorar una intervención mayor.",
+            "C": "El comité demostró que el cruce era innecesario.",
+            "D": "Los datos indicaban que nadie usaba la avenida."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-archivos-sonoros",
+      "title": "Voces que se borran",
+      "level": "preparatoria",
+      "text": "Un equipo de estudiantes entrevistó a antiguos trabajadores de una fábrica textil cerrada hace décadas. Al principio guardaron las grabaciones en teléfonos personales, pero algunos archivos carecían de fecha y no aclaraban quién hablaba. Elaboraron fichas con el nombre autorizado, lugar y año aproximado de la entrevista, además del tema. Conservaron una copia íntegra y otra con fragmentos para una exposición. El proyecto no pretende contar toda la historia de la fábrica: reúne testimonios situados que pueden contrastarse con documentos y otras memorias del barrio.",
+      "questions": [
+        {
+          "id": "prep-gen-011",
+          "difficulty": "facil",
+          "prompt": "¿A quiénes entrevistó el equipo?",
+          "choices": {
+            "A": "Faltaban fechas o datos sobre quién hablaba.",
+            "B": "A antiguos trabajadores de una fábrica textil.",
+            "C": "A los dueños actuales de una mina.",
+            "D": "A visitantes de un museo."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-012",
+          "difficulty": "facil",
+          "prompt": "¿Qué problema tenían algunas grabaciones?",
+          "choices": {
+            "A": "Para contextualizar e identificar las grabaciones autorizadas.",
+            "B": "El sonido era demasiado fuerte.",
+            "C": "Todas estaban en discos de vinilo.",
+            "D": "Faltaban fechas o datos sobre quién hablaba."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-013",
+          "difficulty": "intermedia",
+          "prompt": "¿Para qué elaboraron fichas?",
+          "choices": {
+            "A": "Para contextualizar e identificar las grabaciones autorizadas.",
+            "B": "Una permanece íntegra y otra reúne fragmentos para la exposición.",
+            "C": "Para sustituir las voces por resúmenes anónimos.",
+            "D": "Para probar que todos recordaban lo mismo."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-014",
+          "difficulty": "intermedia",
+          "prompt": "¿En qué difieren las dos copias?",
+          "choices": {
+            "A": "Son memorias situadas que deben contrastarse, no una historia total.",
+            "B": "Una contiene audio y otra fotografías.",
+            "C": "Una permanece íntegra y otra reúne fragmentos para la exposición.",
+            "D": "Una es pública y otra se destruyó."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-015",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué postura adopta el texto sobre el alcance de los testimonios?",
+          "choices": {
+            "A": "A antiguos trabajadores de una fábrica textil.",
+            "B": "Son memorias situadas que deben contrastarse, no una historia total.",
+            "C": "Constituyen una explicación definitiva del cierre.",
+            "D": "Carecen de valor si no coinciden palabra por palabra."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-polinizadores",
+      "title": "Un jardín con calendario",
+      "level": "preparatoria",
+      "text": "En una escuela, el jardín atraía mariposas en primavera, pero quedaba casi sin flores al final del verano. El grupo de ciencias consultó a una viverista y elaboró un calendario de floración con especies locales. Buscó flores disponibles en distintas épocas y refugios, además de néctar. Como el terreno recibe poco riego durante las vacaciones, descartó plantas que exigen humedad constante. Al año siguiente hubo visitas de insectos durante más meses, aunque el equipo no atribuyó el cambio a una sola especie: también influyeron las lluvias y el crecimiento de arbustos.",
+      "questions": [
+        {
+          "id": "prep-gen-016",
+          "difficulty": "facil",
+          "prompt": "¿Cuándo quedaba casi sin flores el jardín?",
+          "choices": {
+            "A": "Con una viverista.",
+            "B": "Al final del verano.",
+            "C": "A mediados del invierno.",
+            "D": "Al inicio de la primavera."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-017",
+          "difficulty": "facil",
+          "prompt": "¿Con quién consultó el grupo?",
+          "choices": {
+            "A": "Para procurar flores disponibles en distintas épocas.",
+            "B": "Con el director del mercado.",
+            "C": "Con un conductor de autobús.",
+            "D": "Con una viverista."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-018",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué usaron un calendario de floración?",
+          "choices": {
+            "A": "Para procurar flores disponibles en distintas épocas.",
+            "B": "El jardín recibe poco riego durante las vacaciones.",
+            "C": "Para elegir solo las plantas más vistosas.",
+            "D": "Para regar todas las especies igual."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-019",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué descartaron algunas especies?",
+          "choices": {
+            "A": "También pudieron influir las lluvias y los arbustos.",
+            "B": "No producían flores brillantes.",
+            "C": "El jardín recibe poco riego durante las vacaciones.",
+            "D": "Atraían insectos demasiados meses."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-020",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué no atribuyeron las visitas a una sola planta?",
+          "choices": {
+            "A": "Al final del verano.",
+            "B": "También pudieron influir las lluvias y los arbustos.",
+            "C": "Ningún insecto volvió después de primavera.",
+            "D": "El calendario no registraba la floración."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-algoritmos-recomendacion",
+      "title": "La lista que decide qué vemos",
+      "level": "preparatoria",
+      "text": "Una plataforma de videos organiza su página principal con señales como temas vistos, tiempo de reproducción y búsquedas recientes. Intenta mostrar contenidos de interés, pero no comprende por qué alguien vio un video ni si le resultó útil. Una investigadora comparó dos cuentas nuevas: una recibió señales de preferencias deportivas y otra de música. Días después, las recomendaciones se concentraban en el tema inicial de cada cuenta. Esto sugiere que las selecciones influyen en lo que aparece después, pero no prueba que todos reciban listas idénticas o que el sistema no pueda cambiarse.",
+      "questions": [
+        {
+          "id": "prep-gen-021",
+          "difficulty": "facil",
+          "prompt": "¿Qué organiza la plataforma con señales de uso?",
+          "choices": {
+            "A": "Preferencias deportivas.",
+            "B": "La página principal de videos.",
+            "C": "El horario del transporte público.",
+            "D": "La lista de libros de una biblioteca."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-022",
+          "difficulty": "facil",
+          "prompt": "¿Qué señal recibió la primera cuenta?",
+          "choices": {
+            "A": "No sabe por qué alguien vio un video ni si fue útil.",
+            "B": "Preferencias culinarias.",
+            "C": "Jardinería.",
+            "D": "Preferencias deportivas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-023",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué limitación se atribuye al sistema?",
+          "choices": {
+            "A": "No sabe por qué alguien vio un video ni si fue útil.",
+            "B": "Las recomendaciones se concentraron en los temas iniciales.",
+            "C": "No puede registrar búsquedas recientes.",
+            "D": "Solo funciona con cuentas antiguas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-024",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué observó la investigadora?",
+          "choices": {
+            "A": "Las selecciones pueden influir en recomendaciones sin generalizar a todos.",
+            "B": "Ambas cuentas recibieron videos idénticos.",
+            "C": "Las recomendaciones se concentraron en los temas iniciales.",
+            "D": "Las señales deportivas desaparecieron de todos los perfiles."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-025",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué conclusión prudente permite el experimento?",
+          "choices": {
+            "A": "La página principal de videos.",
+            "B": "Las selecciones pueden influir en recomendaciones sin generalizar a todos.",
+            "C": "Toda recomendación determina permanentemente los intereses.",
+            "D": "Las cuentas nuevas nunca reciben variedad."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-energia-termica",
+      "title": "Calor en el techo",
+      "level": "preparatoria",
+      "text": "Una cooperativa instaló techos claros en tres salones y comparó su temperatura con aulas similares de cubierta oscura. Durante dos semanas soleadas, los primeros alcanzaron temperaturas interiores menores al mediodía. La diferencia fue mayor con las ventanas cerradas; al ventilar, ambos grupos se acercaban. El equipo no concluyó que el color resolviera por sí solo el calor: las aulas diferían en orientación y sombra, y el periodo fue breve. Propuso repetir la medición en otra estación y registrar la temperatura exterior para distinguir efectos.",
+      "questions": [
+        {
+          "id": "prep-gen-026",
+          "difficulty": "facil",
+          "prompt": "¿Qué cambio hizo la cooperativa en tres salones?",
+          "choices": {
+            "A": "Con las ventanas cerradas.",
+            "B": "Instaló techos claros.",
+            "C": "Pintó las ventanas de negro.",
+            "D": "Retiró todas las cubiertas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-027",
+          "difficulty": "facil",
+          "prompt": "¿Cuándo fue mayor la diferencia entre grupos?",
+          "choices": {
+            "A": "Las temperaturas de ambos grupos se acercaban.",
+            "B": "Cuando llovía de noche.",
+            "C": "Al amanecer antes de salir el sol.",
+            "D": "Con las ventanas cerradas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-028",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué ocurrió al ventilar las aulas?",
+          "choices": {
+            "A": "Las temperaturas de ambos grupos se acercaban.",
+            "B": "Para distinguir el efecto de la cubierta de otras condiciones.",
+            "C": "Los salones claros se calentaban sin límite.",
+            "D": "La diferencia se duplicaba siempre."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-029",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué medirían también la temperatura exterior?",
+          "choices": {
+            "A": "La observación breve y diferencias de orientación y sombra.",
+            "B": "Para evitar comparar aulas con ventanas.",
+            "C": "Para distinguir el efecto de la cubierta de otras condiciones.",
+            "D": "Para probar que la orientación no importa."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-030",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué debilita una conclusión causal firme sobre el color del techo?",
+          "choices": {
+            "A": "Instaló techos claros.",
+            "B": "La observación breve y diferencias de orientación y sombra.",
+            "C": "Las mediciones interiores al mediodía.",
+            "D": "Que las ventanas se cerraran alguna vez."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-lectura-etiquetas",
+      "title": "Lo que cabe en una etiqueta",
+      "level": "preparatoria",
+      "text": "En el laboratorio escolar, un grupo comparó dos bebidas con nombres parecidos y descubrió que sus porciones declaradas eran distintas. Anotó el tamaño de la porción y revisó azúcares, sodio e ingredientes. Una botella contenía dos porciones, aunque suele beberse de una vez, por lo que mirar solo las cifras impresas podía inducir a error. El ejercicio buscaba practicar una lectura contextual, no declarar una bebida buena y otra mala. La etiqueta informa sobre composición, pero no describe por sí sola la alimentación completa ni las necesidades de cada persona.",
+      "questions": [
+        {
+          "id": "prep-gen-031",
+          "difficulty": "facil",
+          "prompt": "¿Qué productos comparó el grupo?",
+          "choices": {
+            "A": "Azúcares, sodio e ingredientes.",
+            "B": "Dos bebidas con nombres parecidos.",
+            "C": "Dos botellas de agua sin etiqueta.",
+            "D": "Una bebida y un alimento sólido."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-032",
+          "difficulty": "facil",
+          "prompt": "¿Qué datos revisaron tras el tamaño de porción?",
+          "choices": {
+            "A": "Una botella tenía dos porciones aunque se suele beber de una vez.",
+            "B": "Precio, marca y fecha de compra.",
+            "C": "Color, forma y material del envase.",
+            "D": "Azúcares, sodio e ingredientes."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-033",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué podía inducir a error mirar solo las cifras?",
+          "choices": {
+            "A": "Una botella tenía dos porciones aunque se suele beber de una vez.",
+            "B": "Practicar una lectura contextual, no calificar una bebida.",
+            "C": "Las etiquetas no incluyen números.",
+            "D": "El grupo comparó productos idénticos."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-034",
+          "difficulty": "intermedia",
+          "prompt": "¿Cuál era el propósito del ejercicio?",
+          "choices": {
+            "A": "Informa sobre composición, pero no resume alimentación y necesidades individuales.",
+            "B": "Elegir la marca más popular.",
+            "C": "Practicar una lectura contextual, no calificar una bebida.",
+            "D": "Establecer la misma dieta para todos."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-035",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué límite de la etiqueta destaca el texto?",
+          "choices": {
+            "A": "Dos bebidas con nombres parecidos.",
+            "B": "Informa sobre composición, pero no resume alimentación y necesidades individuales.",
+            "C": "No permite conocer ingrediente alguno.",
+            "D": "Solo sirve para comparar productos idénticos."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-restauracion-humedal",
+      "title": "Recuperar sin borrar",
+      "level": "preparatoria",
+      "text": "Junto a una laguna, vecinos retiraron residuos y replantaron vegetación nativa en una franja erosionada. Dejaron algunos tramos intactos para observar su recuperación espontánea. En parcelas pequeñas registraron cada mes la supervivencia de brotes y la presencia de aves. A los seis meses sobrevivieron más plantas cerca de zonas protegidas del paso de personas. El grupo no declaró completa la restauración: faltaba una temporada de lluvias y no se había medido la calidad del agua. El informe separó las acciones realizadas de los efectos que aún requieren seguimiento.",
+      "questions": [
+        {
+          "id": "prep-gen-036",
+          "difficulty": "facil",
+          "prompt": "¿Qué retiraron los vecinos de la orilla?",
+          "choices": {
+            "A": "Los dejaron sin intervenir para observar su recuperación.",
+            "B": "Residuos.",
+            "C": "Todas las aves.",
+            "D": "El agua de la laguna."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-037",
+          "difficulty": "facil",
+          "prompt": "¿Qué hicieron con algunos tramos?",
+          "choices": {
+            "A": "Supervivencia de brotes y presencia de aves.",
+            "B": "Los cubrieron con pavimento.",
+            "C": "Los cerraron a la observación.",
+            "D": "Los dejaron sin intervenir para observar su recuperación."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-038",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué registraron cada mes en las parcelas?",
+          "choices": {
+            "A": "Supervivencia de brotes y presencia de aves.",
+            "B": "Cerca de zonas protegidas del paso de personas.",
+            "C": "Visitantes y compras.",
+            "D": "Temperatura de las casas vecinas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-039",
+          "difficulty": "intermedia",
+          "prompt": "¿Dónde sobrevivieron más plantas?",
+          "choices": {
+            "A": "Faltaba otra temporada de lluvias y medir la calidad del agua.",
+            "B": "En partes erosionadas y transitadas.",
+            "C": "Cerca de zonas protegidas del paso de personas.",
+            "D": "En tramos cubiertos de residuos."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-040",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué vuelve cauteloso el informe sobre el éxito?",
+          "choices": {
+            "A": "Residuos.",
+            "B": "Faltaba otra temporada de lluvias y medir la calidad del agua.",
+            "C": "No hubo acciones junto a la laguna.",
+            "D": "Las aves se excluyeron de observaciones."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-huella-digital",
+      "title": "Una imagen fuera de contexto",
+      "level": "preparatoria",
+      "text": "Una fotografía de una inundación circuló en redes con mensajes que afirmaban que correspondía a la ciudad ese mismo día. Una reportera encontró una versión subida tres años antes desde otra región. Consultó un archivo meteorológico y pidió comparar edificios con mapas urbanos. La verificación descartó la fecha difundida, pero no identificó con certeza a quien tomó la foto original. Encontrar una imagen antigua puede corregir una afirmación concreta; no basta para explicar quién la difundió ni con qué intención.",
+      "questions": [
+        {
+          "id": "prep-gen-041",
+          "difficulty": "facil",
+          "prompt": "¿Qué afirmaban los mensajes sobre la fotografía?",
+          "choices": {
+            "A": "Tres años antes.",
+            "B": "Que mostraba la ciudad ese mismo día.",
+            "C": "Que era un mapa antiguo.",
+            "D": "Que anunciaba un museo."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-042",
+          "difficulty": "facil",
+          "prompt": "¿Cuándo se había subido una versión anterior?",
+          "choices": {
+            "A": "Publicaciones anteriores, archivo meteorológico y mapas urbanos.",
+            "B": "Una semana antes.",
+            "C": "Diez años antes.",
+            "D": "Tres años antes."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-043",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué fuentes consultó la reportera?",
+          "choices": {
+            "A": "Publicaciones anteriores, archivo meteorológico y mapas urbanos.",
+            "B": "La fecha que acompañaba la publicación.",
+            "C": "Comentarios anónimos únicamente.",
+            "D": "Pronóstico futuro y catálogo musical."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-044",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué pudo descartar la verificación?",
+          "choices": {
+            "A": "Corregir una fecha no revela necesariamente quién difundió la imagen o su intención.",
+            "B": "La identidad de toda persona que compartió la imagen.",
+            "C": "La fecha que acompañaba la publicación.",
+            "D": "La existencia de inundaciones en cualquier ciudad."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-045",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué distinción establece el cierre?",
+          "choices": {
+            "A": "Que mostraba la ciudad ese mismo día.",
+            "B": "Corregir una fecha no revela necesariamente quién difundió la imagen o su intención.",
+            "C": "Una imagen antigua demuestra que cualquier noticia reciente es falsa.",
+            "D": "Identificar el origen siempre revela la intención."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-mercado-local",
+      "title": "El precio de temporada",
+      "level": "preparatoria",
+      "text": "En un mercado, el precio del jitomate bajó durante varias semanas de cosecha abundante. Comerciantes señalaron que creció la oferta local y disminuyeron los costos de transporte desde parcelas cercanas. En dos puestos el precio siguió por encima del promedio: vendían variedades seleccionadas y aceptaban pagos a crédito. Un estudiante comparó precios diarios y entrevistó a vendedores y productores. Concluyó que la temporada explica la tendencia general, pero no fija por sí sola cada precio: también cuentan las condiciones de venta y el tipo de producto.",
+      "questions": [
+        {
+          "id": "prep-gen-046",
+          "difficulty": "facil",
+          "prompt": "¿Qué producto bajó de precio?",
+          "choices": {
+            "A": "Pagos a crédito.",
+            "B": "El jitomate.",
+            "C": "La cebolla.",
+            "D": "El maíz."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-047",
+          "difficulty": "facil",
+          "prompt": "¿Qué aceptaban los dos puestos con precio mayor al promedio?",
+          "choices": {
+            "A": "Mayor oferta local y menores costos de transporte.",
+            "B": "Intercambios de libros.",
+            "C": "Reservas de semillas.",
+            "D": "Pagos a crédito."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-048",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué factores contribuyeron a la baja general?",
+          "choices": {
+            "A": "Mayor oferta local y menores costos de transporte.",
+            "B": "Ofrecían variedades seleccionadas y aceptaban crédito.",
+            "C": "Menor cosecha y transporte más caro.",
+            "D": "Variedades seleccionadas y crédito amplio."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-049",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué algunos puestos cobraban más?",
+          "choices": {
+            "A": "La temporada explica la tendencia, pero otras condiciones afectan cada puesto.",
+            "B": "No recibían productos de parcelas cercanas.",
+            "C": "Ofrecían variedades seleccionadas y aceptaban crédito.",
+            "D": "Vendían solo en invierno."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-050",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué conclusión refleja la investigación?",
+          "choices": {
+            "A": "El jitomate.",
+            "B": "La temporada explica la tendencia, pero otras condiciones afectan cada puesto.",
+            "C": "La cosecha fija el mismo precio en todo el mercado.",
+            "D": "El transporte es el único factor del precio."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-diseno-accesible",
+      "title": "Una puerta que sí invita",
+      "level": "preparatoria",
+      "text": "Al remodelar un centro cultural, el equipo consultó a usuarios de silla de ruedas, personas mayores y familias con carriolas. Detectó que la rampa prevista era muy inclinada y la señalización solo podía leerse desde cierta altura. La versión revisada añadió un descanso, letreros de alto contraste y una ruta sin escalones hasta el auditorio. En la inauguración propusieron además indicaciones táctiles; quedaron pendientes por requerir materiales y pruebas. La consulta no resolvió cada necesidad, pero reveló barreras que los planos iniciales no mostraban.",
+      "questions": [
+        {
+          "id": "prep-gen-051",
+          "difficulty": "facil",
+          "prompt": "¿A quiénes consultó el equipo arquitectónico?",
+          "choices": {
+            "A": "Un descanso.",
+            "B": "Usuarios de silla de ruedas, personas mayores y familias con carriolas.",
+            "C": "Solo proveedores de materiales.",
+            "D": "Deportistas del auditorio."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-052",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué se añadió a la rampa?",
+          "choices": {
+            "A": "Solo podía leerse desde cierta altura.",
+            "B": "Una escalera más alta.",
+            "C": "Una puerta giratoria.",
+            "D": "Un descanso."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-053",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué barrera tenía la señalización inicial?",
+          "choices": {
+            "A": "Solo podía leerse desde cierta altura.",
+            "B": "Incorporar indicaciones táctiles.",
+            "C": "Estaba dentro del auditorio.",
+            "D": "Tenía demasiadas indicaciones táctiles."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-054",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué mejora quedó pendiente?",
+          "choices": {
+            "A": "La participación reveló barreras omitidas, aunque no resolvió de inmediato toda necesidad.",
+            "B": "Construir una rampa desde cero.",
+            "C": "Incorporar indicaciones táctiles.",
+            "D": "Quitar letreros de alto contraste."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-055",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué demuestra el proceso de consulta?",
+          "choices": {
+            "A": "Usuarios de silla de ruedas, personas mayores y familias con carriolas.",
+            "B": "La participación reveló barreras omitidas, aunque no resolvió de inmediato toda necesidad.",
+            "C": "Los planos iniciales ya mostraban todas las barreras.",
+            "D": "Consultar garantiza una solución completa."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-isla-calor",
+      "title": "Sombra desigual",
+      "level": "preparatoria",
+      "text": "Un grupo midió la temperatura del aire en seis calles del centro durante una semana de verano. Las calles con árboles maduros tendían a registrar lecturas menores por la tarde, pero una era también más angosta y recibía menos sol directo. El equipo anotó orientación, ancho y pavimento, y repitió mediciones en horarios equivalentes. Los resultados respaldaron una asociación entre sombra y menor temperatura, aunque la muestra pequeña no permitió calcular el peso de cada factor. El informe recomendó ampliar el muestreo a otros barrios antes de decidir dónde plantar.",
+      "questions": [
+        {
+          "id": "prep-gen-056",
+          "difficulty": "facil",
+          "prompt": "¿En qué época midió el grupo las calles?",
+          "choices": {
+            "A": "Lecturas menores por la tarde.",
+            "B": "Durante una semana de verano.",
+            "C": "Durante un invierno completo.",
+            "D": "Una mañana de primavera."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-057",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué tendían a registrar las calles con árboles maduros?",
+          "choices": {
+            "A": "Para considerar otros factores que podían influir en las lecturas.",
+            "B": "Más sol directo de noche.",
+            "C": "Temperaturas idénticas todo el día.",
+            "D": "Lecturas menores por la tarde."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-058",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué anotaron orientación y ancho?",
+          "choices": {
+            "A": "Para considerar otros factores que podían influir en las lecturas.",
+            "B": "Ampliar el muestreo a otros barrios.",
+            "C": "Para contar árboles sin medir temperatura.",
+            "D": "Para escoger calles sin sombra."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-059",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué recomendó el informe antes de decidir dónde plantar?",
+          "choices": {
+            "A": "Respaldan una asociación, pero no cuantifican cada factor con precisión.",
+            "B": "Dejar de medir por la tarde.",
+            "C": "Ampliar el muestreo a otros barrios.",
+            "D": "Eliminar árboles de calles angostas."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-060",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué grado de certeza corresponde a los resultados?",
+          "choices": {
+            "A": "Durante una semana de verano.",
+            "B": "Respaldan una asociación, pero no cuantifican cada factor con precisión.",
+            "C": "Prueban que los árboles son la única causa térmica.",
+            "D": "Demuestran que el ancho anula cualquier sombra."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-traduccion-literaria",
+      "title": "Dos versiones de una voz",
+      "level": "preparatoria",
+      "text": "Al traducir un cuento, una estudiante encontró que un verbo podía significar \"esperar\" o \"aguardar\". Eligió \"aguardar\" en una escena porque el ritmo pausado sugería una espera larga; en otra prefirió \"esperar\" para conservar la naturalidad de un diálogo cotidiano. En su nota explicó que ninguna palabra era siempre superior: la elección dependía de la voz y del contexto. Al comparar su versión con otra publicada, observó decisiones distintas sin cambio del sentido general. La diferencia permitió hablar de interpretación, no de una respuesta única para cada frase.",
+      "questions": [
+        {
+          "id": "prep-gen-061",
+          "difficulty": "facil",
+          "prompt": "¿Qué dos sentidos podía tener el verbo?",
+          "choices": {
+            "A": "Esperar.",
+            "B": "Esperar y aguardar.",
+            "C": "Correr y saltar.",
+            "D": "Mirar y escuchar."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-062",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué palabra eligió en el diálogo cotidiano?",
+          "choices": {
+            "A": "El ritmo pausado sugería una espera prolongada.",
+            "B": "Aguardar.",
+            "C": "Caminar.",
+            "D": "Esperar."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-063",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué escogió \"aguardar\" en una escena?",
+          "choices": {
+            "A": "El ritmo pausado sugería una espera prolongada.",
+            "B": "Había decisiones distintas y se conservaba el sentido general.",
+            "C": "Era un diálogo cotidiano y veloz.",
+            "D": "La autora prohibió otros verbos."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-064",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué observó al comparar con otra traducción?",
+          "choices": {
+            "A": "El contexto guía decisiones interpretativas y admite más de una solución.",
+            "B": "Las versiones eran idénticas en cada frase.",
+            "C": "Había decisiones distintas y se conservaba el sentido general.",
+            "D": "La otra versión cambiaba toda la trama."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-065",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué idea sobre traducir se desprende?",
+          "choices": {
+            "A": "Esperar y aguardar.",
+            "B": "El contexto guía decisiones interpretativas y admite más de una solución.",
+            "C": "Cada frase tiene una traducción única, independiente de la voz.",
+            "D": "La naturalidad debe eliminar diferencias de ritmo."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-ciclos-agua-ciudad",
+      "title": "Lluvia retenida",
+      "level": "preparatoria",
+      "text": "Una colonia instaló jardines de lluvia junto a las banquetas para que el agua de tormenta se infiltrara y no corriera directamente a las coladeras. En los primeros aguaceros, voluntarios midieron cuánto tardaban en vaciarse y anotaron si basura o tierra obstruía las entradas. Un jardín despejado drenó más rápido que otro parcialmente bloqueado, pero recibieron lluvias de distinta intensidad. El comité consideró que los datos servían para detectar problemas de mantenimiento, no para comparar la capacidad total de los diseños. Acordó limpiar las entradas y medir de nuevo en condiciones más semejantes.",
+      "questions": [
+        {
+          "id": "prep-gen-066",
+          "difficulty": "facil",
+          "prompt": "¿Para qué se instalaron los jardines de lluvia?",
+          "choices": {
+            "A": "Si había basura o tierra obstruyendo las entradas.",
+            "B": "Para favorecer la infiltración del agua de tormenta.",
+            "C": "Para impedir que lloviera en las banquetas.",
+            "D": "Para almacenar basura antes de las coladeras."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-067",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué anotaron los voluntarios además del tiempo de vaciado?",
+          "choices": {
+            "A": "El despejado drenó más rápido que el parcialmente bloqueado.",
+            "B": "El precio de viviendas cercanas.",
+            "C": "Los vehículos estacionados.",
+            "D": "Si había basura o tierra obstruyendo las entradas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-068",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué diferencia observaron entre los jardines?",
+          "choices": {
+            "A": "El despejado drenó más rápido que el parcialmente bloqueado.",
+            "B": "Para detectar problemas de mantenimiento.",
+            "C": "El bloqueado drenó más rápido siempre.",
+            "D": "Ambos se vaciaron igual a pesar de la lluvia."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-069",
+          "difficulty": "avanzada",
+          "prompt": "¿Para qué fueron útiles los datos iniciales?",
+          "choices": {
+            "A": "Recibieron lluvias distintas y uno tenía una obstrucción.",
+            "B": "Para decidir la capacidad total de cada diseño.",
+            "C": "Para detectar problemas de mantenimiento.",
+            "D": "Para reemplazar futuras mediciones."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-070",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué no era válida una comparación directa de capacidad?",
+          "choices": {
+            "A": "Para favorecer la infiltración del agua de tormenta.",
+            "B": "Recibieron lluvias distintas y uno tenía una obstrucción.",
+            "C": "Los voluntarios anotaron tiempos.",
+            "D": "Ambos estaban cerca de banquetas."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-debate-publico",
+      "title": "Un debate con reglas",
+      "level": "preparatoria",
+      "text": "En una asamblea escolar sobre el patio, cada grupo tuvo tres minutos para presentar una propuesta y dos para responder preguntas. La moderadora pidió criticar ideas, no personas, y reservó el cierre para resumir desacuerdos. Instalar más bancas recibió apoyo; dividir el patio entre zonas silenciosas y deportivas generó objeciones por falta de espacio. La asamblea no votó porque faltaban datos sobre costos y horarios. El acta registró acuerdos, dudas y tareas pendientes para que la siguiente conversación partiera de razones explícitas, no solo impresiones.",
+      "questions": [
+        {
+          "id": "prep-gen-071",
+          "difficulty": "facil",
+          "prompt": "¿Cuánto tiempo tuvo cada grupo para presentar?",
+          "choices": {
+            "A": "Instalar más bancas.",
+            "B": "Tres minutos.",
+            "C": "Dos minutos.",
+            "D": "Cinco minutos."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-072",
+          "difficulty": "facil",
+          "prompt": "¿Qué propuesta recibió apoyo amplio?",
+          "choices": {
+            "A": "Dirigirlas a las ideas y no a las personas.",
+            "B": "Cerrar el patio diariamente.",
+            "C": "Quitar zonas deportivas.",
+            "D": "Instalar más bancas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-073",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué pidió la moderadora sobre las críticas?",
+          "choices": {
+            "A": "Dirigirlas a las ideas y no a las personas.",
+            "B": "Faltaban datos sobre costos y horarios.",
+            "C": "Evitar todas las preguntas.",
+            "D": "Hacerlas después de la votación."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-074",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué no se votó ese día?",
+          "choices": {
+            "A": "Conserva razones, desacuerdos y pendientes para orientar la discusión posterior.",
+            "B": "No hubo propuestas.",
+            "C": "Faltaban datos sobre costos y horarios.",
+            "D": "Se olvidó registrar acuerdos."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-075",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué función cumple el acta?",
+          "choices": {
+            "A": "Tres minutos.",
+            "B": "Conserva razones, desacuerdos y pendientes para orientar la discusión posterior.",
+            "C": "Declara ganadora la propuesta de bancas.",
+            "D": "Sustituye los datos de costos."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "preparatoria-restos-alimentos",
+      "title": "Aprovechar lo que sobra",
+      "level": "preparatoria",
+      "text": "El comedor de una preparatoria pesó durante diez días los alimentos que volvían en charolas. Las guarniciones de verduras se desperdiciaban más los lunes, cuando se servía una porción fija pese a variar la asistencia. El equipo probó ofrecer dos tamaños y permitir repetir. El desperdicio de esas guarniciones disminuyó y el consumo total se mantuvo similar. Como el registro no abarcó bebidas ni otros platillos, el informe limitó su conclusión a las verduras observadas. Recomendó preguntar por qué los estudiantes dejan comida: el peso no revela si influyen sabor, tiempo o tamaño de porción.",
+      "questions": [
+        {
+          "id": "prep-gen-076",
+          "difficulty": "facil",
+          "prompt": "¿Qué alimento se desperdiciaba más los lunes?",
+          "choices": {
+            "A": "Ofrecer dos tamaños y permitir repetir.",
+            "B": "Guarniciones de verduras.",
+            "C": "Bebidas calientes.",
+            "D": "Postres de fruta."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "prep-gen-077",
+          "difficulty": "facil",
+          "prompt": "¿Qué opción probó el equipo?",
+          "choices": {
+            "A": "Bajó el desperdicio y el consumo total fue similar.",
+            "B": "Eliminar todas las verduras.",
+            "C": "Servir una porción fija más grande.",
+            "D": "Ofrecer dos tamaños y permitir repetir."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "prep-gen-078",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué cambió tras probar los dos tamaños?",
+          "choices": {
+            "A": "Bajó el desperdicio y el consumo total fue similar.",
+            "B": "El peso no explica por qué dejan comida.",
+            "C": "Aumentó el desperdicio de todos los alimentos.",
+            "D": "El consumo total cayó a cero."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "prep-gen-079",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué preguntar a los estudiantes?",
+          "choices": {
+            "A": "La conclusión atañe a verduras registradas, no a bebidas u otros platillos.",
+            "B": "Las charolas no pueden pesarse.",
+            "C": "El peso no explica por qué dejan comida.",
+            "D": "El informe ya midió todas las razones."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "prep-gen-080",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué afirmación respeta el alcance del estudio?",
+          "choices": {
+            "A": "Guarniciones de verduras.",
+            "B": "La conclusión atañe a verduras registradas, no a bebidas u otros platillos.",
+            "C": "El nuevo servicio eliminó todo desperdicio escolar.",
+            "D": "El tamaño es la única causa de sobrantes."
+          },
+          "answer": "B"
+        }
       ]
     },
     {
@@ -58,11 +2398,66 @@
       "level": "universidad",
       "text": "En investigación, una muestra pequeña no es automáticamente inútil; su valor depende de la pregunta, del método de selección y de la incertidumbre que se comunica. Una muestra de conveniencia puede ayudar a probar un instrumento o descubrir problemas de procedimiento, pero normalmente no representa a toda una población. Aumentar el tamaño reduce cierta variabilidad aleatoria, aunque no corrige por sí solo un sesgo sistemático de selección. En consecuencia, la calidad de una conclusión no se resume en el número de observaciones: también importa explicar cómo se obtuvieron y cuáles son sus límites.",
       "questions": [
-        {"id": "u01", "difficulty": "facil", "prompt": "¿Una muestra pequeña carece siempre de utilidad?", "choices": {"A": "Sí, sin excepción.", "B": "No; puede servir para probar un instrumento o procedimiento.", "C": "Sí, si el estudio es exploratorio.", "D": "No, porque siempre representa a toda la población."}, "answer": "B"},
-        {"id": "u02", "difficulty": "intermedia", "prompt": "¿Qué no corrige necesariamente aumentar el tamaño de la muestra?", "choices": {"A": "Un sesgo sistemático de selección.", "B": "La variabilidad aleatoria.", "C": "La cantidad de observaciones.", "D": "El tiempo de recolección."}, "answer": "A"},
-        {"id": "u03", "difficulty": "avanzada", "prompt": "¿Qué criterio de calidad enfatiza el texto?", "choices": {"A": "El tamaño por encima de cualquier otro factor.", "B": "La transparencia sobre selección, método e incertidumbre.", "C": "La eliminación de toda limitación.", "D": "El uso exclusivo de muestras grandes."}, "answer": "B"},
-        {"id": "u07", "difficulty": "intermedia", "prompt": "¿Para qué puede ser útil una muestra de conveniencia?", "choices": {"A": "Para demostrar que toda la población piensa igual.", "B": "Para probar un instrumento o detectar problemas del procedimiento.", "C": "Para eliminar cualquier incertidumbre.", "D": "Para reemplazar la selección de participantes."}, "answer": "B"},
-        {"id": "u08", "difficulty": "avanzada", "prompt": "Si se aumenta una muestra sesgada, ¿qué problema podría persistir?", "choices": {"A": "La falta de observaciones.", "B": "La variabilidad aleatoria.", "C": "El sesgo sistemático de selección.", "D": "La imposibilidad de calcular un promedio."}, "answer": "C"}
+        {
+          "id": "u01",
+          "difficulty": "facil",
+          "prompt": "¿Una muestra pequeña carece siempre de utilidad?",
+          "choices": {
+            "A": "Sí, sin excepción.",
+            "B": "No; puede servir para probar un instrumento o procedimiento.",
+            "C": "Sí, si el estudio es exploratorio.",
+            "D": "No, porque siempre representa a toda la población."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u02",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué no corrige necesariamente aumentar el tamaño de la muestra?",
+          "choices": {
+            "A": "Un sesgo sistemático de selección.",
+            "B": "La variabilidad aleatoria.",
+            "C": "La cantidad de observaciones.",
+            "D": "El tiempo de recolección."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u03",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué criterio de calidad enfatiza el texto?",
+          "choices": {
+            "A": "El tamaño por encima de cualquier otro factor.",
+            "B": "La transparencia sobre selección, método e incertidumbre.",
+            "C": "La eliminación de toda limitación.",
+            "D": "El uso exclusivo de muestras grandes."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u07",
+          "difficulty": "intermedia",
+          "prompt": "¿Para qué puede ser útil una muestra de conveniencia?",
+          "choices": {
+            "A": "Para demostrar que toda la población piensa igual.",
+            "B": "Para probar un instrumento o detectar problemas del procedimiento.",
+            "C": "Para eliminar cualquier incertidumbre.",
+            "D": "Para reemplazar la selección de participantes."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u08",
+          "difficulty": "avanzada",
+          "prompt": "Si se aumenta una muestra sesgada, ¿qué problema podría persistir?",
+          "choices": {
+            "A": "La falta de observaciones.",
+            "B": "La variabilidad aleatoria.",
+            "C": "El sesgo sistemático de selección.",
+            "D": "La imposibilidad de calcular un promedio."
+          },
+          "answer": "C"
+        }
       ]
     },
     {
@@ -71,11 +2466,1154 @@
       "level": "universidad",
       "text": "Un sistema suele evaluarse primero bajo condiciones normales, pero sus fallos más importantes pueden aparecer en situaciones poco frecuentes. Por ejemplo, una plataforma que responde rápido con una conexión estable podría perder datos cuando la red fluctúa. Diseñar para estas excepciones no significa optimizar cada caso imaginable: implica identificar fallos plausibles, establecer cómo se detectarán y decidir qué estado seguro debe adoptar el sistema. Las pruebas de recuperación son tan relevantes como las pruebas de funcionamiento ordinario, porque muestran si el servicio puede volver a operar sin ocultar errores ni corromper información.",
       "questions": [
-        {"id": "u04", "difficulty": "facil", "prompt": "¿Qué situación ilustra un posible fallo de una plataforma?", "choices": {"A": "La red fluctúa y se pueden perder datos.", "B": "La conexión permanece estable.", "C": "El sistema responde en condiciones normales.", "D": "Las pruebas terminan rápidamente."}, "answer": "A"},
-        {"id": "u05", "difficulty": "intermedia", "prompt": "¿Qué significa diseñar para excepciones según el texto?", "choices": {"A": "Prever fallos plausibles y definir respuestas seguras.", "B": "Optimizar cada situación imaginable.", "C": "Evitar probar la recuperación.", "D": "Ocultar errores para mantener el servicio."}, "answer": "A"},
-        {"id": "u06", "difficulty": "avanzada", "prompt": "¿Por qué se consideran importantes las pruebas de recuperación?", "choices": {"A": "Porque sustituyen todas las pruebas normales.", "B": "Porque verifican la recuperación sin ocultar errores o dañar datos.", "C": "Porque garantizan que nunca habrá fallos.", "D": "Porque solo miden la velocidad de conexión."}, "answer": "B"},
-        {"id": "u09", "difficulty": "intermedia", "prompt": "¿Qué debería decidirse ante un fallo plausible?", "choices": {"A": "Qué estado seguro adoptará el sistema.", "B": "Cómo ocultarlo para no interrumpir.", "C": "Cómo evitar probarlo.", "D": "Cómo optimizar todos los casos imaginables."}, "answer": "A"},
-        {"id": "u10", "difficulty": "avanzada", "prompt": "¿Cuál es el alcance razonable del diseño para excepciones?", "choices": {"A": "Resolver todo evento imaginable.", "B": "Ignorar eventos infrecuentes.", "C": "Identificar fallos plausibles y definir detección y recuperación.", "D": "Probar solo la velocidad bajo condiciones normales."}, "answer": "C"}
+        {
+          "id": "u04",
+          "difficulty": "facil",
+          "prompt": "¿Qué situación ilustra un posible fallo de una plataforma?",
+          "choices": {
+            "A": "La red fluctúa y se pueden perder datos.",
+            "B": "La conexión permanece estable.",
+            "C": "El sistema responde en condiciones normales.",
+            "D": "Las pruebas terminan rápidamente."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u05",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué significa diseñar para excepciones según el texto?",
+          "choices": {
+            "A": "Prever fallos plausibles y definir respuestas seguras.",
+            "B": "Optimizar cada situación imaginable.",
+            "C": "Evitar probar la recuperación.",
+            "D": "Ocultar errores para mantener el servicio."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u06",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué se consideran importantes las pruebas de recuperación?",
+          "choices": {
+            "A": "Porque sustituyen todas las pruebas normales.",
+            "B": "Porque verifican la recuperación sin ocultar errores o dañar datos.",
+            "C": "Porque garantizan que nunca habrá fallos.",
+            "D": "Porque solo miden la velocidad de conexión."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u09",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué debería decidirse ante un fallo plausible?",
+          "choices": {
+            "A": "Qué estado seguro adoptará el sistema.",
+            "B": "Cómo ocultarlo para no interrumpir.",
+            "C": "Cómo evitar probarlo.",
+            "D": "Cómo optimizar todos los casos imaginables."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u10",
+          "difficulty": "avanzada",
+          "prompt": "¿Cuál es el alcance razonable del diseño para excepciones?",
+          "choices": {
+            "A": "Resolver todo evento imaginable.",
+            "B": "Ignorar eventos infrecuentes.",
+            "C": "Identificar fallos plausibles y definir detección y recuperación.",
+            "D": "Probar solo la velocidad bajo condiciones normales."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "universidad-archivos",
+      "title": "El archivo que también describe sus silencios",
+      "level": "universidad",
+      "text": "Un archivo municipal digitalizó miles de planos y los puso a disposición pública. Sin embargo, el catálogo conserva mejor los documentos de las zonas céntricas que los de barrios periféricos, donde durante décadas hubo menos recursos para registrar obras. Una investigadora que encuentre pocas referencias a esos barrios no puede concluir sin más que allí se construyó poco: el vacío podría describir las prácticas de documentación, no la actividad urbana. El equipo comenzó a añadir notas sobre procedencia, criterios de selección y series incompletas. Así, el catálogo no elimina sus lagunas, pero ofrece herramientas para que quienes lo consultan distingan entre ausencia de evidencia y evidencia de ausencia.",
+      "questions": [
+        {
+          "id": "u11",
+          "difficulty": "facil",
+          "prompt": "¿Qué tipo de documentos se digitalizaron?",
+          "choices": {
+            "A": "Planos municipales.",
+            "B": "Cartas privadas.",
+            "C": "Registros de cosechas.",
+            "D": "Grabaciones de radio."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u12",
+          "difficulty": "facil",
+          "prompt": "¿Qué zonas tienen menos referencias en el catálogo?",
+          "choices": {
+            "A": "Las zonas portuarias.",
+            "B": "Los barrios periféricos.",
+            "C": "El centro histórico.",
+            "D": "Las áreas industriales recientes."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u13",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué no basta la escasez de planos para afirmar que hubo poca construcción?",
+          "choices": {
+            "A": "Porque los planos siempre se extravían al digitalizarse.",
+            "B": "Porque toda construcción queda descrita en otros archivos.",
+            "C": "Porque la falta de documentos puede reflejar prácticas de registro desiguales.",
+            "D": "Porque las zonas céntricas fueron menos estudiadas."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u14",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué agregaron las notas del equipo al catálogo?",
+          "choices": {
+            "A": "Una reconstrucción completa de cada barrio.",
+            "B": "Una estimación del valor de cada edificio.",
+            "C": "Un índice que elimina las lagunas documentales.",
+            "D": "La procedencia, los criterios de selección y las series incompletas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u15",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué distinción permite hacer el catálogo mejorado?",
+          "choices": {
+            "A": "Entre ausencia de evidencia y evidencia de ausencia.",
+            "B": "Entre documentos públicos y privados.",
+            "C": "Entre planos antiguos y planos digitales.",
+            "D": "Entre edificios céntricos y edificios protegidos."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "universidad-calor",
+      "title": "La sombra como infraestructura",
+      "level": "universidad",
+      "text": "Al comparar temperaturas de distintos distritos, una oficina de planificación observó que los sectores con menos árboles también tendían a concentrar hogares con menores ingresos. Plantar árboles parecía una respuesta evidente, pero el municipio advirtió que el beneficio térmico tardaría años y que el aumento del atractivo de una calle podía elevar los alquileres. Por ello, combinó la plantación con refugios frescos inmediatos y medidas de protección para inquilinos. El plan trata la sombra como infraestructura de salud, no como adorno, y evalúa sus resultados tanto por los grados que reduce como por quién puede seguir viviendo en las zonas intervenidas.",
+      "questions": [
+        {
+          "id": "u16",
+          "difficulty": "facil",
+          "prompt": "¿Qué diferencia encontraron entre los distritos?",
+          "choices": {
+            "A": "Los de más árboles tenían más tráfico.",
+            "B": "Los de menos árboles tendían a tener hogares con menores ingresos.",
+            "C": "Los más cálidos carecían de escuelas.",
+            "D": "Los céntricos tenían alquileres más bajos."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u17",
+          "difficulty": "facil",
+          "prompt": "¿Qué medida ofrece alivio térmico inmediato?",
+          "choices": {
+            "A": "Nuevas carreteras.",
+            "B": "Poda de todos los árboles.",
+            "C": "Refugios frescos.",
+            "D": "Subsidios a comercios."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u18",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué el plan no se limita a plantar árboles?",
+          "choices": {
+            "A": "Porque los árboles no afectan la temperatura.",
+            "B": "Porque los refugios frescos son permanentes.",
+            "C": "Porque no se midieron diferencias térmicas.",
+            "D": "Porque el efecto tarda y la mejora puede presionar los alquileres."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u19",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué representa la sombra en el enfoque municipal?",
+          "choices": {
+            "A": "Una infraestructura vinculada con la salud.",
+            "B": "Un elemento ornamental de bajo costo.",
+            "C": "Un indicador exclusivo del precio del suelo.",
+            "D": "Una solución que reemplaza toda política de vivienda."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u20",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué dimensión distributiva incorpora la evaluación?",
+          "choices": {
+            "A": "Si aumenta el número total de árboles de la ciudad.",
+            "B": "Si las calles intervenidas conservan a sus residentes.",
+            "C": "Si los refugios se construyen con materiales locales.",
+            "D": "Si todos los distritos reciben el mismo presupuesto."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "universidad-replicacion",
+      "title": "Repetir no es copiar",
+      "level": "universidad",
+      "text": "Un equipo intentó reproducir un experimento sobre memoria realizado en otra universidad. Conservó la tarea central, pero adaptó las instrucciones para participantes que hablaban otra variedad lingüística y documentó cada cambio. El resultado fue menos marcado que el original. En vez de calificarlo como fracaso, el equipo examinó si la diferencia procedía de la muestra, del contexto o de decisiones de medición. Distinguir una réplica exacta de una réplica conceptual permitió formular una conclusión más precisa: el efecto aparecía en ciertas condiciones, aunque su magnitud no se mantenía idéntica en todos los entornos.",
+      "questions": [
+        {
+          "id": "u21",
+          "difficulty": "facil",
+          "prompt": "¿Qué estudiaba el experimento original?",
+          "choices": {
+            "A": "La visión nocturna.",
+            "B": "El aprendizaje de idiomas.",
+            "C": "La memoria.",
+            "D": "La toma de decisiones financieras."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u22",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué decisión permitió adaptar el estudio sin abandonar su tarea central?",
+          "choices": {
+            "A": "Cambiar la hipótesis para obtener el resultado original.",
+            "B": "Usar únicamente participantes de la universidad de origen.",
+            "C": "Eliminar toda diferencia entre contextos.",
+            "D": "Ajustar las instrucciones lingüísticas y documentar los cambios."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u23",
+          "difficulty": "intermedia",
+          "prompt": "¿Cómo interpretó el equipo el resultado menos marcado?",
+          "choices": {
+            "A": "Como motivo para investigar muestra, contexto y medición.",
+            "B": "Como prueba de que no hubo experimento.",
+            "C": "Como confirmación exacta del resultado original.",
+            "D": "Como evidencia de que toda adaptación invalida un estudio."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u24",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué diferencia metodológica ayudó a precisar la conclusión?",
+          "choices": {
+            "A": "Entre un estudio breve y uno longitudinal.",
+            "B": "Entre una réplica exacta y una conceptual.",
+            "C": "Entre memoria visual y auditiva.",
+            "D": "Entre instrucciones escritas y orales."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u25",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué conclusión se ajusta al resultado descrito?",
+          "choices": {
+            "A": "El efecto es universal y siempre idéntico.",
+            "B": "La adaptación lingüística demuestra que el efecto es falso.",
+            "C": "El efecto aparece bajo ciertas condiciones, pero su magnitud varía.",
+            "D": "La réplica conceptual no permite estudiar efectos."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "universidad-traduccion",
+      "title": "Traducir sin borrar la duda",
+      "level": "universidad",
+      "text": "En un archivo judicial, una palabra indígena fue traducida durante décadas como «confesión». Un nuevo grupo de traductores halló que, según el contexto, podía referirse también a una declaración ofrecida ante una autoridad sin admitir culpa. No sustituyó silenciosamente la versión anterior: registró la traducción histórica, explicó sus límites y propuso alternativas para cada expediente. La decisión hizo más visible la incertidumbre, pero también permitió revisar fallos que habían dependido de una equivalencia demasiado estrecha. Para el equipo, la precisión no consistía en fingir que toda frase posee un equivalente único, sino en mostrar qué interpretaciones estaban justificadas.",
+      "questions": [
+        {
+          "id": "u26",
+          "difficulty": "facil",
+          "prompt": "¿Cómo se había traducido históricamente la palabra?",
+          "choices": {
+            "A": "Como «sentencia».",
+            "B": "Como «testimonio escrito».",
+            "C": "Como «apelación».",
+            "D": "Como «confesión»."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u27",
+          "difficulty": "facil",
+          "prompt": "¿Qué posibilidad adicional encontraron los traductores?",
+          "choices": {
+            "A": "Una declaración que no admite culpa.",
+            "B": "Una orden para cerrar el archivo.",
+            "C": "Una promesa de pagar una multa.",
+            "D": "Una descripción de un lugar."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u28",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué conservaron la traducción anterior junto con sus límites?",
+          "choices": {
+            "A": "Para impedir cambios en los expedientes.",
+            "B": "Para documentar la interpretación previa y permitir revisar sus efectos.",
+            "C": "Porque consideraban correcta toda traducción histórica.",
+            "D": "Para ocultar las alternativas al tribunal."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u29",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué idea de precisión sostiene el equipo?",
+          "choices": {
+            "A": "Elegir siempre el equivalente más breve.",
+            "B": "Eliminar toda incertidumbre del lenguaje.",
+            "C": "Explicitar las interpretaciones justificables en vez de fingir unicidad.",
+            "D": "Conservar una sola versión por expediente."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u30",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué consecuencia institucional pudo tener la equivalencia estrecha?",
+          "choices": {
+            "A": "Que los expedientes carecieran de fechas.",
+            "B": "Que se suprimieran todas las declaraciones.",
+            "C": "Que las autoridades dejaran de usar traducciones.",
+            "D": "Que algunos fallos dependieran de una interpretación limitada."
+          },
+          "answer": "D"
+        }
+      ]
+    },
+    {
+      "id": "universidad-agua",
+      "title": "El costo de medir el agua",
+      "level": "universidad",
+      "text": "Una cuenca compartida entre varias localidades instaló sensores para medir caudales y publicar los datos en tiempo real. La transparencia ayudó a detectar pérdidas en las tuberías, pero los sensores no resolvieron quién debía reducir el consumo durante una sequía. Al principio, cada localidad defendía su promedio anual; luego acordaron distinguir entre uso doméstico básico, agricultura estacional y pérdidas de red. También reconocieron que una lectura técnica no decide por sí sola qué reparto es justo. Los datos mejoraron la deliberación porque hicieron visibles los patrones, mientras que las reglas de asignación siguieron requiriendo negociación pública.",
+      "questions": [
+        {
+          "id": "u31",
+          "difficulty": "facil",
+          "prompt": "¿Qué instaló la cuenca para seguir los caudales?",
+          "choices": {
+            "A": "Sensores.",
+            "B": "Compuertas privadas.",
+            "C": "Molinos.",
+            "D": "Estaciones de tren."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u32",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué mejora de gestión posibilitó el monitoreo compartido?",
+          "choices": {
+            "A": "Determinar automáticamente un reparto justo.",
+            "B": "Detectar pérdidas en las tuberías.",
+            "C": "Evitar toda negociación entre localidades.",
+            "D": "Predecir las preferencias de cada agricultor."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u33",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué categorías acordaron distinguir?",
+          "choices": {
+            "A": "Consumo urbano, exportación y recreación.",
+            "B": "Agua dulce, salada y embotellada.",
+            "C": "Usos domésticos básicos, agricultura estacional y pérdidas de red.",
+            "D": "Ríos, lagos y pozos privados."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u34",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué aportaron los datos a la deliberación?",
+          "choices": {
+            "A": "Determinaron automáticamente el reparto justo.",
+            "B": "Reemplazaron la negociación pública.",
+            "C": "Eliminaban la necesidad de reglas.",
+            "D": "Hicieron visibles patrones relevantes para discutir."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u35",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué límite atribuye el texto a una medición técnica?",
+          "choices": {
+            "A": "No decide por sí misma qué distribución es justa.",
+            "B": "No puede registrar caudales en tiempo real.",
+            "C": "No permite observar pérdidas de red.",
+            "D": "No sirve para comparar localidades."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "universidad-bibliotecas",
+      "title": "La biblioteca después del préstamo",
+      "level": "universidad",
+      "text": "Una red de bibliotecas observó que la asistencia aumentaba cuando ofrecía ayuda para trámites digitales, aunque esas consultas rara vez aparecían en sus estadísticas de préstamo. Para entender el trabajo, añadió registros de orientación, observaciones voluntarias y entrevistas breves. El cambio mostró que el personal mediaba entre plataformas complejas y personas con distintos niveles de acceso, pero planteó una cautela: registrar cada interacción podría exponer información sensible. La red decidió recopilar solo datos agregados y permitir que cada visitante rechazara la observación. Medir mejor la labor, concluyó, no debía convertir la ayuda cotidiana en vigilancia.",
+      "questions": [
+        {
+          "id": "u36",
+          "difficulty": "facil",
+          "prompt": "¿Qué tipo de ayuda aumentaba la asistencia?",
+          "choices": {
+            "A": "Reparación de bicicletas.",
+            "B": "Orientación para trámites digitales.",
+            "C": "Clases de cocina.",
+            "D": "Préstamo de herramientas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u37",
+          "difficulty": "facil",
+          "prompt": "¿Qué registro tradicional no captaba bien esas consultas?",
+          "choices": {
+            "A": "Los horarios de apertura.",
+            "B": "Los catálogos impresos.",
+            "C": "Las estadísticas de préstamo.",
+            "D": "Los inventarios de mobiliario."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u38",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué aspecto del trabajo de biblioteca reveló el nuevo registro?",
+          "choices": {
+            "A": "La sustitución del personal por plataformas.",
+            "B": "La reducción de la ayuda a tareas de préstamo.",
+            "C": "La uniformidad de las habilidades digitales.",
+            "D": "La mediación entre plataformas y personas con distintos accesos."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u39",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué precaución adoptó la red al recopilar información?",
+          "choices": {
+            "A": "Usar datos agregados y permitir rechazar la observación.",
+            "B": "Guardar historiales individuales completos.",
+            "C": "Publicar nombres para validar los resultados.",
+            "D": "Registrar todas las pantallas consultadas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u40",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué tensión ética organiza el texto?",
+          "choices": {
+            "A": "El préstamo de libros frente a la compra de plataformas.",
+            "B": "La necesidad de medir el trabajo frente al riesgo de convertirlo en vigilancia.",
+            "C": "La apertura de bibliotecas frente a su cierre permanente.",
+            "D": "La formación del personal frente a la automatización total."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "universidad-ensenanza",
+      "title": "La participación que no se oye",
+      "level": "universidad",
+      "text": "En un seminario, la docente evaluaba la participación principalmente por las intervenciones orales espontáneas. Al revisar los trabajos, advirtió que algunos estudiantes que hablaban poco habían elaborado conexiones complejas por escrito. No concluyó que hablar careciera de valor; modificó la evaluación para incluir preguntas preparadas, comentarios escritos y síntesis de debates. La variedad de vías no reduce la exigencia intelectual, pero evita confundir rapidez verbal con comprensión. Además, al anunciar los criterios antes de cada unidad, la docente permitió que el alumnado supiera qué evidencia podía demostrar su aprendizaje.",
+      "questions": [
+        {
+          "id": "u41",
+          "difficulty": "facil",
+          "prompt": "¿Cómo medía inicialmente la docente la participación?",
+          "choices": {
+            "A": "Por la asistencia a tutorías.",
+            "B": "Por exámenes de opción múltiple.",
+            "C": "Por intervenciones orales espontáneas.",
+            "D": "Por el número de páginas leídas."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u42",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué reveló la revisión de los trabajos sobre la medida inicial de participación?",
+          "choices": {
+            "A": "Que las intervenciones orales no tenían valor intelectual.",
+            "B": "Que todos preferían debatir sin preparación.",
+            "C": "Que la asistencia era una medida suficiente de comprensión.",
+            "D": "Que algunos estudiantes expresaban conexiones complejas por escrito pese a hablar poco."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u43",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué formas de participación incorporó la evaluación?",
+          "choices": {
+            "A": "Preguntas preparadas, comentarios escritos y síntesis.",
+            "B": "Solo debates más largos.",
+            "C": "Únicamente exámenes orales.",
+            "D": "Asistencia, puntualidad y silencio."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u44",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué confusión busca evitar la docente?",
+          "choices": {
+            "A": "Confundir lectura con escritura.",
+            "B": "Equiparar rapidez verbal con comprensión.",
+            "C": "Equiparar asistencia con impuntualidad.",
+            "D": "Confundir debate con preparación."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u45",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué efecto tiene anunciar criterios con anticipación?",
+          "choices": {
+            "A": "Hace innecesaria toda retroalimentación.",
+            "B": "Garantiza que el alumnado hable más rápido.",
+            "C": "Permite conocer qué evidencias pueden mostrar el aprendizaje.",
+            "D": "Elimina las diferencias entre estudiantes."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "universidad-mercado-laboral",
+      "title": "El precio de la disponibilidad",
+      "level": "universidad",
+      "text": "Una aplicación de reparto ofrecía pagos adicionales durante las horas de mayor demanda. Para quienes podían conectarse con poca anticipación, el incentivo elevaba los ingresos; para quienes tenían responsabilidades de cuidado o dependían del transporte público, esas franjas eran menos accesibles. La empresa describía el sistema como flexible porque cada repartidor elegía cuándo conectarse. Un estudio laboral mostró, sin embargo, que la elección estaba condicionada por horarios, costos y necesidad de ingresos. La flexibilidad formal, sostuvo el informe, no equivale a control efectivo si rechazar una franja reduce el acceso a tareas futuras.",
+      "questions": [
+        {
+          "id": "u46",
+          "difficulty": "facil",
+          "prompt": "¿Cuándo ofrecía pagos adicionales la aplicación?",
+          "choices": {
+            "A": "Durante las vacaciones escolares.",
+            "B": "Al completar cursos de conducción.",
+            "C": "En días sin entregas.",
+            "D": "En horas de mayor demanda."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u47",
+          "difficulty": "facil",
+          "prompt": "¿Qué grupo podía encontrar menos accesibles esas franjas?",
+          "choices": {
+            "A": "Personas con responsabilidades de cuidado.",
+            "B": "Quienes vivían junto a los restaurantes.",
+            "C": "Quienes trabajaban desde casa.",
+            "D": "Personas con vehículos disponibles todo el día."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u48",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué sostiene el estudio sobre la elección de horarios?",
+          "choices": {
+            "A": "Es siempre totalmente libre.",
+            "B": "Está condicionada por horarios, costos y necesidad de ingresos.",
+            "C": "Depende únicamente de la preferencia personal.",
+            "D": "No influye en el acceso a tareas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u49",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué condición debilita la flexibilidad descrita por la empresa?",
+          "choices": {
+            "A": "El pago adicional se anuncia con antelación.",
+            "B": "Los repartidores conocen los costos del transporte.",
+            "C": "Rechazar una franja puede reducir el acceso a tareas futuras.",
+            "D": "La demanda cambia según la hora."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u50",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué distingue flexibilidad formal de control efectivo?",
+          "choices": {
+            "A": "La flexibilidad formal siempre aumenta los ingresos.",
+            "B": "El control efectivo depende solo del nombre de la aplicación.",
+            "C": "Ambas expresiones significan que no hay restricciones.",
+            "D": "La posibilidad nominal de elegir no basta si existen penalizaciones indirectas."
+          },
+          "answer": "D"
+        }
+      ]
+    },
+    {
+      "id": "universidad-semillas",
+      "title": "Semillas para más de una estación",
+      "level": "universidad",
+      "text": "Un banco comunitario de semillas distribuía variedades locales de maduración temprana, útiles en años de lluvia irregular. Tras varias cosechas exitosas, algunos agricultores dejaron de conservar otras variedades, y la diversidad disponible se redujo. El banco cambió entonces su política: además de entregar semillas, organizó parcelas de comparación y pidió devolver una parte de cada cosecha para su conservación. La medida no presupone que una variedad sea superior en todo lugar; busca mantener opciones mientras cambian el clima, las plagas y las preferencias de quienes cultivan.",
+      "questions": [
+        {
+          "id": "u51",
+          "difficulty": "facil",
+          "prompt": "¿Qué rasgo tenían las variedades locales distribuidas?",
+          "choices": {
+            "A": "Maduración temprana.",
+            "B": "Resistencia exclusiva al frío.",
+            "C": "Crecimiento sin agua.",
+            "D": "Uso únicamente ornamental."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u52",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué consecuencia imprevista tuvo el éxito de algunas cosechas?",
+          "choices": {
+            "A": "Desaparecieron las lluvias irregulares.",
+            "B": "Se redujo la diversidad de variedades conservadas.",
+            "C": "Aumentaron todas las plagas.",
+            "D": "Se cerró el banco de semillas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u53",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el banco incorporó parcelas de comparación?",
+          "choices": {
+            "A": "Para reemplazar la conservación de semillas.",
+            "B": "Para medir solo el precio de cada cosecha.",
+            "C": "Para evaluar variedades sin asumir que una es superior en todo contexto.",
+            "D": "Para distribuir una variedad única."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u54",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué objetivo cumple devolver parte de cada cosecha?",
+          "choices": {
+            "A": "Impedir que los agricultores seleccionen cultivos.",
+            "B": "Asegurar que toda cosecha madure temprano.",
+            "C": "Evitar que cambien las preferencias locales.",
+            "D": "Mantener una reserva conservada para futuras opciones."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u55",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué factores justifican preservar varias alternativas?",
+          "choices": {
+            "A": "Cambios en clima, plagas y preferencias.",
+            "B": "La uniformidad de los suelos en todas las regiones.",
+            "C": "La desaparición de la agricultura estacional.",
+            "D": "La certeza de que las variedades nunca cambian."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "universidad-museo",
+      "title": "Una vitrina con varias voces",
+      "level": "universidad",
+      "text": "Al preparar una exposición sobre una antigua ruta comercial, un museo reunió monedas, mapas y relatos de viajeros. Las primeras etiquetas presentaban la expansión de la ruta como una historia de intercambio pacífico, pero las reuniones con comunidades vinculadas al territorio señalaron también desplazamientos y tributos forzosos. El museo revisó la narración y diferenció entre lo que cada objeto permite afirmar y lo que procede de testimonios posteriores. No resolvió todas las disputas históricas; hizo explícitas las fuentes y colocó versiones en diálogo, para que la pluralidad no se confundiera con la idea de que cualquier interpretación tiene el mismo respaldo.",
+      "questions": [
+        {
+          "id": "u56",
+          "difficulty": "facil",
+          "prompt": "¿Qué objetos reunió el museo para la exposición?",
+          "choices": {
+            "A": "Herramientas agrícolas y fotografías aéreas.",
+            "B": "Monedas, mapas y relatos de viajeros.",
+            "C": "Cerámicas, partituras y diarios escolares.",
+            "D": "Cartas náuticas y muestras de minerales."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u57",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué aspectos omitían las etiquetas iniciales?",
+          "choices": {
+            "A": "La existencia de monedas y mapas.",
+            "B": "El comercio entre ciudades.",
+            "C": "Desplazamientos y tributos forzosos.",
+            "D": "La fecha de apertura del museo."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u58",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué distinción incorporó la nueva narración?",
+          "choices": {
+            "A": "Entre objetos valiosos y objetos sin valor.",
+            "B": "Entre visitantes locales y extranjeros.",
+            "C": "Entre relatos escritos y relatos orales, sin atender a su contenido.",
+            "D": "Entre lo que permiten afirmar los objetos y lo que procede de testimonios posteriores."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u59",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué evita la aclaración sobre el respaldo de las interpretaciones?",
+          "choices": {
+            "A": "Equiparar pluralidad de voces con igual solidez probatoria.",
+            "B": "Que el público observe las fuentes.",
+            "C": "Que se reconozcan los testimonios comunitarios.",
+            "D": "Que el museo presente desacuerdos."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u60",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué postura adopta el museo frente a las disputas históricas?",
+          "choices": {
+            "A": "Las elimina escogiendo una sola voz.",
+            "B": "Las hace visibles sin afirmar que todas quedan resueltas.",
+            "C": "Las considera irrelevantes para la exposición.",
+            "D": "Las resuelve atribuyendo igual certeza a cada versión."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "universidad-clinica",
+      "title": "La espera que no aparece en el promedio",
+      "level": "universidad",
+      "text": "Una clínica informó que el tiempo medio entre la llegada y la consulta había disminuido. Al desglosar los datos, descubrió que la mayoría esperaba menos, mientras un grupo pequeño de pacientes con necesidades complejas soportaba demoras mucho mayores. El promedio había mejorado porque las consultas breves se atendían con rapidez, aunque la experiencia de ese grupo seguía deteriorándose. La dirección creó una medida adicional que registra percentiles y motivos de espera. No abandonó el promedio, pero dejó de usarlo como único indicador: una cifra central puede ocultar tanto la dispersión como quién carga con las demoras más graves.",
+      "questions": [
+        {
+          "id": "u61",
+          "difficulty": "facil",
+          "prompt": "¿Qué había disminuido según el informe inicial?",
+          "choices": {
+            "A": "La cantidad de pacientes.",
+            "B": "El número de consultas breves.",
+            "C": "El tiempo medio hasta la consulta.",
+            "D": "La duración de todas las citas."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u62",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué grupo seguía afrontando demoras mayores?",
+          "choices": {
+            "A": "Quienes tenían consultas breves.",
+            "B": "Quienes llegaban a primera hora.",
+            "C": "Pacientes sin cita previa únicamente.",
+            "D": "Pacientes con necesidades complejas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u63",
+          "difficulty": "avanzada",
+          "prompt": "¿Cómo pudo mejorar el promedio mientras empeoraba una experiencia particular?",
+          "choices": {
+            "A": "Las consultas breves se resolvían rápido y el subgrupo demorado era pequeño.",
+            "B": "Todos los pacientes esperaban exactamente lo mismo.",
+            "C": "Las demoras más largas dejaron de registrarse.",
+            "D": "Los percentiles redujeron directamente los tiempos."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u64",
+          "difficulty": "facil",
+          "prompt": "¿Qué información adicional decidió registrar la clínica?",
+          "choices": {
+            "A": "El domicilio de cada paciente.",
+            "B": "Percentiles y motivos de espera.",
+            "C": "El costo de cada medicamento.",
+            "D": "La duración del trayecto a la clínica."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u65",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué limitación del promedio se destaca?",
+          "choices": {
+            "A": "No se puede calcular cuando hay consultas breves.",
+            "B": "Solo sirve para evaluar costos.",
+            "C": "Puede ocultar la dispersión y la distribución desigual de las demoras.",
+            "D": "Siempre aumenta cuando un subgrupo espera menos."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "universidad-datos-abiertos",
+      "title": "Abrir datos, cerrar atajos",
+      "level": "universidad",
+      "text": "Un laboratorio publicó un conjunto de datos sobre movilidad, pero eliminó nombres y direcciones exactas. La revisión ética advirtió que combinar horarios poco comunes con recorridos detallados aún podía permitir identificar a algunas personas. En lugar de retirar el conjunto, el equipo redujo la precisión espacial, agrupó los horarios y ofreció acceso controlado a las versiones más detalladas para proyectos aprobados. También describió qué análisis dejaban de ser posibles con esa reducción. La apertura, en este caso, no era una decisión binaria: se trataba de equilibrar la utilidad para la investigación con el riesgo residual de reidentificación.",
+      "questions": [
+        {
+          "id": "u66",
+          "difficulty": "facil",
+          "prompt": "¿Sobre qué tema trataba el conjunto publicado?",
+          "choices": {
+            "A": "Consumo eléctrico.",
+            "B": "Resultados escolares.",
+            "C": "Calidad del aire.",
+            "D": "Movilidad."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u67",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué combinación podía facilitar la identificación pese a quitar nombres?",
+          "choices": {
+            "A": "Horarios poco comunes y recorridos detallados.",
+            "B": "Datos agrupados y coordenadas aproximadas.",
+            "C": "Nombres eliminados y campos vacíos.",
+            "D": "Promedios mensuales y rutas generales."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u68",
+          "difficulty": "avanzada",
+          "prompt": "¿Cómo mantuvo el equipo cierto acceso a versiones detalladas?",
+          "choices": {
+            "A": "Publicando direcciones exactas sin nombres.",
+            "B": "Mediante acceso controlado para proyectos aprobados.",
+            "C": "Vendiendo copias a cualquier solicitante.",
+            "D": "Difundiendo los recorridos en redes sociales."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u69",
+          "difficulty": "facil",
+          "prompt": "¿Qué cambios se hicieron en los datos de acceso general?",
+          "choices": {
+            "A": "Se añadieron nombres y domicilios.",
+            "B": "Se eliminaron todos los recorridos.",
+            "C": "Se redujo la precisión espacial y se agruparon horarios.",
+            "D": "Se sustituyeron por opiniones personales."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u70",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué el equipo describió análisis que ya no podían realizarse?",
+          "choices": {
+            "A": "Para demostrar que los datos no tenían utilidad.",
+            "B": "Para revelar las identidades protegidas.",
+            "C": "Para evitar futuras revisiones éticas.",
+            "D": "Para transparentar el costo analítico de las medidas de protección."
+          },
+          "answer": "D"
+        }
+      ]
+    },
+    {
+      "id": "universidad-costa",
+      "title": "Restaurar sin congelar la costa",
+      "level": "universidad",
+      "text": "Un proyecto costero plantó vegetación nativa para amortiguar marejadas y retener sedimentos. En los primeros meses, las parcelas con mayor supervivencia parecían demostrar que la técnica elegida era la mejor. Sin embargo, las parcelas estaban situadas en sectores protegidos del viento; las zonas expuestas aún no permitían una comparación equivalente. El equipo prolongó el seguimiento y registró cambios estacionales, no solo el número de plantas vivas. La restauración se diseñó como adaptación continua: el objetivo era recuperar funciones ecológicas y aprender dónde funcionaban las intervenciones, no imponer una imagen fija de la costa.",
+      "questions": [
+        {
+          "id": "u71",
+          "difficulty": "facil",
+          "prompt": "¿Qué propósito cumplía la vegetación nativa?",
+          "choices": {
+            "A": "Amortiguar marejadas y retener sedimentos.",
+            "B": "Aumentar la profundidad del puerto.",
+            "C": "Fijar una línea costera inmutable.",
+            "D": "Atraer visitantes a las parcelas."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u72",
+          "difficulty": "facil",
+          "prompt": "¿Qué diferencia tenían las parcelas de mayor supervivencia?",
+          "choices": {
+            "A": "Recibían agua dulce todo el año.",
+            "B": "Estaban protegidas del viento.",
+            "C": "Estaban más cerca de la ciudad.",
+            "D": "Tenían más especies plantadas."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u73",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué era prematuro concluir que la técnica era superior?",
+          "choices": {
+            "A": "No se habían plantado especies nativas.",
+            "B": "La costa no recibe marejadas.",
+            "C": "Las parcelas no ofrecían condiciones equivalentes de exposición.",
+            "D": "El equipo solo contó visitantes."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u74",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué cambio en la evaluación refleja una visión más completa de la restauración?",
+          "choices": {
+            "A": "Contar plantas vivas una sola vez.",
+            "B": "Comparar exclusivamente el costo inicial.",
+            "C": "Fijar la costa en una forma permanente.",
+            "D": "Registrar variaciones estacionales y funciones ecológicas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u75",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué objetivo distingue la adaptación continua de la imposición de una costa fija?",
+          "choices": {
+            "A": "Recuperar funciones y aprender dónde sirven las intervenciones.",
+            "B": "Garantizar que ninguna forma del terreno cambie.",
+            "C": "Eliminar toda vegetación espontánea.",
+            "D": "Aplicar idénticas medidas en cualquier sector."
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "universidad-energia",
+      "title": "La factura y la curva de demanda",
+      "level": "universidad",
+      "text": "Una cooperativa eléctrica probó tarifas más bajas durante las horas de menor consumo para desplazar algunas tareas domésticas fuera del pico vespertino. El uso agregado se movió parcialmente, pero no todos los hogares podían cambiar sus rutinas: quienes trabajaban turnos fijos o cuidaban a otras personas tenían menos margen. La cooperativa ofreció controles automáticos opcionales y mantuvo una tarifa protegida para consumos esenciales. La prueba mostró que un precio puede modificar decisiones sin distribuir por igual la capacidad de responder. Por eso, el éxito se midió tanto en la curva de demanda como en los efectos sobre las facturas de distintos hogares.",
+      "questions": [
+        {
+          "id": "u76",
+          "difficulty": "facil",
+          "prompt": "¿Qué buscaban las tarifas reducidas?",
+          "choices": {
+            "A": "Aumentar el consumo en las horas de mayor demanda.",
+            "B": "Desplazar tareas fuera del pico vespertino.",
+            "C": "Eliminar los medidores domésticos.",
+            "D": "Cobrar igual todo el día."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u77",
+          "difficulty": "facil",
+          "prompt": "¿Qué ofreció la cooperativa como opción?",
+          "choices": {
+            "A": "Un generador para cada hogar.",
+            "B": "La eliminación de las tarifas protegidas.",
+            "C": "Controles automáticos voluntarios.",
+            "D": "Un cambio obligatorio de turnos."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u78",
+          "difficulty": "avanzada",
+          "prompt": "¿Por qué algunos hogares podían responder menos al precio?",
+          "choices": {
+            "A": "No existía un pico de demanda.",
+            "B": "Todos recibían controles automáticos.",
+            "C": "Las tarifas no variaban entre horas.",
+            "D": "Sus turnos laborales o tareas de cuidado limitaban el cambio de rutinas."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u79",
+          "difficulty": "facil",
+          "prompt": "¿Qué consumo quedó protegido por una tarifa especial?",
+          "choices": {
+            "A": "El consumo esencial.",
+            "B": "El consumo industrial.",
+            "C": "La energía de exportación.",
+            "D": "El uso de vehículos recreativos."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u80",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué criterio de evaluación refleja la conclusión de la prueba?",
+          "choices": {
+            "A": "Medir solo el cambio de consumo total.",
+            "B": "Considerar tanto la demanda agregada como los efectos distributivos en facturas.",
+            "C": "Evaluar únicamente el costo de los controles.",
+            "D": "Comparar tarifas sin observar rutinas."
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "universidad-mapas",
+      "title": "Mapas que aprenden con quienes los usan",
+      "level": "universidad",
+      "text": "Un equipo creó un mapa de rutas accesibles para sillas de ruedas usando datos municipales sobre pendientes y aceras. Las visitas de campo revelaron obstáculos temporales —vehículos sobre rampas, obras sin desvíos— que el registro oficial no recogía. Un botón permitió a usuarios enviar observaciones, pero el equipo no las convirtió automáticamente en hechos verificados: solicitó ubicación aproximada, fecha y, cuando era posible, una segunda confirmación. El mapa incorporó una marca de vigencia para cada reporte. Así combinó cobertura institucional con conocimiento situado, reconociendo que la accesibilidad cambia con el tiempo y que la colaboración también necesita mecanismos de comprobación.",
+      "questions": [
+        {
+          "id": "u81",
+          "difficulty": "facil",
+          "prompt": "¿Para quién se diseñó el mapa de rutas?",
+          "choices": {
+            "A": "Para conductores de camiones.",
+            "B": "Para ciclistas de montaña.",
+            "C": "Para usuarios de sillas de ruedas.",
+            "D": "Para turistas en barco."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u82",
+          "difficulty": "facil",
+          "prompt": "¿Qué obstáculos temporales descubrieron en campo?",
+          "choices": {
+            "A": "Puentes demasiado nuevos.",
+            "B": "Señales con información redundante.",
+            "C": "Cruces peatonales sin semáforos sonoros.",
+            "D": "Vehículos sobre rampas y obras sin desvíos."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u83",
+          "difficulty": "intermedia",
+          "prompt": "¿Qué información pedía el formulario de observación?",
+          "choices": {
+            "A": "Ubicación aproximada y fecha, además de una posible confirmación.",
+            "B": "Nombre completo y domicilio exacto.",
+            "C": "Una evaluación del presupuesto municipal.",
+            "D": "La marca de la silla utilizada."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u84",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué los reportes no se trataron automáticamente como hechos verificados?",
+          "choices": {
+            "A": "Porque los usuarios no podían conocer las rutas.",
+            "B": "Porque requerían datos de contexto y mecanismos de comprobación.",
+            "C": "Porque los datos municipales eran siempre correctos.",
+            "D": "Porque los obstáculos eran permanentes."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u85",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué aporta la marca de vigencia de los reportes?",
+          "choices": {
+            "A": "Demuestra que un obstáculo nunca volverá a aparecer.",
+            "B": "Sustituye toda visita de campo.",
+            "C": "Permite considerar que la accesibilidad puede variar con el tiempo.",
+            "D": "Oculta qué observaciones hizo la comunidad."
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "universidad-ciencia-ciudadana",
+      "title": "Observar aves sin contar dos veces",
+      "level": "universidad",
+      "text": "Un programa de ciencia ciudadana invitó a residentes a registrar aves en parques urbanos. Como los observadores diferían en experiencia y tiempo disponible, los recuentos brutos favorecían los lugares más visitados. El equipo pidió registrar también la duración de cada recorrido y adoptó protocolos sencillos de identificación. Para comparar tendencias, ajustó los análisis por esfuerzo de observación y conservó una categoría de identificación incierta. La participación amplió la cobertura espacial, pero no volvió intercambiables todas las observaciones: el diseño debía distinguir un cambio en las poblaciones de un cambio en la intensidad con que las personas buscaban.",
+      "questions": [
+        {
+          "id": "u86",
+          "difficulty": "facil",
+          "prompt": "¿Qué registraban los residentes?",
+          "choices": {
+            "A": "Insectos en cultivos.",
+            "B": "Cambios en la calidad del agua.",
+            "C": "Vehículos en avenidas.",
+            "D": "Aves en parques urbanos."
+          },
+          "answer": "D"
+        },
+        {
+          "id": "u87",
+          "difficulty": "facil",
+          "prompt": "¿Qué dato adicional solicitó el equipo?",
+          "choices": {
+            "A": "La duración de cada recorrido.",
+            "B": "El costo del equipo óptico.",
+            "C": "La cantidad de árboles plantados.",
+            "D": "El nombre de cada visitante."
+          },
+          "answer": "A"
+        },
+        {
+          "id": "u88",
+          "difficulty": "intermedia",
+          "prompt": "¿Por qué los recuentos brutos favorecían los parques más visitados?",
+          "choices": {
+            "A": "Porque esos parques tenían especies más grandes.",
+            "B": "Porque allí se acumulaba más esfuerzo de observación.",
+            "C": "Porque el protocolo prohibía visitar otros lugares.",
+            "D": "Porque los observadores tenían idéntica experiencia."
+          },
+          "answer": "B"
+        },
+        {
+          "id": "u89",
+          "difficulty": "intermedia",
+          "prompt": "¿Cómo hicieron comparables las tendencias entre lugares?",
+          "choices": {
+            "A": "Eliminaron las observaciones de residentes.",
+            "B": "Contaron solo las aves más comunes.",
+            "C": "Ajustaron el análisis por el esfuerzo de observación.",
+            "D": "Igualaron el número de parques."
+          },
+          "answer": "C"
+        },
+        {
+          "id": "u90",
+          "difficulty": "avanzada",
+          "prompt": "¿Qué diferencia debía distinguir el análisis?",
+          "choices": {
+            "A": "Un cambio en el clima frente a uno en el tamaño del parque.",
+            "B": "La experiencia de observadores frente a su edad.",
+            "C": "La identificación incierta frente a la ausencia de aves.",
+            "D": "Un cambio poblacional frente a un cambio en la intensidad de búsqueda."
+          },
+          "answer": "D"
+        }
       ]
     }
   ]

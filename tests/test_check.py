@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from src.check import main, run_check
-from src.session import ConnectionLost, SimClock, SimulatedSource
+from src.session import ConnectionLost, PolarSource, SimClock, SimulatedSource, wait_for_ecg
 from src.synthetic import make_synthetic_signal
 
 FS = 130
@@ -27,6 +27,44 @@ def test_good_signal_is_ready():
     raw, report = _check(make_synthetic_signal(60, FS, seed=1, hr_bpm=72) * 400 + 20)
     assert report.ok and 60 < report.hr_bpm < 85
     assert len(raw) == pytest.approx(12 * FS, abs=FS * 0.2)
+
+
+def test_check_allows_ecg_stream_startup_delay():
+    class DelayedSource(PolarSource):
+        def __init__(self, clock):
+            self.clock = clock
+            self.source = SimulatedSource(clock, seed=1)
+
+        async def start(self):
+            await self.source.start()
+
+        async def stop(self):
+            await self.source.stop()
+
+        def n_samples(self):
+            if self.clock() < 7:
+                return 0
+            return self.source.n_samples()
+
+        def take(self, i0, i1):
+            return self.source.take(i0, i1)
+
+    clock = SimClock()
+    source = DelayedSource(clock)
+    raw, report = _run(run_check(source, clock.sleep, clock, lambda *a, **k: None))
+    assert report.ok
+    assert len(raw) == pytest.approx(12 * FS, abs=FS * 0.2)
+
+
+def test_wait_for_ecg_reports_when_stream_never_starts():
+    class SilentSource:
+        def n_samples(self):
+            return 0
+
+    clock = SimClock()
+    with pytest.raises(ConnectionLost, match="no empezó a enviar señal ECG en 15 s"):
+        _run(wait_for_ecg(SilentSource(), clock.sleep))
+    assert clock() == pytest.approx(15)
 
 
 def test_flat_signal_is_not_ready_and_says_why():

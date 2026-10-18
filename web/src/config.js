@@ -7,7 +7,7 @@ export const LEVELS = [
 
 export const DIFFICULTIES = [
   { value: "todas", label: "Variada" },
-  { value: "facil", label: "Inicial" },
+  { value: "facil", label: "Fácil" },
   { value: "intermedia", label: "Intermedia" },
   { value: "avanzada", label: "Avanzada" },
 ];

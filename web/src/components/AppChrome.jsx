@@ -43,7 +43,7 @@ export function SessionModal({ modal, onClose, onContinue, onFinish, onAbandon }
 
   const locked = modal.kind === "locked";
   const persistent = ["recovery", "rechecking", "locked"].includes(modal.kind);
-  const warning = ["signal", "enroll-signal", "recheck-signal"].includes(modal.kind);
+  const warning = ["signal", "enroll-signal", "recheck-signal", "low-match-warning"].includes(modal.kind);
 
   return (
     <div className="modal-backdrop" role="presentation">
@@ -63,6 +63,7 @@ export function SessionModal({ modal, onClose, onContinue, onFinish, onAbandon }
         <p>{modal.message}</p>
         {modal.kind === "enrolled" && <Button full onClick={onContinue}>Continuar <ArrowRight size={16} /></Button>}
         {modal.kind === "signal" && <Button full onClick={onClose}>Entendido, revisaré la banda <Check size={16} /></Button>}
+        {modal.kind === "low-match-warning" && <Button full onClick={onClose}>Entendido, revisaré la banda <Check size={16} /></Button>}
         {modal.kind === "recovery" && <Button full onClick={onClose}>Ajustar banda y continuar <ArrowRight size={16} /></Button>}
         {modal.kind === "enroll-signal" && <Button full onClick={onClose}>Entendido <Check size={16} /></Button>}
         {modal.kind === "recheck-signal" && <Button full onClick={onClose}>Ajustar la banda <Check size={16} /></Button>}

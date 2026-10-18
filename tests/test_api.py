@@ -1,3 +1,5 @@
+import csv
+import asyncio
 import time
 
 import pytest
@@ -9,6 +11,7 @@ from src.config import Config
 from src.evaluate import make_model_embed_fn
 from src.model import ECGEmbeddingNet
 from src.quality import check_quality
+from src.session import ConnectionLost
 
 
 @pytest.fixture
@@ -17,7 +20,7 @@ def client(tmp_path):
     net = ECGEmbeddingNet(cfg).eval()
     ctl = Controller(make_model_embed_fn(net), cfg, "modelo_test.pt", threshold=0.31, simulate=True, speed=300.0,
                      template_dir=tmp_path / "live")
-    with TestClient(create_app(ctl)) as c:
+    with TestClient(create_app(ctl, metrics_dir=tmp_path / "metrics")) as c:
         yield c
 
 
@@ -66,6 +69,35 @@ def test_loopback_cors_allows_localhost_and_ip_aliases(tmp_path):
             )
             assert response.status_code == 200
             assert response.headers["access-control-allow-origin"] == origin
+
+
+def test_real_backend_waits_for_ecg_before_marking_sensor_connected(monkeypatch):
+    class Source:
+        stopped = False
+
+        async def start(self):
+            pass
+
+        async def stop(self):
+            self.stopped = True
+
+    source = Source()
+    waited = []
+    monkeypatch.setattr("src.api.PolarSource", lambda: source)
+
+    async def wait_for_ecg(src):
+        waited.append(src)
+        raise ConnectionLost("ECG stream did not start")
+
+    monkeypatch.setattr("src.api.wait_for_ecg", wait_for_ecg)
+    ctl = Controller(lambda _: None, Config(), "modelo_test.pt")
+    with pytest.raises(ConnectionLost, match="ECG stream did not start"):
+        asyncio.run(ctl.open_source())
+
+    assert waited == [source]
+    assert source.stopped
+    assert not ctl.state["connected"]
+    assert ctl.state["last_error"]["code"] == "CONNECTION_LOST"
 
 
 def test_enroll_progress_and_result_over_websocket(client):
@@ -142,15 +174,110 @@ def test_user_id_cannot_escape_the_templates_folder(client):
 
 
 def test_exam_routes_keep_answer_key_in_backend(client):
-    response = client.get("/exam/questions?level=mixto&difficulty=todas&count=12")
+    response = client.get("/exam/questions?level=mixto&difficulty=todas&count=10")
     assert response.status_code == 200
     questions = response.json()["questions"]
-    assert len(questions) == 12
+    assert len(questions) == 10
     assert all("answer" not in question for question in questions)
 
     grade = client.post("/exam/grade", json={"answers": [{"question_id": "s01", "answer": "B"}]})
     assert grade.status_code == 200
     assert grade.json()["percentage"] == 100
+
+
+def test_exam_questions_api_serves_30_per_level_and_difficulty(client):
+    for level in ("secundaria", "preparatoria", "universidad"):
+        for difficulty in ("facil", "intermedia", "avanzada"):
+            response = client.get(
+                "/exam/questions",
+                params={"level": level, "difficulty": difficulty, "count": 30},
+            )
+            assert response.status_code == 200
+            questions = response.json()["questions"]
+            assert len(questions) == 30
+            assert all(question["level"] == level for question in questions)
+            assert all(question["difficulty"] == difficulty for question in questions)
+            assert all("answer" not in question for question in questions)
+
+    assert client.get("/exam/questions?level=secundaria&difficulty=facil&count=12").status_code == 422
+
+
+@pytest.mark.parametrize(
+    ("outcome", "folder", "wearer_label", "ground_truth"),
+    [
+        ("completed", "examenes_completados", "original", "genuine"),
+        ("interrupted", "examenes_interrumpidos", "impostor", "impostor"),
+        ("completed", "examenes_completados", "unknown", "unknown"),
+    ],
+)
+def test_exam_metrics_are_saved_as_csv_by_outcome_and_wearer_label(
+    client, tmp_path, outcome, folder, wearer_label, ground_truth
+):
+    reading = {
+        "time_seconds": 12.5,
+        "question_number": 2,
+        "question_id": "s02",
+        "question_text": "¿Cuál es la idea principal?",
+        "wearer_label": wearer_label,
+        "similarity": 0.42,
+        "smoothed_similarity": 0.38,
+        "threshold": 0.31,
+        "status": "AUTHENTICATED",
+        "heart_rate_bpm": 71.2,
+    }
+
+    response = client.post(
+        "/exam/metrics",
+        json={"outcome": outcome, "readings": [reading]},
+    )
+
+    assert response.status_code == 201
+    saved = response.json()
+    assert saved["saved"] is True and saved["outcome"] == outcome and saved["rows"] == 1
+    csv_path = tmp_path / "metrics" / folder / saved["file"].split("/", 1)[1]
+    with csv_path.open(encoding="utf-8-sig", newline="") as source:
+        rows = list(csv.DictReader(source))
+    assert len(rows) == 1
+    assert rows[0]["session_id"] == saved["session_id"]
+    assert rows[0]["outcome"] == outcome
+    assert rows[0]["time_seconds"] == "12.5"
+    assert rows[0]["question_number"] == "2"
+    assert rows[0]["question_id"] == "s02"
+    assert rows[0]["question_text"] == reading["question_text"]
+    assert rows[0]["wearer_label"] == wearer_label
+    assert rows[0]["ground_truth"] == ground_truth
+    assert rows[0]["similarity"] == "0.42"
+    assert rows[0]["smoothed_similarity"] == "0.38"
+    assert rows[0]["threshold"] == "0.31"
+
+
+def test_exam_metrics_without_readings_still_record_interrupted_session(client, tmp_path):
+    response = client.post(
+        "/exam/metrics",
+        json={"outcome": "interrupted", "readings": []},
+    )
+
+    assert response.status_code == 201
+    saved = response.json()
+    assert saved["rows"] == 1
+    csv_path = tmp_path / "metrics" / "examenes_interrumpidos" / saved["file"].split("/", 1)[1]
+    with csv_path.open(encoding="utf-8-sig", newline="") as source:
+        row = next(csv.DictReader(source))
+    assert row["status"] == "NO_READINGS"
+    assert row["outcome"] == "interrupted"
+    assert row["ground_truth"] == "unknown"
+
+
+def test_exam_metrics_reject_invalid_wearer_label(client):
+    response = client.post(
+        "/exam/metrics",
+        json={
+            "outcome": "completed",
+            "readings": [{"time_seconds": 1, "status": "AUTHENTICATED", "wearer_label": "maybe"}],
+        },
+    )
+
+    assert response.status_code == 422
 
 
 def test_recheck_uses_the_existing_template_and_returns_a_result(client):

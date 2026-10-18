@@ -9,6 +9,13 @@ salvo que se indique `web/`.
 - Node.js y npm.
 - Para probar en modo real: Polar H10 emparejada por Bluetooth, con electrodos húmedos y colocada.
 
+Antes de registrar una sesión con la banda, se puede comprobar que entrega una señal ECG válida
+(el chequeo espera hasta 15 s a que empiece a llegar ECG y abre una gráfica):
+
+```powershell
+.\.venv\Scripts\python.exe -m src.check
+```
+
 ## Instalación inicial de Python
 
 Crear y activar un entorno virtual:
@@ -129,6 +136,13 @@ Desde la raíz:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest tests\test_api.py tests\test_exam.py
+```
+
+Después de recopilar exámenes con IDs anónimos y etiquetas genuine/impostor confirmadas, calcular un EER
+exploratorio desde los CSV:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.metrics
 ```
 
 Construir el frontend para comprobar que compila:

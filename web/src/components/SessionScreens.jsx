@@ -8,32 +8,20 @@ import Card from "./ui/Card.jsx";
 import { Eyebrow, StepLabel } from "./ui/Label.jsx";
 import ProgressBar from "./ui/ProgressBar.jsx";
 
-function questionOptionsFor(level, difficulty) {
-  if (level === "mixto") {
-    return difficulty === "todas" ? [10, 20, 30] : difficulty === "facil" ? [3, 6] : [6, 12];
-  }
-  return difficulty === "todas" ? [5, 10] : difficulty === "facil" ? [2] : [2, 4];
-}
-
-function defaultQuestionCount(level, difficulty) {
-  if (level === "mixto") return difficulty === "todas" ? 20 : 6;
-  return difficulty === "todas" ? 10 : difficulty === "facil" ? 2 : 4;
-}
+const QUESTION_COUNTS = [5, 10, 20, 30];
 
 export function WelcomeScreen({
   level, difficulty, questionCount, apiAvailable, onLevelChange,
   onDifficultyChange, onQuestionCountChange, onBegin,
 }) {
-  const questionOptions = questionOptionsFor(level, difficulty);
-
   function changeLevel(nextLevel) {
     onLevelChange(nextLevel);
-    onQuestionCountChange(defaultQuestionCount(nextLevel, difficulty));
+    onQuestionCountChange(20);
   }
 
   function changeDifficulty(nextDifficulty) {
     onDifficultyChange(nextDifficulty);
-    onQuestionCountChange(defaultQuestionCount(level, nextDifficulty));
+    onQuestionCountChange(20);
   }
 
   return (
@@ -73,7 +61,7 @@ export function WelcomeScreen({
             <span className="field-label">Preguntas</span>
             <span className="select-wrap">
               <select value={questionCount} onChange={(event) => onQuestionCountChange(Number(event.target.value))}>
-                {questionOptions.map((count) => <option key={count} value={count}>{count} preguntas</option>)}
+                {QUESTION_COUNTS.map((count) => <option key={count} value={count}>{count} preguntas</option>)}
               </select><ChevronDown size={15} />
             </span>
           </label>
@@ -184,14 +172,14 @@ export function RecoveryScreen({ recheckProgress, busy, onRetry, onAbandon }) {
   );
 }
 
-export function LockedScreen({ onHome }) {
+export function LockedScreen({ message, onHome }) {
   return (
     <section className="center-stage">
       <Card className="locked-card">
         <div className="locked-emblem"><LockKeyhole size={29} /></div>
         <Eyebrow tone="red">SESIÓN DETENIDA</Eyebrow>
         <h1>La verificación<br /><span>no fue superada.</span></h1>
-        <p>La muestra adicional no coincidió con la referencia inicial. El examen simulado se detuvo y las respuestas no se calificaron.</p>
+        <p>{message || "La verificación no coincidió con la referencia inicial. El examen se finalizó y las respuestas no se calificaron."}</p>
         <Button full onClick={onHome}>
           Volver al inicio <ArrowRight size={17} />
         </Button>

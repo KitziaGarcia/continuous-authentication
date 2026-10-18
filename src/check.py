@@ -1,4 +1,4 @@
-"""Chequeo rápido (~12 s) de que el Polar H10 está leyendo bien, ANTES de grabar una sesión.
+"""Chequeo rápido de que el Polar H10 está leyendo bien, ANTES de grabar una sesión.
 
 Uso (con la banda puesta y los electrodos húmedos):
     python -m src.check
@@ -72,7 +72,7 @@ def _bad_signal(kind: str, seconds: float, fs: int = POLAR_FS) -> np.ndarray:
 
 
 def main(argv=None) -> int:
-    p = argparse.ArgumentParser(prog="python -m src.check", description="Chequeo rápido del Polar H10 (~12 s)")
+    p = argparse.ArgumentParser(prog="python -m src.check", description="Chequeo rápido del Polar H10")
     p.add_argument("--seconds", type=float, default=12.0, help=f"duración del análisis (mínimo {MIN_SECONDS:.0f})")
     p.add_argument("--simulate", action="store_true", help="sin sensor (señal buena simulada)")
     p.add_argument("--simulate-bad", choices=["flat", "noise", "spike"], help="sin sensor, con una señal mala simulada")

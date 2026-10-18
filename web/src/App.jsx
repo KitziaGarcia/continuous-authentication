@@ -26,12 +26,22 @@ export default function App() {
   const [enrollStage, setEnrollStage] = useState("settling");
   const [enrolled, setEnrolled] = useState(false);
   const [questions, setQuestions] = useState([]);
+  const [wearerLabel, setWearerLabel] = useState("unknown");
+  const wearerLabelRef = useRef("unknown");
   const [answers, setAnswers] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
+  const questionsRef = useRef(questions);
+  questionsRef.current = questions;
+  const currentIndexRef = useRef(currentIndex);
+  currentIndexRef.current = currentIndex;
+  const metricReadingsRef = useRef([]);
+  const metricsCollectionActiveRef = useRef(false);
+  const examTerminatingRef = useRef(false);
   const [decision, setDecision] = useState(null);
   const [signalBad, setSignalBad] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [recheckProgress, setRecheckProgress] = useState(null);
+  const [lockedMessage, setLockedMessage] = useState("");
   const [result, setResult] = useState(null);
   const [modal, setModal] = useState(null);
   const modalRef = useRef(modal);
@@ -122,18 +132,27 @@ export default function App() {
           message: (event.messages || humanSignal(event.codes)).join(" "),
         });
       } else {
-        setFlow("locked");
-        setModal({
-          kind: "locked",
-          title: "Examen pausado",
-          message: "La nueva muestra no coincidió con la huella inicial. La simulación se detuvo.",
-        });
-        void request("/stop", { method: "POST" }).catch(() => {});
+        void terminateExamInterrupted("La muestra de verificación no coincidió con la huella inicial. El examen se finalizó y las respuestas no se calificaron.");
       }
       return;
     }
     if (event.type === "decision") {
       setDecision(event);
+      if (metricsCollectionActiveRef.current) {
+        const question = questionsRef.current[currentIndexRef.current];
+        metricReadingsRef.current.push({
+          time_seconds: event.t,
+          question_number: question ? currentIndexRef.current + 1 : null,
+          question_id: question?.id || "",
+          question_text: question?.prompt || "",
+          wearer_label: wearerLabelRef.current,
+          similarity: event.score,
+          smoothed_similarity: event.smoothed,
+          threshold: event.threshold,
+          status: event.status,
+          heart_rate_bpm: event.hr_bpm,
+        });
+      }
       const isBad = event.status === "BAD_SIGNAL";
       setSignalBad(isBad);
       if (isBad && event.bad_signal_streak >= 3 && !badSignalWarned.current) {
@@ -149,22 +168,24 @@ export default function App() {
         badSignalWarned.current = false;
         if (modalRef.current?.kind === "signal") setModal(null);
       }
-      if (
-        event.status === "REJECTED"
-        && event.rejection_streak >= 3
-        && flowRef.current === "exam"
-        && !recoveryTriggered.current
+      if (event.status === "REJECTED" && flowRef.current === "exam") {
+        if (event.rejection_streak >= 3 && !recoveryTriggered.current) {
+          recoveryTriggered.current = true;
+          void terminateExamInterrupted("Detectamos una coincidencia muy baja en tres verificaciones consecutivas. Por seguridad, finalizamos el examen y las respuestas no se calificarán. Revisa que la banda esté bien colocada y tenga buen contacto con la piel.");
+        } else if (event.rejection_streak === 1 || event.rejection_streak === 2) {
+          setModal({
+            kind: "low-match-warning",
+            title: event.rejection_streak === 1 ? "Coincidencia baja" : "Segunda alerta de coincidencia",
+            message: event.rejection_streak === 1
+              ? "La lectura tuvo una coincidencia baja con la muestra inicial. Revisa que la banda siga firme y en buen contacto con la piel. El examen continúa por ahora."
+              : "La siguiente lectura también tuvo una coincidencia baja. Revisa y ajusta la banda ahora; si una tercera verificación consecutiva sigue sin coincidir, la sesión finalizará.",
+          });
+        }
+      } else if (
+        event.status !== "REJECTED"
+        && modalRef.current?.kind === "low-match-warning"
       ) {
-        recoveryTriggered.current = true;
-        setFlow("recovery");
-        setModal({
-          kind: "recovery",
-          title: "Confirma tu señal",
-          message: "No pudimos confirmar la huella en tres lecturas seguidas. Ajusta la banda y permanece quieto; tomaremos una nueva muestra antes de continuar.",
-        });
-        void request("/stop", { method: "POST" }).catch((error) => {
-          showError("No se pudo pausar la vigilancia", error);
-        });
+        setModal(null);
       }
       return;
     }
@@ -260,9 +281,15 @@ export default function App() {
       const data = await request(`/exam/questions?${params}`);
       if (!data.questions.length) throw new Error("No hay preguntas para esa combinación.");
       setQuestions(data.questions);
+      metricReadingsRef.current = [];
+      metricsCollectionActiveRef.current = true;
+      examTerminatingRef.current = false;
+      wearerLabelRef.current = "unknown";
+      setWearerLabel("unknown");
       setAnswers({});
       setCurrentIndex(0);
       setElapsed(0);
+      setLockedMessage("");
       await startMonitoring();
     } catch (error) {
       showError("No se pudo preparar el examen", error);
@@ -288,8 +315,28 @@ export default function App() {
   }
 
   async function finishExam() {
+    if (examTerminatingRef.current) return;
+    examTerminatingRef.current = true;
+    const failures = [];
     try {
       await request("/stop", { method: "POST" });
+    } catch (error) {
+      failures.push(`No se pudo detener la vigilancia: ${errorText(error)}`);
+    } finally {
+      metricsCollectionActiveRef.current = false;
+    }
+    try {
+      await request("/exam/metrics", {
+        method: "POST",
+        body: JSON.stringify({
+          outcome: "completed",
+          readings: metricReadingsRef.current,
+        }),
+      });
+    } catch (error) {
+      failures.push(`No se pudieron guardar las métricas: ${errorText(error)}`);
+    }
+    try {
       const grade = await request("/exam/grade", {
         method: "POST",
         body: JSON.stringify({
@@ -302,16 +349,81 @@ export default function App() {
       setResult(grade);
       setModal(null);
       setFlow("results");
+      if (failures.length) showError("El examen terminó con avisos", new Error(failures.join(" ")));
     } catch (error) {
-      showError("No se pudo cerrar el examen", error);
+      const message = failures.length
+        ? `${errorText(error)} ${failures.join(" ")}`
+        : errorText(error);
+      showError("No se pudo cerrar el examen", new Error(message));
     }
   }
 
+  async function terminateExamInterrupted(message) {
+    if (examTerminatingRef.current) return;
+    examTerminatingRef.current = true;
+    setFlow("locked");
+    setLockedMessage(message);
+    setModal(null);
+
+    let stopError = null;
+    try {
+      await request("/stop", { method: "POST" });
+    } catch (error) {
+      stopError = error;
+    } finally {
+      metricsCollectionActiveRef.current = false;
+    }
+    let metricsError = null;
+    try {
+      await request("/exam/metrics", {
+        method: "POST",
+        body: JSON.stringify({
+          outcome: "interrupted",
+          readings: metricReadingsRef.current,
+        }),
+      });
+    } catch (error) {
+      metricsError = error;
+    }
+    if (metricsError) {
+      setLockedMessage((current) => `${current} No se pudieron guardar las métricas: ${errorText(metricsError)}`);
+    }
+    if (stopError) showError("No se pudo detener la vigilancia", stopError);
+  }
+
   async function abandonExam() {
-    await request("/stop", { method: "POST" }).catch(() => {});
+    const failures = [];
+    if (metricsCollectionActiveRef.current && !examTerminatingRef.current) {
+      examTerminatingRef.current = true;
+      try {
+        await request("/stop", { method: "POST" });
+      } catch (error) {
+        failures.push(`No se pudo detener la vigilancia: ${errorText(error)}`);
+      } finally {
+        metricsCollectionActiveRef.current = false;
+      }
+      try {
+        await request("/exam/metrics", {
+          method: "POST",
+          body: JSON.stringify({
+            outcome: "interrupted",
+            readings: metricReadingsRef.current,
+          }),
+        });
+      } catch (error) {
+        failures.push(`No se pudieron guardar las métricas: ${errorText(error)}`);
+      }
+    } else {
+      try {
+        await request("/stop", { method: "POST" });
+      } catch (error) {
+        failures.push(`No se pudo detener la vigilancia: ${errorText(error)}`);
+      }
+    }
     setFlow("welcome");
     setDecision(null);
     setModal(null);
+    if (failures.length) showError("No se pudo completar el cierre", new Error(failures.join(" ")));
   }
 
   function goHome() {
@@ -387,6 +499,15 @@ export default function App() {
             answers={answers}
             currentIndex={currentIndex}
             decision={decision}
+            wearerLabel={wearerLabel}
+            onConfirmWearer={(label) => {
+              if (!["original", "impostor", "unknown"].includes(label)) {
+                showError("Etiqueta de participante inválida", new Error("Selecciona original, impostor o no confirmado."));
+                return;
+              }
+              wearerLabelRef.current = label;
+              setWearerLabel(label);
+            }}
             signalBad={signalBad}
             elapsed={elapsed}
             onAnswer={(questionId, answer) => setAnswers((current) => ({ ...current, [questionId]: answer }))}
@@ -413,10 +534,11 @@ export default function App() {
           />
         )}
         {flow === "locked" && (
-          <LockedScreen onHome={() => {
+          <LockedScreen message={lockedMessage} onHome={() => {
             setModal(null);
             setFlow("welcome");
             setEnrolled(false);
+            setLockedMessage("");
           }} />
         )}
         {flow === "results" && result && <ResultsScreen result={result} onHome={goHome} />}

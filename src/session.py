@@ -128,6 +128,18 @@ class PolarSource:
         return np.array(self._samples[i0:i1], dtype=np.float64)
 
 
+async def wait_for_ecg(source, sleep=asyncio.sleep, timeout_s: float = 15.0) -> None:
+    """Wait for the first ECG notification; the H10 can take several seconds to begin streaming."""
+    elapsed = 0.0
+    while source.n_samples() == 0 and elapsed < timeout_s:
+        step = min(0.1, timeout_s - elapsed)
+        await sleep(step)
+        elapsed += step
+    if source.n_samples() == 0:
+        raise ConnectionLost("La banda se conectó, pero no empezó a enviar señal ECG en "
+                             f"{timeout_s:.0f} s. Revisa el contacto, la batería y que ninguna otra app use la banda.")
+
+
 # ---------------------------------------------------------------- la sentada
 async def collect(source, segments, sleep, clock, say, on_segment, fs: int = POLAR_FS,
                   settle_s: float = 10.0, ready_s: float = 5.0, edge_s: float = 1.0, stall_s: float = 3.0) -> None:
@@ -153,6 +165,9 @@ async def collect(source, segments, sleep, clock, say, on_segment, fs: int = POL
 
     await source.start()
     try:
+        if isinstance(source, PolarSource) and source.n_samples() == 0:
+            say("Esperando a que la banda empiece a enviar ECG...")
+            await wait_for_ecg(source, sleep)
         say("Conectado. Quédate quieto unos segundos mientras la señal se estabiliza...")
         await wait(settle_s, "estabilizando")
         for seg in segments:

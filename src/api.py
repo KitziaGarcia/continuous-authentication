@@ -9,8 +9,12 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import csv
+import logging
 import re
 import time
+import uuid
+from datetime import datetime
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit
@@ -28,12 +32,13 @@ from src.evaluate import make_model_embed_fn
 from src.live import AUTH, BAD_SIGNAL, REJECT, make_template, monitor, score_window
 from src.quality import HR_RANGE, MAX_RR_GAP_S, MAX_RR_VARIATION, MAX_SPIKE_RATIO, check_quality
 from src.record import POLAR_FS
-from src.session import ConnectionLost, PolarSource
+from src.session import ConnectionLost, PolarSource, wait_for_ecg
 from src.synthetic import make_synthetic_signal
 from src.try_me import _default_checkpoint
 from src.windowing import signal_to_windows
 
 DEFAULT_THRESHOLD = 0.31      # similitud coseno; provisional (se recalibra con el modelo final)
+DEFAULT_METRICS_DIR = Path(__file__).resolve().parent.parent / "metrics"
 SETTLE_S, ENROLL_S = 5.0, 60.0
 RECHECK_SETTLE_S, RECHECK_RECORD_S = 3.0, 10.0
 USER_ID = re.compile(r"[A-Za-z0-9-]{1,40}")
@@ -207,10 +212,18 @@ class Controller:
         src = ScenarioSource(self.clock, scenario=self.scenario) if self.simulate else PolarSource()
         try:
             await src.start()
+            if not self.simulate:
+                await wait_for_ecg(src)
+        except ConnectionLost as e:
+            await src.stop()
+            self.fail("CONNECTION_LOST", str(e))
+            raise ConnectionLost(str(e)) from e
         except RuntimeError as e:
+            await src.stop()
             self.fail("NO_DEVICE", str(e))
             raise ConnectionLost(str(e)) from e
         except Exception as e:                    # bleak/Bluetooth: apagado, sin permisos, etc.
+            await src.stop()
             self.fail("CONNECTION_FAILED", f"No se pudo conectar con la banda: {e}")
             raise ConnectionLost(str(e)) from e
         self.source = src
@@ -394,9 +407,33 @@ class ExamAnswers(BaseModel):
     answers: list[ExamAnswer] = Field(max_length=30)
 
 
-def create_app(ctl: Controller, cors_origins=("*",), exam_bank: ExamBank | None = None) -> FastAPI:
+class ExamMetricReading(BaseModel):
+    time_seconds: float = Field(ge=0)
+    question_number: int | None = Field(default=None, ge=1, le=30)
+    question_id: str = Field(default="", max_length=80)
+    question_text: str = Field(default="", max_length=1000)
+    wearer_label: Literal["original", "impostor", "unknown"] = "unknown"
+    similarity: float | None = Field(default=None, ge=-1, le=1)
+    smoothed_similarity: float | None = Field(default=None, ge=-1, le=1)
+    threshold: float | None = Field(default=None, ge=-1, le=1)
+    status: Literal["AUTHENTICATED", "REJECTED", "BAD_SIGNAL", "NO_READINGS"]
+    heart_rate_bpm: float | None = Field(default=None, ge=0, le=300)
+
+
+class ExamMetrics(BaseModel):
+    outcome: Literal["completed", "interrupted"]
+    readings: list[ExamMetricReading] = Field(max_length=20000)
+
+
+def create_app(
+    ctl: Controller,
+    cors_origins=("*",),
+    exam_bank: ExamBank | None = None,
+    metrics_dir: Path = DEFAULT_METRICS_DIR,
+) -> FastAPI:
     app = FastAPI(title="Autenticación continua con ECG")
     bank = exam_bank or ExamBank()
+    metrics_dir = Path(metrics_dir)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=_loopback_origin_aliases(cors_origins),
@@ -414,13 +451,61 @@ def create_app(ctl: Controller, cors_origins=("*",), exam_bank: ExamBank | None 
         return ctl.state
 
     @app.get("/exam/questions")
-    def exam_questions(level: str = "mixto", difficulty: str = "todas", count: int = 12):
+    def exam_questions(level: str = "mixto", difficulty: str = "todas", count: int = 20):
         questions = bank.select(level, difficulty, count)
         return {"questions": questions, "count": len(questions)}
 
     @app.post("/exam/grade")
     def exam_grade(body: ExamAnswers):
         return bank.grade([answer.model_dump() for answer in body.answers])
+
+    @app.post("/exam/metrics", status_code=201)
+    def save_exam_metrics(body: ExamMetrics):
+        session_id = uuid.uuid4().hex
+        saved_at = datetime.now().astimezone().isoformat(timespec="seconds")
+        directory_name = "examenes_completados" if body.outcome == "completed" else "examenes_interrumpidos"
+        output_dir = metrics_dir / directory_name
+        filename = f"sesion_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{session_id[:8]}.csv"
+        output_path = output_dir / filename
+        fields = (
+            "session_id", "outcome", "saved_at", "time_seconds", "question_number",
+            "wearer_label", "ground_truth",
+            "question_id", "question_text", "similarity", "smoothed_similarity",
+            "threshold", "status", "heart_rate_bpm",
+        )
+        readings = body.readings or [
+            ExamMetricReading(time_seconds=0, status="NO_READINGS")
+        ]
+        try:
+            output_dir.mkdir(parents=True, exist_ok=True)
+            with output_path.open("w", encoding="utf-8-sig", newline="") as output:
+                writer = csv.DictWriter(output, fieldnames=fields)
+                writer.writeheader()
+                for reading in readings:
+                    writer.writerow({
+                        "session_id": session_id,
+                        "outcome": body.outcome,
+                        "saved_at": saved_at,
+                        "wearer_label": reading.wearer_label,
+                        "ground_truth": {
+                            "original": "genuine",
+                            "impostor": "impostor",
+                            "unknown": "unknown",
+                        }[reading.wearer_label],
+                        **{
+                            **reading.model_dump(),
+                        },
+                    })
+        except OSError as exc:
+            logging.getLogger(__name__).exception("No se pudieron guardar las métricas del examen.")
+            raise HTTPException(500, "No se pudieron guardar las métricas del examen.") from exc
+        return {
+            "saved": True,
+            "session_id": session_id,
+            "outcome": body.outcome,
+            "rows": len(readings),
+            "file": f"{directory_name}/{filename}",
+        }
 
     @app.get("/users/{user_id}")
     def user(user_id: str):

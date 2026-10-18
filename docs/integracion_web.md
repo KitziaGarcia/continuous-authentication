@@ -62,7 +62,8 @@ usuarios se guardan en `data/live/<user_id>.npz` (ignorado por git).
 1. Al cargar la página: abre el WebSocket (`/ws`) y comprueba `GET /health`.
 2. Botón **"Tomar muestra inicial"** → `POST /enroll/start`. Dura **65 s** (5 s de estabilización + 60 s de
    registro). Escucha `enroll_progress` y al final `enroll_result`.
-3. La aplicación solicita preguntas con `GET /exam/questions` y comienza el examen junto con
+3. La aplicación solicita entre 5, 10, 20 o 30 preguntas del nivel y dificultad elegidos con
+   `GET /exam/questions` y comienza el examen junto con
    `POST /monitor/start`. Llegan eventos `decision` cada ~2.5 s.
 4. Tres rechazos consecutivos pausan el examen. El usuario puede ajustar la banda y pedir una muestra
    de verificación con `POST /monitor/recheck`; esa muestra se compara con la plantilla existente y nunca
@@ -93,8 +94,9 @@ devuelve `422`.
 | `POST /enroll/start` | `{"user_id": "ana"}` | `202 {"accepted": true, "user_id": "ana"}`. El resultado llega **por WebSocket** o en `/state`. |
 | `POST /monitor/start` | `{"user_id": "ana"}` | `202 {"accepted": true, "user_id": "ana"}` |
 | `POST /monitor/recheck` | `{"user_id": "ana"}` | `202`; el resultado llega como `recheck_result` por WebSocket |
-| `GET /exam/questions?level=mixto&difficulty=todas&count=12` | — | Preguntas sin clave de respuesta |
+| `GET /exam/questions?level=secundaria&difficulty=facil&count=10` | — | Preguntas sin clave de respuesta; `count` acepta 5, 10, 20 o 30 y la API rechaza solicitudes que excedan el banco filtrado |
 | `POST /exam/grade` | `{"answers": [{"question_id": "s01", "answer": "B"}]}` | Calificación y retroalimentación al finalizar |
+| `POST /exam/metrics` | `{"outcome": "completed", "readings": [{"time_seconds": 12.5, "status": "AUTHENTICATED", "wearer_label": "original"}]}` | Guarda una fila CSV por decisión, con etiqueta de portador, verdad, tiempo, pregunta y similitud |
 | `POST /stop` | — | `{"phase": "idle"}` |
 | `POST /sim/scenario` | `{"scenario": "..."}` | Solo con `--simulate`. Ver §7. |
 
@@ -109,6 +111,41 @@ devuelve `422`.
 
 Los errores que ocurren **durante** una operación (banda no encontrada, conexión perdida) no son respuestas HTTP:
 llegan como evento `error` por WebSocket y quedan en `last_error` de `/state`.
+
+### Exportación local de métricas
+
+Al completar el examen, la interfaz envía las lecturas a `POST /exam/metrics` con `outcome: "completed"`.
+Una expulsión por baja coincidencia o la salida manual las guarda con `outcome: "interrupted"`.
+El backend crea un CSV independiente en `metrics/examenes_completados/` o
+`metrics/examenes_interrumpidos/`. Cada fila incluye un identificador aleatorio de sesión y la etiqueta
+elegida por el operador: `original` se guarda como `genuine`, `impostor` como `impostor` y `unknown`
+como `unknown`. «Original» significa la misma persona que aportó la muestra de enrolamiento; no hace
+falta escribir ni recordar IDs de participantes en la interfaz. Durante el examen, el operador elige
+«participante original», «otra persona» o «no confirmado». La etiqueta inicia en `unknown` y, al aplicar
+el control, se asigna a las lecturas siguientes sin alterar la decisión del modelo. También se guarda el tiempo desde el
+inicio de la vigilancia, número/ID/texto de la pregunta visible, similitud instantánea y suavizada, estado
+de verificación, umbral operativo y ritmo cardiaco. Las respuestas no se incluyen.
+Si el examen termina sin decisiones, igualmente se crea un CSV con estado `NO_READINGS`.
+
+Las métricas son datos sensibles de investigación: permanecen localmente y `metrics/` está excluido de Git.
+Las etiquetas describen quién llevaba la banda, no se infieren de la decisión del autenticador. Un cierre
+inesperado de la pestaña o del navegador antes de enviar el resultado puede impedir el guardado.
+
+Con datos genuine e impostor etiquetados de forma independiente, se calculan EER, AUC ROC, FAR y FRR en el
+umbral operativo, además del tiempo entre la primera lectura marcada impostor y el primer rechazo del modelo.
+Los episodios impostores que no recibieron un rechazo antes del final se cuentan como no detectados.
+Para obtener estas métricas:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.metrics
+```
+
+Por defecto analiza `smoothed_similarity`, la misma puntuación que compara el autenticador con su umbral;
+se puede usar `--score-column similarity` para puntuaciones sin suavizar en EER/AUC. FAR y FRR resumen las
+decisiones observadas (`AUTHENTICATED`/`REJECTED`) y excluyen señal mala. El tiempo de detección depende de
+cuándo el operador cambia la etiqueta: aplica el control en cuanto cambia el portador. Ignora `unknown`,
+`BAD_SIGNAL` y lecturas sin puntuación para EER/AUC. Las ventanas consecutivas de una persona están
+correlacionadas: estas métricas son exploratorias, no ensayos independientes ni una evaluación clínica.
 
 ---
 
@@ -217,9 +254,10 @@ Después de un `error` el servidor vuelve a `phase: "idle"` y cierra la conexió
 `POST /monitor/start` con la plantilla original.
 
 Los eventos `decision` separan `BAD_SIGNAL` de `REJECTED`. Tras tres ventanas consecutivas `BAD_SIGNAL`,
-el frontend muestra un aviso de calidad y desactiva las respuestas mientras no haya señal confiable. Tras
-tres `REJECTED` consecutivos, solicita revalidación y, si esta vuelve a fallar por identidad, bloquea la
-simulación. Las ventanas con señal mala no incrementan el contador de rechazos del modelo.
+el frontend muestra un aviso de calidad y desactiva las respuestas mientras no haya señal confiable. Ante
+el primer y segundo `REJECTED` consecutivos, muestra un aviso para revisar el ajuste de la banda y el examen
+continúa. El tercer `REJECTED` consecutivo finaliza la sesión y muestra el motivo; no se toma una muestra de
+revalidación. Las ventanas con señal mala no incrementan el contador de rechazos del modelo.
 
 El API del examen devuelve solo enunciados, opciones y lecturas. La respuesta correcta permanece en
 `data/exams/questions.json` y se revela únicamente en el resultado de `POST /exam/grade`.
