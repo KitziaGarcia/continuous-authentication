@@ -65,15 +65,14 @@ es evidencia de que cambió la persona.
 ### Rechazo biométrico
 
 - Los scores se suavizan en el backend; una sola ventana bajo el umbral no expulsa a nadie.
-- Después de tres decisiones `REJECTED` consecutivas, la página pausa el examen y muestra una advertencia
-  para revisar la banda.
-- Al confirmar que la banda está ajustada, `POST /monitor/recheck` toma 3 segundos de estabilización y
-  10 segundos de señal.
-- El backend compara la muestra nueva con la misma plantilla y emite `recheck_result`.
-- Si la señal sigue siendo mala, la persona puede ajustar la banda y repetir la verificación; no se cuenta
-  como fallo de identidad.
-- Si la muestra supera el umbral, se reanuda la vigilancia con la plantilla original. No se sobrescribe.
-- Si la muestra es legible pero no coincide, se bloquea la simulación y no se reporta una calificación.
+- La configuración permite elegir entre dos modos:
+  - **Modo prueba** (predeterminado): muestra alertas en el primer y segundo rechazo; el tercero finaliza
+    la sesión y las respuestas no se califican.
+  - **Modo métricas**: sigue examinando la señal tras rechazos, incluso cuando cambia el portador, para
+    registrar su evolución sin detener el examen. El operador debe actualizar la etiqueta de portador para
+    que las lecturas guardadas en CSV queden correctamente anotadas.
+- Ambos modos conservan el manejo separado de `BAD_SIGNAL`; el modo métricas no desactiva los controles de
+  calidad de señal ni las alertas de desconexión.
 
 ## Banco de preguntas
 

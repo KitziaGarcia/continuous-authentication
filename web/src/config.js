@@ -12,6 +12,19 @@ export const DIFFICULTIES = [
   { value: "avanzada", label: "Avanzada" },
 ];
 
+export const AUTH_MODES = [
+  {
+    value: "test",
+    label: "Modo prueba",
+    description: "Dos alertas; la tercera lectura rechazada finaliza el examen.",
+  },
+  {
+    value: "metrics",
+    label: "Modo métricas",
+    description: "La sesión continúa ante rechazos para registrar más lecturas.",
+  },
+];
+
 const SIGNAL_COPY = {
   FLAT_SIGNAL: "No llega una lectura clara. Revisa que la banda esté ajustada y que los electrodos estén húmedos.",
   INVALID_VALUES: "La señal contiene valores inválidos. Ajusta la banda y vuelve a intentarlo.",

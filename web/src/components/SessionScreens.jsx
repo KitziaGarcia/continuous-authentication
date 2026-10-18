@@ -2,7 +2,7 @@ import {
   AlertCircle, ArrowRight, AudioLines, BadgeCheck, BookOpen, Check, ChevronDown, Fingerprint,
   HeartPulse, LockKeyhole, Radio,
 } from "lucide-react";
-import { DIFFICULTIES, LEVELS } from "../config.js";
+import { AUTH_MODES, DIFFICULTIES, LEVELS } from "../config.js";
 import Button from "./ui/Button.jsx";
 import Card from "./ui/Card.jsx";
 import { Eyebrow, StepLabel } from "./ui/Label.jsx";
@@ -11,8 +11,8 @@ import ProgressBar from "./ui/ProgressBar.jsx";
 const QUESTION_COUNTS = [5, 10, 20, 30];
 
 export function WelcomeScreen({
-  level, difficulty, questionCount, apiAvailable, onLevelChange,
-  onDifficultyChange, onQuestionCountChange, onBegin,
+  level, difficulty, questionCount, authMode, apiAvailable, onLevelChange,
+  onDifficultyChange, onQuestionCountChange, onAuthModeChange, onBegin,
 }) {
   function changeLevel(nextLevel) {
     onLevelChange(nextLevel);
@@ -40,6 +40,23 @@ export function WelcomeScreen({
           <div><StepLabel>CONFIGURAR SESIÓN</StepLabel><h2>Tu simulación</h2></div>
           <span className="setup-icon"><BookOpen size={20} /></span>
         </div>
+        <fieldset className="auth-mode-field">
+          <legend className="field-label">Modo de evaluación</legend>
+          <div className="auth-mode-options">
+            {AUTH_MODES.map((mode) => (
+              <button
+                key={mode.value}
+                type="button"
+                className={`auth-mode-option ${authMode === mode.value ? "selected" : ""}`}
+                aria-pressed={authMode === mode.value}
+                onClick={() => onAuthModeChange(mode.value)}
+              >
+                <span>{mode.label}</span>
+                <small>{mode.description}</small>
+              </button>
+            ))}
+          </div>
+        </fieldset>
         <label className="field-label" htmlFor="level">Nivel del examen</label>
         <div className="level-grid" id="level">
           {LEVELS.map((item) => (

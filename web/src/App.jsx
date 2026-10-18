@@ -22,6 +22,9 @@ export default function App() {
   const [level, setLevel] = useState("mixto");
   const [difficulty, setDifficulty] = useState("todas");
   const [questionCount, setQuestionCount] = useState(20);
+  const [authMode, setAuthMode] = useState("test");
+  const authModeRef = useRef(authMode);
+  authModeRef.current = authMode;
   const [enrollProgress, setEnrollProgress] = useState(0);
   const [enrollStage, setEnrollStage] = useState("settling");
   const [enrolled, setEnrolled] = useState(false);
@@ -169,7 +172,9 @@ export default function App() {
         if (modalRef.current?.kind === "signal") setModal(null);
       }
       if (event.status === "REJECTED" && flowRef.current === "exam") {
-        if (event.rejection_streak >= 3 && !recoveryTriggered.current) {
+        if (authModeRef.current === "metrics") {
+          if (modalRef.current?.kind === "low-match-warning") setModal(null);
+        } else if (event.rejection_streak >= 3 && !recoveryTriggered.current) {
           recoveryTriggered.current = true;
           void terminateExamInterrupted("Detectamos una coincidencia muy baja en tres verificaciones consecutivas. Por seguridad, finalizamos el examen y las respuestas no se calificarán. Revisa que la banda esté bien colocada y tenga buen contacto con la piel.");
         } else if (event.rejection_streak === 1 || event.rejection_streak === 2) {
@@ -459,10 +464,12 @@ export default function App() {
             level={level}
             difficulty={difficulty}
             questionCount={questionCount}
+            authMode={authMode}
             apiAvailable={apiStatus?.ok}
             onLevelChange={setLevel}
             onDifficultyChange={setDifficulty}
             onQuestionCountChange={setQuestionCount}
+            onAuthModeChange={setAuthMode}
             onBegin={() => setFlow("enroll")}
           />
         )}
@@ -499,6 +506,7 @@ export default function App() {
             answers={answers}
             currentIndex={currentIndex}
             decision={decision}
+            authMode={authMode}
             wearerLabel={wearerLabel}
             onConfirmWearer={(label) => {
               if (!["original", "impostor", "unknown"].includes(label)) {

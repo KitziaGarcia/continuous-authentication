@@ -65,9 +65,9 @@ usuarios se guardan en `data/live/<user_id>.npz` (ignorado por git).
 3. La aplicación solicita entre 5, 10, 20 o 30 preguntas del nivel y dificultad elegidos con
    `GET /exam/questions` y comienza el examen junto con
    `POST /monitor/start`. Llegan eventos `decision` cada ~2.5 s.
-4. Tres rechazos consecutivos pausan el examen. El usuario puede ajustar la banda y pedir una muestra
-   de verificación con `POST /monitor/recheck`; esa muestra se compara con la plantilla existente y nunca
-   la reemplaza. Si no coincide, el frontend detiene el examen.
+4. El modo elegido determina qué pasa ante `REJECTED`: **Modo prueba** avisa en el primer y segundo rechazo
+   y finaliza el examen al tercero consecutivo; **Modo métricas** mantiene el examen y registra decisiones
+   posteriores al cambio de portador en el CSV. El modo se elige antes de empezar.
 5. La calidad de señal baja genera avisos de colocación y pausa la interacción con las preguntas, pero
    **no** cuenta como rechazo de identidad. La señal debe recuperarse antes de continuar.
 6. Al terminar, la aplicación envía las respuestas a `POST /exam/grade`; la calificación se calcula en el
@@ -254,10 +254,20 @@ Después de un `error` el servidor vuelve a `phase: "idle"` y cierra la conexió
 `POST /monitor/start` con la plantilla original.
 
 Los eventos `decision` separan `BAD_SIGNAL` de `REJECTED`. Tras tres ventanas consecutivas `BAD_SIGNAL`,
-el frontend muestra un aviso de calidad y desactiva las respuestas mientras no haya señal confiable. Ante
-el primer y segundo `REJECTED` consecutivos, muestra un aviso para revisar el ajuste de la banda y el examen
-continúa. El tercer `REJECTED` consecutivo finaliza la sesión y muestra el motivo; no se toma una muestra de
-revalidación. Las ventanas con señal mala no incrementan el contador de rechazos del modelo.
+el frontend muestra un aviso de calidad y desactiva las respuestas mientras no haya señal confiable. Las
+ventanas con señal mala no incrementan el contador de rechazos del modelo.
+
+La configuración inicial ofrece dos modos de evaluación:
+
+- `Modo prueba` (predeterminado): ante el primer y segundo `REJECTED` consecutivos muestra alertas para
+  revisar la banda; el tercer rechazo consecutivo finaliza la sesión y no califica las respuestas.
+- `Modo métricas`: los rechazos no detienen ni pausan la sesión. El backend continúa monitorizando y el
+  frontend sigue registrando cada decisión con la etiqueta de portador seleccionada para guardar lecturas
+  posteriores al cambio de persona. La baja calidad de señal y la pérdida de conexión mantienen sus avisos
+  y controles; este modo solo desactiva el cierre automático por rechazo de identidad.
+
+En ambos modos, las decisiones registradas se envían a `POST /exam/metrics` al finalizar manualmente el
+examen o la sesión, y se guardan localmente como CSV.
 
 El API del examen devuelve solo enunciados, opciones y lecturas. La respuesta correcta permanece en
 `data/exams/questions.json` y se revela únicamente en el resultado de `POST /exam/grade`.

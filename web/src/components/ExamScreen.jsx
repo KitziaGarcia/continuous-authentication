@@ -10,7 +10,7 @@ import Card from "./ui/Card.jsx";
 import ProgressBar from "./ui/ProgressBar.jsx";
 
 export default function ExamScreen({
-  questions, answers, currentIndex, decision, wearerLabel,
+  questions, answers, currentIndex, decision, authMode, wearerLabel,
   onConfirmWearer, signalBad, elapsed, onAnswer,
   onPrevious, onNext, onFinishRequest, onExitRequest,
 }) {
@@ -88,10 +88,28 @@ export default function ExamScreen({
         </Card>
       </div>
       <Card className="monitor-strip">
-        <div className="monitor-title"><span className="monitor-pulse"><HeartPulse size={17} /></span><span><b>Autenticación continua</b><small>Señal procesada localmente por el backend</small></span></div>
+        <div className="monitor-title">
+          <span className="monitor-pulse"><HeartPulse size={17} /></span>
+          <span>
+            <b>Autenticación continua</b>
+            <small>{authMode === "metrics"
+              ? "Modo métricas · sigue registrando aunque haya rechazos"
+              : "Modo prueba · finaliza al tercer rechazo consecutivo"}</small>
+          </span>
+        </div>
         <div className="monitor-metric"><small>SIMILITUD</small><b>{decision?.smoothed == null ? "—" : decision.smoothed.toFixed(2)}</b></div>
         <div className="monitor-meter"><span style={{ width: `${Math.max(0, Math.min(100, ((decision?.smoothed ?? 0) + 1) * 50))}%` }} /></div>
-        <div className="monitor-caption">{decision?.status === "AUTHENTICATED" ? "Coincide con la muestra inicial" : decision?.status === "BAD_SIGNAL" ? "Sin decisión: señal de baja calidad" : decision?.status === "REJECTED" ? "Se requiere revisar la muestra" : "Esperando la primera lectura"}</div>
+        <div className="monitor-caption">
+          {decision?.status === "AUTHENTICATED"
+            ? "Coincide con la muestra inicial"
+            : decision?.status === "BAD_SIGNAL"
+              ? "Sin decisión: señal de baja calidad"
+              : decision?.status === "REJECTED" && authMode === "metrics"
+                ? `Modo métricas: rechazo ${decision.rejection_streak ?? 0}; la sesión continúa`
+                : decision?.status === "REJECTED"
+                  ? "Se requiere revisar la muestra"
+                  : "Esperando la primera lectura"}
+        </div>
         <div className="research-label">
           <label className="research-label-field">
             <span>¿Quién lleva la banda ahora?</span>
