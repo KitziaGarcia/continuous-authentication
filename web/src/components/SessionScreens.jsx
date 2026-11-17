@@ -7,6 +7,7 @@ import Button from "./ui/Button.jsx";
 import Card from "./ui/Card.jsx";
 import { Eyebrow, StepLabel } from "./ui/Label.jsx";
 import ProgressBar from "./ui/ProgressBar.jsx";
+import SignalPlot from "./ui/SignalPlot.jsx";
 
 const QUESTION_COUNTS = [5, 10, 20, 30];
 
@@ -98,7 +99,7 @@ export function WelcomeScreen({
 }
 
 export function EnrollmentScreen({
-  userId, enrolled, backendPhase, enrollStage, enrollProgress,
+  userId, enrolled, backendPhase, enrollStage, enrollProgress, enrollBufferRef,
   apiAvailable, socketConnected, busy, onStartEnrollment, onBeginExam, onBack,
 }) {
   return (
@@ -136,6 +137,9 @@ export function EnrollmentScreen({
           )}
           <Button variant="text" className="back-link" onClick={onBack}>Volver a configuración</Button>
         </div>
+        {backendPhase === "enrolling" && !enrolled && (
+          <div className="enroll-signal"><SignalPlot bufferRef={enrollBufferRef} /></div>
+        )}
       </Card>
     </section>
   );

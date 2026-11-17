@@ -119,10 +119,14 @@ async def enroll(source, embed_fn, cfg: Config, sleep, say, seconds: float = 60.
 
 async def monitor(source, template, embed_fn, cfg: Config, threshold: float, sleep, clock, say, on_step,
                   hop_s: float = 2.5, smooth: int = 6, duration: float | None = None,
-                  max_stall_s: float = 15.0, reset_after: int = 2) -> list:
-    """Cada `hop_s` toma los últimos 5 s de señal (con 10 s extra de contexto para el filtro) y decide."""
+                  max_stall_s: float = 15.0, reset_after: int = 2, contact_fn=None, settle_good: int = 2) -> list:
+    """Cada `hop_s` toma los últimos 5 s de señal (con 10 s extra de contexto para el filtro) y decide.
+
+    `contact_fn()` devuelve False si la banda dice que no toca la piel (el ruido al aire no cuenta como persona).
+    Tras un tramo de señal mala hacen falta `settle_good` ventanas buenas seguidas antes de emitir AUTH o REJECT.
+    """
     win, ctx = cfg.window_samples, 3 * cfg.window_samples      # 5 s de ventana, 15 s de buffer
-    decider, steps, bad_run = Decider(threshold, smooth), [], 0
+    decider, steps, bad_run, good_run = Decider(threshold, smooth), [], 0, settle_good
     t0, last_n, stalled = clock(), source.n_samples(), 0.0
     while duration is None or clock() - t0 < duration:
         await sleep(hop_s)
@@ -135,18 +139,24 @@ async def monitor(source, template, embed_fn, cfg: Config, threshold: float, sle
             continue                                            # aún no hay suficiente señal
         raw = source.take(n - ctx, n)
         windows = signal_to_windows(raw, POLAR_FS, cfg) if stalled == 0 else []
-        if len(windows) == 0 or not check_quality(raw[-2 * win:], POLAR_FS, min_peaks=5).ok:
+        no_contact = contact_fn is not None and contact_fn() is False
+        if no_contact or len(windows) == 0 or not check_quality(raw[-2 * win:], POLAR_FS, min_peaks=5).ok:
             step = Step(clock() - t0, BAD_SIGNAL, None, None)   # no se decide con señal mala: ni acepta ni rechaza
             bad_run += 1
+            good_run = 0
             if bad_run >= reset_after:
                 # Banda quitada o floja: los puntajes de antes ya no valen. Si alguien más se la pone,
                 # no debe heredar tu promedio.
                 decider.reset()
         else:
             bad_run = 0
+            good_run += 1
             score = score_window(embed_fn, template, windows[-1])
             smoothed, status = decider.update(score)
-            step = Step(clock() - t0, status, score, smoothed)
+            if good_run < settle_good:                          # señal recién recuperada: aún no cuenta como decisión
+                step = Step(clock() - t0, BAD_SIGNAL, None, None)
+            else:
+                step = Step(clock() - t0, status, score, smoothed)
         steps.append(step)
         on_step(step)
     return steps

@@ -33,6 +33,7 @@ const SIGNAL_COPY = {
   IMPOSSIBLE_HEART_RATE: "La lectura no parece confiable. Revisa el contacto de la banda y respira con normalidad.",
   IRREGULAR_RHYTHM: "La señal presenta variaciones. Quédate quieto y revisa la posición de la banda.",
   SIGNAL_GAP: "La lectura se interrumpió. Comprueba que la banda siga colocada.",
+  NO_CONTACT: "La banda no detecta contacto con la piel. Colócala bien y humedece los electrodos.",
   POOR_SIGNAL: "La señal no es suficientemente clara. Ajusta la banda y vuelve a intentarlo.",
 };
 

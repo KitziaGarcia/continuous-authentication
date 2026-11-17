@@ -6,8 +6,12 @@ import {
   EnrollmentScreen, LockedScreen, ReadyScreen, RecoveryScreen,
   ResultsScreen, WelcomeScreen,
 } from "./components/SessionScreens.jsx";
+import { PREVIEW_SAMPLES } from "./components/ui/SignalPlot.jsx";
 import { humanSignal } from "./config.js";
 import { errorText, makeUserId } from "./utils.js";
+
+// Tiempo que se ignoran los rechazos tras cada aviso de coincidencia baja.
+const LOW_MATCH_GRACE_MS = 10_000;
 
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem("latido-theme") || "light");
@@ -27,6 +31,7 @@ export default function App() {
   authModeRef.current = authMode;
   const [enrollProgress, setEnrollProgress] = useState(0);
   const [enrollStage, setEnrollStage] = useState("settling");
+  const enrollBufferRef = useRef([]);
   const [enrolled, setEnrolled] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [wearerLabel, setWearerLabel] = useState("unknown");
@@ -50,6 +55,7 @@ export default function App() {
   const modalRef = useRef(modal);
   modalRef.current = modal;
   const recoveryTriggered = useRef(false);
+  const lowMatch = useRef({ alerts: 0, graceUntil: 0 });
   const badSignalWarned = useRef(false);
   const socketRef = useRef(null);
   const eventHandlerRef = useRef(null);
@@ -66,6 +72,7 @@ export default function App() {
           body: JSON.stringify({ user_id: userIdRef.current }),
         });
         recoveryTriggered.current = false;
+        lowMatch.current = { alerts: 0, graceUntil: 0 };
         setDecision(null);
         setSignalBad(false);
         setModal(null);
@@ -100,6 +107,12 @@ export default function App() {
         });
       } else if (event.signal_ok === true && modalRef.current?.kind === "enroll-signal") {
         setModal(null);
+      }
+      return;
+    }
+    if (event.type === "signal_chunk") {
+      if (flowRef.current === "enroll") {
+        enrollBufferRef.current = enrollBufferRef.current.concat(event.signal).slice(-PREVIEW_SAMPLES);
       }
       return;
     }
@@ -174,23 +187,29 @@ export default function App() {
       if (event.status === "REJECTED" && flowRef.current === "exam") {
         if (authModeRef.current === "metrics") {
           if (modalRef.current?.kind === "low-match-warning") setModal(null);
-        } else if (event.rejection_streak >= 3 && !recoveryTriggered.current) {
-          recoveryTriggered.current = true;
-          void terminateExamInterrupted("Detectamos una coincidencia muy baja en tres verificaciones consecutivas. Por seguridad, finalizamos el examen y las respuestas no se calificarán. Revisa que la banda esté bien colocada y tenga buen contacto con la piel.");
-        } else if (event.rejection_streak === 1 || event.rejection_streak === 2) {
-          setModal({
-            kind: "low-match-warning",
-            title: event.rejection_streak === 1 ? "Coincidencia baja" : "Segunda alerta de coincidencia",
-            message: event.rejection_streak === 1
-              ? "La lectura tuvo una coincidencia baja con la muestra inicial. Revisa que la banda siga firme y en buen contacto con la piel. El examen continúa por ahora."
-              : "La siguiente lectura también tuvo una coincidencia baja. Revisa y ajusta la banda ahora; si una tercera verificación consecutiva sigue sin coincidir, la sesión finalizará.",
-          });
+        } else if (Date.now() >= lowMatch.current.graceUntil && !recoveryTriggered.current) {
+          // Fuera de la ventana de gracia: este rechazo cuenta como una alerta nueva.
+          lowMatch.current.alerts += 1;
+          if (lowMatch.current.alerts >= 3) {
+            recoveryTriggered.current = true;
+            void terminateExamInterrupted("Detectamos una coincidencia muy baja que persistió después de dos avisos. Por seguridad, finalizamos el examen y las respuestas no se calificarán. Revisa que la banda esté bien colocada y tenga buen contacto con la piel.");
+          } else {
+            lowMatch.current.graceUntil = Date.now() + LOW_MATCH_GRACE_MS;
+            const first = lowMatch.current.alerts === 1;
+            setModal({
+              kind: "low-match-warning",
+              title: first ? "Coincidencia baja" : "Segunda alerta de coincidencia",
+              message: first
+                ? "La lectura tuvo una coincidencia baja con la muestra inicial. Revisa que la banda siga firme y en buen contacto con la piel. Tienes unos 10 segundos para acomodarla; el examen continúa."
+                : "La coincidencia sigue baja. Revisa y ajusta la banda ahora: tienes otros 10 segundos y, si sigue sin coincidir, la sesión finalizará.",
+            });
+          }
         }
-      } else if (
-        event.status !== "REJECTED"
-        && modalRef.current?.kind === "low-match-warning"
-      ) {
-        setModal(null);
+        // Dentro de la ventana de gracia los rechazos se ignoran.
+      } else if (event.status !== "REJECTED") {
+        // Una lectura válida (o sin señal) cancela el conteo de alertas.
+        lowMatch.current = { alerts: 0, graceUntil: 0 };
+        if (modalRef.current?.kind === "low-match-warning") setModal(null);
       }
       return;
     }
@@ -261,8 +280,10 @@ export default function App() {
     }
     setEnrollProgress(0);
     setEnrollStage("settling");
+    enrollBufferRef.current = [];
     setEnrolled(false);
     recoveryTriggered.current = false;
+    lowMatch.current = { alerts: 0, graceUntil: 0 };
     setModal(null);
     setFlow("enroll");
     try {
@@ -480,6 +501,7 @@ export default function App() {
             backendPhase={backendPhase}
             enrollStage={enrollStage}
             enrollProgress={enrollProgress}
+            enrollBufferRef={enrollBufferRef}
             apiAvailable={apiStatus?.ok}
             socketConnected={socketConnected}
             busy={busy}

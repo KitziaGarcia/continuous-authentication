@@ -32,6 +32,9 @@ from src.record import POLAR_FS, POLAR_RESOLUTION, save_recording
 from src.synthetic import make_synthetic_signal
 
 
+HR_MEASUREMENT_UUID = "00002a37-0000-1000-8000-00805f9b34fb"
+
+
 class ConnectionLost(RuntimeError):
     """Dejó de llegar señal de la banda a media sesión."""
 
@@ -94,6 +97,13 @@ class PolarSource:
         self._samples: list = []
         self._cm = None
         self._dev = None
+        self.contact: bool | None = None           # contacto con la piel según la banda; None = no se sabe
+
+    def _on_hr(self, _sender, data) -> None:
+        """Lee el indicador de contacto del servicio estándar de ritmo cardiaco (bits 1-2 de las banderas)."""
+        if len(data):
+            state = (data[0] >> 1) & 0b11          # 2 = soportado y sin contacto, 3 = soportado y con contacto
+            self.contact = None if state < 2 else state == 3
 
     async def start(self) -> None:
         from bleak import BleakScanner          # import perezoso: solo hace falta con el sensor
@@ -108,6 +118,10 @@ class PolarSource:
         self._dev = await self._cm.__aenter__()
         await self._dev.start_ecg_stream(ecg_callback=lambda d: self._samples.extend(d.data),
                                          sample_rate=POLAR_FS, resolution=POLAR_RESOLUTION)
+        try:                                       # polar_python descarta las banderas, así que se suscribe directo
+            await self._dev._client.start_notify(HR_MEASUREMENT_UUID, self._on_hr)
+        except Exception:                          # sin indicador de contacto se sigue solo con la calidad de la señal
+            self.contact = None
 
     async def stop(self) -> None:
         if self._cm is None:

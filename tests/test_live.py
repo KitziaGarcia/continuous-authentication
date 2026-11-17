@@ -68,4 +68,29 @@ def test_scores_before_a_signal_gap_do_not_carry_over():
     asyncio.run(monitor(src, tpl, embed, cfg, 0.5, clock.sleep, clock, lambda *a, **k: None,
                         steps.append, duration=100))
     first_after_gap = next(s for i, s in enumerate(steps) if s.score is not None and steps[i - 1].score is None)
+    assert steps[steps.index(first_after_gap) - 1].status == BAD_SIGNAL
     assert first_after_gap.status == REJECT           # sin reinicio heredaría el promedio alto de antes
+
+
+def test_no_contact_is_bad_signal_even_with_clean_ecg():
+    cfg, clock = Config(), SimClock()
+    src = SimulatedSource(clock, signal=make_synthetic_signal(60, 130, seed=3) * 400)
+    asyncio.run(src.start())
+    steps = []
+    asyncio.run(monitor(src, np.ones(16) / 4, _embed, cfg, -1.0, clock.sleep, clock, lambda *a, **k: None,
+                        steps.append, duration=40, contact_fn=lambda: False))
+    assert steps and all(s.status == BAD_SIGNAL and s.score is None for s in steps)
+
+
+def test_signal_recovered_after_a_gap_needs_settling_before_deciding():
+    def undecided(settle_good):
+        cfg, clock = Config(), SimClock()
+        good = make_synthetic_signal(45, 130, seed=3) * 400
+        src = SimulatedSource(clock, signal=np.concatenate([good, np.zeros(130 * 20), good]))
+        asyncio.run(src.start())
+        steps = []
+        asyncio.run(monitor(src, np.eye(16)[0], lambda w: np.eye(16)[[1]], cfg, 0.5, clock.sleep, clock,
+                            lambda *a, **k: None, steps.append, duration=100, settle_good=settle_good))
+        return sum(s.score is None for s in steps)
+
+    assert undecided(2) == undecided(1) + 1

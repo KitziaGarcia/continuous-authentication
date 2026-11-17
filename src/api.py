@@ -30,7 +30,7 @@ from src.exam import ExamBank
 from src.errors import CheckpointError
 from src.evaluate import make_model_embed_fn
 from src.live import AUTH, BAD_SIGNAL, REJECT, make_template, monitor, score_window
-from src.quality import HR_RANGE, MAX_RR_GAP_S, MAX_RR_VARIATION, MAX_SPIKE_RATIO, check_quality
+from src.quality import HR_RANGE, MAX_RR_GAP_S, MAX_RR_VARIATION, MAX_SPIKE_RATIO, QualityReport, check_quality
 from src.record import POLAR_FS
 from src.session import ConnectionLost, PolarSource, wait_for_ecg
 from src.synthetic import make_synthetic_signal
@@ -40,6 +40,8 @@ from src.windowing import signal_to_windows
 DEFAULT_THRESHOLD = 0.31      # similitud coseno; provisional (se recalibra con el modelo final)
 DEFAULT_METRICS_DIR = Path(__file__).resolve().parent.parent / "metrics"
 SETTLE_S, ENROLL_S = 5.0, 60.0
+PREVIEW_EVERY_S = 0.04              # ~25 mensajes por segundo a la gráfica del registro
+PREVIEW_S = 4                       # segundos de señal que muestra esa gráfica
 RECHECK_SETTLE_S, RECHECK_RECORD_S = 3.0, 10.0
 USER_ID = re.compile(r"[A-Za-z0-9-]{1,40}")
 
@@ -54,6 +56,7 @@ SIGNAL_MESSAGES = {
     "IMPOSSIBLE_HEART_RATE": "Se detecta un ritmo cardiaco imposible: probablemente mal contacto.",
     "IRREGULAR_RHYTHM": "El ritmo es muy irregular: quédate quieto/a y respira normal.",
     "SIGNAL_GAP": "Se perdió la señal unos segundos: la banda se despegó o se movió.",
+    "NO_CONTACT": "La banda no detecta contacto con la piel: colócala y humedece los electrodos.",
     "POOR_SIGNAL": "La señal no es buena: ajusta la banda y quédate quieto/a.",
 }
 
@@ -276,18 +279,36 @@ class Controller:
             self.emit({"type": "enroll_progress", "stage": stage, "elapsed_s": e["elapsed_s"], "total_s": total,
                        "signal_ok": e["signal_ok"], "codes": e["codes"]})
 
+    async def _preview(self) -> None:
+        """Manda solo las muestras nuevas, varias veces por segundo, para que la gráfica del registro corra en vivo.
+
+        El primer mensaje lleva los últimos PREVIEW_S segundos; el navegador va acumulando los siguientes.
+        """
+        src = self.source
+        sent = max(0, src.n_samples() - int(PREVIEW_S * POLAR_FS))
+        while True:
+            n = src.n_samples()
+            if n > sent:
+                chunk = src.take(sent, n)
+                sent = n
+                self.emit({"type": "signal_chunk", "signal": [round(float(v), 1) for v in chunk]})
+            await self.sleep(PREVIEW_EVERY_S)
+
     async def run_enroll(self, user_id: str) -> None:
         e = self.state["enroll"]
         e.update(stage=None, elapsed_s=0.0, signal_ok=None, codes=[], last_failure=None,
                  consecutive_failures=self.failures.get(user_id, 0))
         self.state["last_error"] = None
         self.set_state(user_id=user_id)
+        preview = None
         try:
             await self.open_source()
             self.set_state(phase="enrolling")
+            preview = asyncio.get_running_loop().create_task(self._preview())
             await self._countdown("settling", SETTLE_S, quality=False)
             i0 = self.source.n_samples()
             await self._countdown("recording", ENROLL_S, quality=True)
+            preview.cancel()
             raw = self.source.take(i0, self.source.n_samples())
             q = check_quality(raw, POLAR_FS)
             if not q.ok:
@@ -311,6 +332,8 @@ class Controller:
                 self.fail("CONNECTION_LOST", str(ex))
             await self.close_source()
         finally:
+            if preview is not None:
+                preview.cancel()
             self.set_state(phase="idle")
 
     async def run_monitor(self, user_id: str, template: np.ndarray) -> None:
@@ -336,12 +359,14 @@ class Controller:
                       "score": step.score, "smoothed": step.smoothed, "threshold": self.threshold,
                       "bad_signal_streak": streaks["bad"], "rejection_streak": streaks["rej"],
                       "hr_bpm": None if np.isnan(q.hr_bpm) else round(float(q.hr_bpm), 1),
-                      "codes": quality_codes(q, raw, 5) if step.status == BAD_SIGNAL else []}
+                      "codes": (["NO_CONTACT"] if getattr(src, "contact", None) is False
+                                else quality_codes(q, raw, 5)) if step.status == BAD_SIGNAL else []}
                 self.state["monitor"] = ev
                 self.emit({"type": "decision", **ev})
 
             await monitor(src, template, self.embed, self.cfg, self.threshold, self.sleep, self.clock,
-                          lambda *a, **k: None, on_step, hop_s=self.hop_s, smooth=self.smooth)
+                          lambda *a, **k: None, on_step, hop_s=self.hop_s, smooth=self.smooth,
+                          contact_fn=lambda: getattr(src, "contact", None))
         except ConnectionLost as ex:
             if self.state["last_error"] is None:
                 self.fail("CONNECTION_LOST", str(ex))
@@ -366,6 +391,8 @@ class Controller:
             raw = src.take(src.n_samples() - int(RECHECK_RECORD_S * POLAR_FS), src.n_samples())
             quality = check_quality(raw, POLAR_FS, min_peaks=8)
             codes = quality_codes(quality, raw, 8)
+            if getattr(src, "contact", None) is False:       # la banda dice que no toca la piel: es ruido, no una persona
+                quality, codes = QualityReport(False), ["NO_CONTACT"]
             if not quality.ok:
                 self.emit({"type": "recheck_result", "kind": "signal", "ok": False, "score": None,
                            "codes": codes, "messages": [SIGNAL_MESSAGES[code] for code in codes]})
