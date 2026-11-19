@@ -11,7 +11,7 @@ import ProgressBar from "./ui/ProgressBar.jsx";
 
 export default function ExamScreen({
   questions, answers, currentIndex, decision, authMode, wearerLabel,
-  onConfirmWearer, signalBad, elapsed, onAnswer,
+  onConfirmWearer, signalBad, interactionBlocked, elapsed, onAnswer,
   onPrevious, onNext, onFinishRequest, onExitRequest,
 }) {
   const [wearerDraft, setWearerDraft] = useState(wearerLabel);
@@ -69,20 +69,24 @@ export default function ExamScreen({
                 key={key}
                 className={`answer-option ${answers[currentQuestion.id] === key ? "chosen" : ""}`}
                 onClick={() => onAnswer(currentQuestion.id, key)}
-                disabled={signalBad}
+                disabled={interactionBlocked}
               >
                 <span className="answer-letter">{key}</span><span>{choice}</span>
                 {answers[currentQuestion.id] === key && <CheckCircle2 className="answer-check" size={17} />}
               </button>
             ))}
           </div>
-          {signalBad && <div className="inline-warning"><AlertCircle size={15} /> Pausamos las respuestas hasta recuperar una señal confiable.</div>}
+          {interactionBlocked && <div className="inline-warning" role="status"><AlertCircle size={15} /> {signalBad
+            ? "Pausamos las respuestas hasta recuperar una señal confiable."
+            : decision?.status === "REJECTED"
+              ? "Pausamos las respuestas hasta que la coincidencia alcance el umbral y se verifique tu identidad."
+              : "Pausamos las respuestas hasta recibir una verificación de identidad válida."}</div>}
           <div className="question-footer">
-            <Button variant="quiet" onClick={onPrevious} disabled={currentIndex === 0}><ArrowLeft size={16} /> Anterior</Button>
+            <Button variant="quiet" onClick={onPrevious} disabled={interactionBlocked || currentIndex === 0}><ArrowLeft size={16} /> Anterior</Button>
             {currentIndex === questions.length - 1 ? (
-              <Button onClick={onFinishRequest} disabled={signalBad}>Finalizar <Check size={16} /></Button>
+              <Button onClick={onFinishRequest} disabled={interactionBlocked}>Finalizar <Check size={16} /></Button>
             ) : (
-              <Button onClick={onNext} disabled={signalBad}>Siguiente <ArrowRight size={16} /></Button>
+              <Button onClick={onNext} disabled={interactionBlocked}>Siguiente <ArrowRight size={16} /></Button>
             )}
           </div>
         </Card>

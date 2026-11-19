@@ -8,7 +8,7 @@ import {
 } from "./components/SessionScreens.jsx";
 import { PREVIEW_SAMPLES } from "./components/ui/SignalPlot.jsx";
 import { humanSignal } from "./config.js";
-import { errorText, makeUserId } from "./utils.js";
+import { canInteractWithExam, errorText, makeUserId } from "./utils.js";
 
 // Tiempo que se ignoran los rechazos tras cada aviso de coincidencia baja.
 const LOW_MATCH_GRACE_MS = 10_000;
@@ -200,7 +200,7 @@ export default function App() {
               kind: "low-match-warning",
               title: first ? "Coincidencia baja" : "Segunda alerta de coincidencia",
               message: first
-                ? "La lectura tuvo una coincidencia baja con la muestra inicial. Revisa que la banda siga firme y en buen contacto con la piel. Tienes unos 10 segundos para acomodarla; el examen continúa."
+                ? "La lectura tuvo una coincidencia baja con la muestra inicial. Revisa que la banda siga firme y en buen contacto con la piel. Tienes unos 10 segundos para acomodarla. Las respuestas están pausadas hasta verificar tu identidad."
                 : "La coincidencia sigue baja. Revisa y ajusta la banda ahora: tienes otros 10 segundos y, si sigue sin coincidir, la sesión finalizará.",
             });
           }
@@ -341,6 +341,10 @@ export default function App() {
   }
 
   async function finishExam() {
+    if (!canInteractWithExam(decision, signalBad, socketConnected)) {
+      setModal(null);
+      return;
+    }
     if (examTerminatingRef.current) return;
     examTerminatingRef.current = true;
     const failures = [];
@@ -461,15 +465,18 @@ export default function App() {
   }
 
   function nextQuestion() {
+    if (!canInteractWithExam(decision, signalBad, socketConnected)) return;
     if (currentIndex < questions.length - 1) setCurrentIndex((index) => index + 1);
   }
 
   function previousQuestion() {
+    if (!canInteractWithExam(decision, signalBad, socketConnected)) return;
     if (currentIndex > 0) setCurrentIndex((index) => index - 1);
   }
 
   const busy = ["connecting", "enrolling", "monitoring", "rechecking"].includes(backendPhase);
   const examInProgress = flow === "exam";
+  const interactionBlocked = !canInteractWithExam(decision, signalBad, socketConnected);
 
   return (
     <div className="app-shell min-h-screen">
@@ -539,15 +546,22 @@ export default function App() {
               setWearerLabel(label);
             }}
             signalBad={signalBad}
+            interactionBlocked={interactionBlocked}
             elapsed={elapsed}
-            onAnswer={(questionId, answer) => setAnswers((current) => ({ ...current, [questionId]: answer }))}
+            onAnswer={(questionId, answer) => {
+              if (interactionBlocked) return;
+              setAnswers((current) => ({ ...current, [questionId]: answer }));
+            }}
             onPrevious={previousQuestion}
             onNext={nextQuestion}
-            onFinishRequest={() => setModal({
-              kind: "finish",
-              title: "Terminar simulación",
-              message: `Has respondido ${Object.keys(answers).length} de ${questions.length} preguntas. ¿Quieres finalizar y ver tu resultado?`,
-            })}
+            onFinishRequest={() => {
+              if (interactionBlocked) return;
+              setModal({
+                kind: "finish",
+                title: "Terminar simulación",
+                message: `Has respondido ${Object.keys(answers).length} de ${questions.length} preguntas. ¿Quieres finalizar y ver tu resultado?`,
+              });
+            }}
             onExitRequest={() => setModal({
               kind: "abandon",
               title: "¿Salir del examen?",

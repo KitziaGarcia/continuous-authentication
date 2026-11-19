@@ -13,3 +13,12 @@ export function formatDuration(seconds) {
   const remainder = Math.floor(seconds % 60).toString().padStart(2, "0");
   return `${minutes}:${remainder}`;
 }
+
+// La decisión del backend usa la similitud suavizada y el umbral de la sesión.
+export function canInteractWithExam(decision, signalBad, socketConnected) {
+  return socketConnected && !signalBad
+    && decision?.status === "AUTHENTICATED"
+    && Number.isFinite(decision.smoothed)
+    && Number.isFinite(decision.threshold)
+    && decision.smoothed >= decision.threshold;
+}

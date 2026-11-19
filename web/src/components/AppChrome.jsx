@@ -9,9 +9,9 @@ import { StepLabel } from "./ui/Label.jsx";
 export function AppHeader({ apiStatus, socketConnected, theme, onToggleTheme }) {
   return (
     <header className="topbar">
-      <div className="brand" aria-label="Latido">
+      <div className="brand" aria-label="QORA ID">
         <span className="brand-mark"><Activity size={19} strokeWidth={2.5} /></span>
-        <span>latido<span className="brand-dot">.</span></span>
+        <span>QORA <span className="brand-dot">ID</span></span>
       </div>
       <div className="topbar-right">
         <span className="status-pill">
@@ -32,7 +32,7 @@ export function AppHeader({ apiStatus, socketConnected, theme, onToggleTheme }) 
 export function AppFooter() {
   return (
     <footer className="app-footer">
-      <span>LATIDO <i>·</i> PROTOTIPO ACADÉMICO</span>
+      <span>QORA ID <i>·</i> PROTOTIPO ACADÉMICO</span>
       <span><CircleHelp size={13} /> La autenticación es experimental y puede equivocarse.</span>
     </footer>
   );
